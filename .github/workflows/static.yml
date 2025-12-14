@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P4ML: Precision for Millions - OMIC-Assist Study</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        /* Base Styles for Futuristic Aesthetic */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0c0e14; /* Deep Space Blue */
+            background-image: radial-gradient(circle at 10% 10%, rgba(56, 189, 248, 0.08), transparent 60%);
+            color: #e5e7eb;
+        }
+        .text-neon-cyan { color: #06b6d4; }
+        .text-neon-emerald { color: #10b981; }
+        .glow-text { text-shadow: 0 0 10px rgba(6, 182, 212, 0.5); }
+        .card-bg { 
+            background-color: rgba(17, 24, 39, 0.85); 
+            backdrop-filter: blur(8px); 
+            border: 1px solid rgba(56, 189, 248, 0.2); 
+        }
+        .card-shadow { box-shadow: 0 4px 20px rgba(6, 182, 212, 0.25); }
+        .divider { background: linear-gradient(to right, #06b6d4, #10b981, transparent); height: 1px; }
+
+        /* Responsive Container */
+        .page-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem; /* Mobile padding */
+        }
+        @media (min-width: 768px) {
+            .page-container {
+                padding: 2.5rem; /* Desktop padding */
+            }
+        }
+        
+        /* Partnership Blob Styles */
+        .partner-blob {
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        .partner-blob:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+        }
+        /* Custom Logo Styling */
+        .p4ml-logo {
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 15px;
+            animation: pulse-glow 2s infinite alternate;
+        }
+        @keyframes pulse-glow {
+            from { box-shadow: 0 0 5px rgba(6, 182, 212, 0.5); }
+            to { box-shadow: 0 0 15px rgba(6, 182, 212, 1); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page-container">
+
+        <!-- HEADER: P4ML CORE IDENTITY (Final Sleek Look with SVG Logo) -->
+        <header class="py-8 text-center card-bg rounded-xl card-shadow mb-8">
+            <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight text-white mb-2 flex items-center justify-center space-x-4">
+                
+                <!-- Custom Inline SVG Logo -->
+                <svg class="p4ml-logo" width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z" fill="#06b6d4"/>
+                    <path d="M12 5V2m0 20v-3m7-7h-3m-14 0H5m11.5-4.5l-2.121 2.121m-9.536 9.536l-2.121 2.121m11.657-11.657l2.121-2.121m-9.536 9.536l2.121-2.121M12 8c2.21 0 4 1.79 4 4s-1.79 4-4 4-4-1.79-4-4 1.79-4 4-4z" stroke="#10b981" stroke-width="1.5" stroke-linecap="round"/>
+                    <text x="12" y="16" font-family="Arial" font-size="8" fill="#f8fafc" text-anchor="middle" font-weight="bold">P</text>
+                </svg>
+
+                <span class="text-neon-cyan glow-text">P4ML</span>: Precision for Millions
+            </h1>
+            <p class="text-xl md:text-2xl text-neon-emerald font-medium glow-text">
+                Driving the Next Era of Predictive Health Strategy
+            </p>
+        </header>
+
+        <!-- SECTION 1: OUR MISSION & INNOVATION ECOSYSTEM -->
+        <section class="mb-16">
+            <div class="card-bg p-6 md:p-10 rounded-xl card-shadow">
+                <div class="flex items-center space-x-4 mb-6">
+                    <i class="fas fa-chart-line text-3xl md:text-4xl text-red-400 glow-text" style="text-shadow: 0 0 8px #f87171;"></i>
+                    <h2 class="text-2xl md:text-3xl font-bold text-white">Innovation at the National Level</h2>
+                </div>
+                
+                <p class="text-lg text-gray-300 mb-4">
+                    P4ML was established with the core mission to translate massive biological data into proactive, predictive health strategies for the UAE population, aligning our technology with the Ministry of Economy's national innovation agenda.
+                </p>
+                
+                <!-- Triple Helix Model & Training COE -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-4 border-t border-slate-700">
+                    <div class="p-4 bg-gray-900 rounded-lg border border-red-500/50">
+                        <h3 class="font-bold text-xl text-red-400 flex items-center mb-2"><i class="fas fa-university mr-2"></i> Training Center of Excellence</h3>
+                        <p class="text-sm text-gray-400">
+                            We are establishing a center dedicated to **knowledge transfer** in bioinformatics, data science, **biopharma**, and **microbiome** research, creating a sustainable talent pipeline across the GCC.
+                        </p>
+                    </div>
+                    <div class="p-4 bg-gray-900 rounded-lg border border-red-500/50">
+                        <h3 class="font-bold text-xl text-red-400 flex items-center mb-2"><i class="fas fa-project-diagram mr-2"></i> Triple Helix Innovation</h3>
+                        <p class="text-sm text-gray-400">
+                            We execute a **Triple Helix Model**—fostering deep collaboration between Academia (research validation), Industry (biopharma/microbiome), and Government (national health strategy).
+                        </p>
+                    </div>
+                </div>
+                
+            </div>
+        </section>
+
+        <!-- SECTION 2: THE OMIC-ASSIST STUDY (FLAGSHIP PROJECT) -->
+        <section class="mb-16">
+            <div class="card-bg p-6 md:p-10 rounded-xl card-shadow">
+                <div class="flex items-center space-x-4 mb-6">
+                    <i class="fas fa-flask text-3xl md:text-4xl text-neon-cyan glow-text"></i>
+                    <h2 class="text-2xl md:text-3xl font-bold text-white">OMIC-Assist: Our Flagship Initiative</h2>
+                </div>
+                
+                <p class="text-gray-300 mb-6">
+                    The OMIC-Assist Study is the world's largest multi-omic precision medicine research project, leveraging deep data integration to deliver personalized health strategies across the region.
+                </p>
+                
+                <!-- Key Metrics Grid -->
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 text-center mb-6">
+                    <div class="p-3 bg-gray-900 rounded-lg border border-cyan-700/50">
+                        <p class="text-3xl font-extrabold text-neon-cyan">2M+</p>
+                        <p class="text-xs text-gray-400 uppercase mt-1">VOLUNTEERS (5 YR GOAL)</p>
+                    </div>
+                    <div class="p-3 bg-gray-900 rounded-lg border border-cyan-700/50">
+                        <p class="text-3xl font-extrabold text-neon-cyan">253</p>
+                        <p class="text-xs text-gray-400 uppercase mt-1">CORE BIOMARKERS ANALYZED</p>
+                    </div>
+                    <div class="p-3 bg-gray-900 rounded-lg border border-cyan-700/50">
+                        <p class="text-3xl font-extrabold text-neon-cyan">47+</p>
+                        <p class="text-xs text-gray-400 uppercase mt-1">REAL-TIME DATA POINTS</p>
+                    </div>
+                    <div class="p-3 bg-gray-900 rounded-lg border border-cyan-700/50">
+                        <p class="text-3xl font-extrabold text-neon-cyan">100</p>
+                        <p class="text-xs text-gray-400 uppercase mt-1">NEW HIGH-SKILLED JOBS</p>
+                    </div>
+                </div>
+
+                <div class="mt-6 pt-4 border-t border-slate-700">
+                    <h3 class="text-xl font-semibold text-neon-emerald mb-4">Strategic Partnerships & Clinical Integration</h3>
+                    
+                    <!-- Partnership Blobs Grid -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        
+                        <!-- DHA -->
+                        <div class="partner-blob bg-blue-900/40 border-blue-600/70 shadow-lg shadow-blue-900/50">
+                            <i class="fas fa-hospital-alt text-2xl text-blue-300"></i>
+                            <p class="font-bold text-lg text-white mt-1">DHA</p>
+                            <p class="text-xs text-blue-200">Dubai Health Authority</p>
+                        </div>
+                        
+                        <!-- Evsop (Biopharma) -->
+                        <div class="partner-blob bg-purple-900/40 border-purple-600/70 shadow-lg shadow-purple-900/50">
+                            <i class="fas fa-syringe text-2xl text-purple-300"></i>
+                            <p class="font-bold text-lg text-white mt-1">Evsop</p>
+                            <p class="text-xs text-purple-200">Biopharma Solutions</p>
+                        </div>
+
+                        <!-- Seqbiome (Microbiome) -->
+                        <div class="partner-blob bg-green-900/40 border-green-600/70 shadow-lg shadow-green-900/50">
+                            <i class="fas fa-microscope text-2xl text-green-300"></i>
+                            <p class="font-bold text-lg text-white mt-1">Seqbiome</p>
+                            <p class="text-xs text-green-200">Microbiome Sequencing</p>
+                        </div>
+
+                        <!-- Fakeeh Hospital -->
+                        <div class="partner-blob bg-red-900/40 border-red-600/70 shadow-lg shadow-red-900/50">
+                            <i class="fas fa-user-md text-2xl text-red-300"></i>
+                            <p class="font-bold text-lg text-white mt-1">Fakeeh Hospital</p>
+                            <p class="text-xs text-red-200">Clinical Validation</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: CORPORATE FOOTPRINT & INNOVATION -->
+        <section class="mb-16">
+            <div class="card-bg p-6 md:p-10 rounded-xl card-shadow">
+                <div class="flex items-center space-x-4 mb-6">
+                    <i class="fas fa-satellite-dish text-3xl md:text-4xl text-yellow-400 glow-text" style="text-shadow: 0 0 8px #facc15;"></i>
+                    <h2 class="text-2xl md:text-3xl font-bold text-white">Innovation & Global Reach</h2>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                    <!-- Future 100 / Ministry of Economy -->
+                    <div class="bg-gray-900 p-4 rounded-lg border border-gray-700 sm:col-span-3 lg:col-span-1">
+                        <h4 class="font-bold text-lg text-neon-cyan flex items-center mb-1">
+                             <i class="fas fa-medal mr-2"></i> National Initiative (Ministry of Economy)
+                        </h4>
+                        <p class="text-sm text-gray-400">P4ML is a **Future100** UAE company, aligning with the national initiative launched by the Ministry of Economy to accelerate economic growth through innovation.</p>
+                    </div>
+                    
+                    <!-- BeginNGS -->
+                    <div class="bg-gray-900 p-4 rounded-lg border border-gray-700">
+                        <h4 class="font-bold text-lg text-neon-cyan"><i class="fas fa-baby-carriage mr-2"></i> BeginNGS Consortium</h4>
+                        <p class="text-sm text-gray-400">The first EMEAI technology partner, focused on advancing genomics for newborn screening and rare disease management across the region.</p>
+                    </div>
+                    <!-- UNTOLD Partnership -->
+                    <div class="bg-gray-900 p-4 rounded-lg border border-gray-700">
+                        <h4 class="font-bold text-lg text-neon-cyan"><i class="fas fa-music mr-2"></i> Public Engagement</h4>
+                        <p class="text-sm text-gray-400">P4ML was the first Health & Wellness company to partner with UNTOLD Dubai 2025, bridging high-tech science with youth wellness culture.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- FOOTER: CONTACT -->
+    <footer class="bg-gray-900/90 py-6 px-4">
+        <div class="max-w-6xl mx-auto text-center">
+            <h3 class="text-xl font-bold text-white mb-2">P4ML | Precision for Millions</h3>
+            <p class="text-sm text-gray-500">
+                <i class="fas fa-envelope mr-2"></i> Contact: <a href="mailto:patrick@p4ml.com" class="text-neon-cyan hover:underline">patrick@p4ml.com</a> | <i class="fas fa-map-marker-alt mr-2"></i> Headquartered: Dubai, UAE
+            </p>
+            <p class="text-xs text-gray-600 mt-2">
+                © 2025 P4ML, Architecting Health Strategy.
+            </p>
+        </div>
+    </footer>
+
+</body>
+</html>
