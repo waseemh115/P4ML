@@ -3,232 +3,684 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>P4ML: Precision for Millions - OMIC-Assist Study</title>
+    <title>Burak CASCADE | Audit Protocol v10.0</title>
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    
+    <!-- Core React Libraries -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <!-- Babel for JSX compilation -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
     <style>
-        /* Base Styles for Futuristic Aesthetic */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+        
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0c0e14; /* Deep Space Blue */
-            background-image: radial-gradient(circle at 10% 10%, rgba(56, 189, 248, 0.08), transparent 60%);
-            color: #e5e7eb;
+            margin: 0;
+            padding: 0;
+            background-color: #fdfcf8;
+            -webkit-font-smoothing: antialiased;
+            color: #0f172a;
+            font-size: 13px;
         }
-        .text-neon-cyan { color: #06b6d4; }
-        .text-neon-emerald { color: #10b981; }
-        .glow-text { text-shadow: 0 0 10px rgba(6, 182, 212, 0.5); }
-        .card-bg { 
-            background-color: rgba(17, 24, 39, 0.85); 
-            backdrop-filter: blur(8px); 
-            border: 1px solid rgba(56, 189, 248, 0.2); 
-        }
-        .card-shadow { box-shadow: 0 4px 20px rgba(6, 182, 212, 0.25); }
-        .divider { background: linear-gradient(to right, #06b6d4, #10b981, transparent); height: 1px; }
 
-        /* Responsive Container */
-        .page-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1.5rem; /* Mobile padding */
+        @keyframes scan-line {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(400%); }
         }
-        @media (min-width: 768px) {
-            .page-container {
-                padding: 2.5rem; /* Desktop padding */
-            }
+        .scan-line {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #3b82f6, transparent);
+            animation: scan-line 2.5s linear infinite;
         }
-        
-        /* Partnership Blob Styles */
-        .partner-blob {
-            padding: 1.5rem;
-            border-radius: 12px;
-            text-align: center;
-            transition: transform 0.3s ease;
+
+        .animate-in {
+            animation: fadeIn 0.4s ease-out forwards;
         }
-        .partner-blob:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        /* Custom Logo Styling */
-        .p4ml-logo {
-            display: inline-block;
-            vertical-align: middle;
-            margin-right: 15px;
-            animation: pulse-glow 2s infinite alternate;
+
+        .text-clinical {
+            font-feature-settings: "tnum";
+            letter-spacing: -0.01em;
         }
-        @keyframes pulse-glow {
-            from { box-shadow: 0 0 5px rgba(6, 182, 212, 0.5); }
-            to { box-shadow: 0 0 15px rgba(6, 182, 212, 1); }
+
+        .audit-bg {
+            background: radial-gradient(circle at top right, #1e293b, #020617);
         }
+
+        .logic-card {
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            border: 1px solid rgba(0,0,0,0.04);
+        }
+        .logic-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(59, 130, 246, 0.4);
+        }
+
+        #root { min-height: 100vh; }
+
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     </style>
 </head>
 <body>
+    <div id="root"></div>
 
-    <div class="page-container">
+    <script type="text/babel">
+        const { useState, useMemo, useEffect, Fragment } = React;
 
-        <!-- HEADER: P4ML CORE IDENTITY (Final Sleek Look with SVG Logo) -->
-        <header class="py-8 text-center card-bg rounded-xl card-shadow mb-8">
-            <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight text-white mb-2 flex items-center justify-center space-x-4">
+        // ==================== 1. GLOBAL CONSTANTS ====================
+
+        const SYSTEM_CATEGORIES = {
+            metabolic: { name: "Energy & Sugar", icon: "Zap", color: "text-blue-600", gradient: "from-blue-600 to-cyan-500" },
+            lipid: { name: "Heart & Blood", icon: "Heart", color: "text-rose-600", gradient: "from-rose-600 to-pink-500" },
+            inflammation: { name: "Immune Balance", icon: "Activity", color: "text-orange-600", gradient: "from-orange-600 to-amber-500" },
+            liver: { name: "Liver Filter", icon: "Droplet", color: "text-emerald-600", gradient: "from-emerald-500 to-teal-500" },
+            kidney: { name: "Kidney Health", icon: "Microscope", color: "text-indigo-600", gradient: "from-indigo-500 to-purple-500" },
+            vitamins: { name: "Nutrient Levels", icon: "ShieldCheck", color: "text-amber-600", gradient: "from-amber-500 to-yellow-500" },
+            hormonal: { name: "Body Signals", icon: "Activity", color: "text-violet-600", gradient: "from-violet-500 to-purple-500" },
+            gut: { name: "Gut Microbiome", icon: "Database", color: "text-cyan-600", gradient: "from-cyan-500 to-blue-500" }
+        };
+
+        const VIP_MARKERS_FULL = [
+            { id: 'glucose', role: 'Blood Sugar', clinicalName: 'GLUCOSE', cat: 'metabolic', unit: 'mg/dL', ref: '70-99' },
+            { id: 'hba1c', role: '3-Month Avg', clinicalName: 'HbA1c', cat: 'metabolic', unit: '%', ref: '4.0-5.6' },
+            { id: 'insulin', role: 'Storage', clinicalName: 'INSULIN', cat: 'metabolic', unit: 'μIU/mL', ref: '2.0-12.0' },
+            { id: 'homa_ir', role: 'Resistance', clinicalName: 'HOMA-IR', cat: 'metabolic', unit: 'idx', ref: '<1.8' },
+            { id: 'igf1', role: 'Anabolic', clinicalName: 'IGF-1', cat: 'metabolic', unit: 'ng/mL', ref: '120-220' },
+            { id: 'triglycerides', role: 'Blood Fats', clinicalName: 'TRIGS', cat: 'lipid', unit: 'mg/dL', ref: '<150' },
+            { id: 'hdl', role: 'Good Chol', clinicalName: 'HDL-C', cat: 'lipid', unit: 'mg/dL', ref: '>45' },
+            { id: 'ldl', role: 'Bad Chol', clinicalName: 'LDL-C', cat: 'lipid', unit: 'mg/dL', ref: '<100' },
+            { id: 'apo_b', role: 'Heart Risk', clinicalName: 'APOB', cat: 'lipid', unit: 'mg/dL', ref: '<80' },
+            { id: 'crp', role: 'hs-CRP', clinicalName: 'hs-CRP', cat: 'inflammation', unit: 'mg/L', ref: '<1.0' },
+            { id: 'homocysteine', role: 'Vessel Stress', clinicalName: 'HCY', cat: 'inflammation', unit: 'μmol/L', ref: '<10.0' },
+            { id: 'ferritin', role: 'Iron Load', clinicalName: 'FERRITIN', cat: 'inflammation', unit: 'ng/mL', ref: '30-200' },
+            { id: 'uric_acid', role: 'Uric Acid', clinicalName: 'URATE', cat: 'kidney', unit: 'mg/dL', ref: '3.5-5.5' },
+            { id: 'creatinine', role: 'Waste Load', clinicalName: 'CREAT', cat: 'kidney', unit: 'mg/dL', ref: '0.7-1.3' },
+            { id: 'egfr', role: 'Filter Speed', clinicalName: 'eGFR', cat: 'kidney', unit: 'mL/min', ref: '>90' },
+            { id: 'alt', role: 'Liver A', clinicalName: 'ALT', cat: 'liver', unit: 'U/L', ref: '<35' },
+            { id: 'ast', role: 'Liver B', clinicalName: 'AST', cat: 'liver', unit: 'U/L', ref: '<35' },
+            { id: 'ggt', role: 'Detox Cap', clinicalName: 'GGT', cat: 'liver', unit: 'U/L', ref: '<30' },
+            { id: 'vitamin_d', role: 'Vitamin D', clinicalName: 'VIT D', cat: 'vitamins', unit: 'ng/mL', ref: '30-100' },
+            { id: 'vitamin_b12', role: 'Vitamin B12', clinicalName: 'B12', cat: 'vitamins', unit: 'pg/mL', ref: '400-900' },
+            { id: 'magnesium', role: 'Intra-Mag', clinicalName: 'MAG-RBC', cat: 'vitamins', unit: 'mg/dL', ref: '5.0-7.0' },
+            { id: 'testosterone', role: 'Male Hormone', clinicalName: 'T-TOTAL', cat: 'hormonal', unit: 'ng/dL', ref: '400-1000' },
+            { id: 'tsh', role: 'Thyroid', clinicalName: 'TSH', cat: 'hormonal', unit: 'μIU/mL', ref: '0.4-2.5' },
+            { id: 'cortisol', role: 'Stress', clinicalName: 'CORTISOL', cat: 'hormonal', unit: 'μg/dL', ref: '6.0-18.0' }
+        ];
+
+        const PHYLA_DEFS = [
+            { id: 'f', role: 'Harvesting', clinicalName: 'FIRMICUTES', ref: "20-30%", desc: "High levels cause calorie extraction spikes." },
+            { id: 'b', role: 'Burning', clinicalName: 'BACTEROIDETES', ref: "30-40%", desc: "Lean phyla promoting metabolic speed." },
+            { id: 'a', role: 'Defense', clinicalName: 'ACTINOBACTERIA', ref: ">5%", desc: "Mucosal barrier defense integrity node." },
+            { id: 'p', role: 'Hazard', clinicalName: 'PROTEOBACTERIA', ref: "<2%", desc: "Triggers acute systemic inflammatory fires." },
+            { id: 'v', role: 'Shield', clinicalName: 'VERRUCOMICROBIA', ref: ">1%", desc: "The Akkermansia barrier shield protection." }
+        ];
+
+        // ==================== 2. GLOBAL UTILITY LOGIC (HOISTED) ====================
+
+        function getStatusColor(status) {
+            if (status === 'critical') return 'text-rose-600';
+            if (status === 'warning') return 'text-amber-500';
+            return 'text-emerald-600';
+        }
+
+        function getStatusBg(status) {
+            if (status === 'critical') return 'bg-rose-50 border-rose-200';
+            if (status === 'warning') return 'bg-amber-50 border-amber-200';
+            return 'bg-emerald-50 border-emerald-200';
+        }
+
+        function getHandshakeLogic(id, status) {
+            const bridges = {
+                metabolic_bridge: {
+                    critical: { title: "Sugar Sync", mechanism: "Bacteria ↔ Insulin", clinicalImpact: "Gut phyla are forcing massive fat storage. Pancreas is overloaded.", exitPath: "Immediate carbohydrate purge phase." },
+                    warning: { title: "Sugar Sync", mechanism: "Bacteria ↔ Insulin", clinicalImpact: "Bacteria starting to slow your energy processing speed.", exitPath: "Add complex botanical fibers." },
+                    optimal: { title: "Sugar Sync", mechanism: "Bacteria ↔ Insulin", clinicalImpact: "Perfect sync. Burning fuel Machine-like.", exitPath: "Maintain Current Baseline." }
+                },
+                inflammation_bridge: {
+                    critical: { title: "Gut-Immune", mechanism: "Seal ↔ CRP", clinicalImpact: "Gut barrier is leaking fire into your blood.", exitPath: "3-day mucosal seal phase." },
+                    warning: { title: "Gut-Immune", mechanism: "Seal ↔ CRP", clinicalImpact: "Defense phyla are low, raising friction.", exitPath: "Add fermented food rotation." },
+                    optimal: { title: "Gut-Immune", mechanism: "Seal ↔ CRP", clinicalImpact: "Seal is strong. Zero leak detected. Peak defense resilience.", exitPath: "Keep phyla complexity." }
+                },
+                cardio_bridge: {
+                    critical: { title: "Heart-Renal", mechanism: "Urate ↔ ApoB", clinicalImpact: "Uric acid is locking your vessels tight. High resistance.", exitPath: "Flush urates immediately." },
+                    warning: { title: "Heart-Renal", mechanism: "Urate ↔ ApoB", clinicalImpact: "Early vessel stiffening from particle drift.", exitPath: "Switch to high-grade Omega fats." },
+                    optimal: { title: "Heart-Renal", mechanism: "Urate ↔ ApoB", clinicalImpact: "Vessels relaxed and open. Peak blood flow.", exitPath: "Maintain lipid balance." }
+                }
+            };
+            return bridges[id][status] || bridges[id].optimal;
+        }
+
+        function getAuditNarrative(category, status) {
+            const scenarios = {
+                metabolic: {
+                    critical: { mechanism: "Insulin system is failing.", clinicalImpact: "Storing fat instantly and aging faster.", exitStrategy: "24h fast immediately." },
+                    warning: { mechanism: "Sugar processing is slow.", clinicalImpact: "Early weight gain and energy dips.", exitStrategy: "Zero liquid sugar policy." },
+                    optimal: { mechanism: "Perfect sugar sync.", clinicalImpact: "Burning fuel like a peak machine.", exitStrategy: "Maintain fiber intake." }
+                },
+                lipid: {
+                    critical: { mechanism: "Arteries at hazard risk.", clinicalImpact: "High chance of plaque build-up.", exitStrategy: "Soluble fiber saturation." },
+                    warning: { mechanism: "Particles stay in blood too long.", clinicalImpact: "Low-grade vascular irritation building.", exitStrategy: "Switch cooking oils." },
+                    optimal: { mechanism: "Clean vessel sovereignty.", clinicalImpact: "Maximum flow to brain and organs.", exitStrategy: "Maintain course." }
+                },
+                gut: {
+                    critical: { mechanism: "Bad gut bacteria winning.", clinicalImpact: "Toxins leaking into your blood.", exitStrategy: "3-day purge phase." },
+                    warning: { mechanism: "Defense phyla are low.", clinicalImpact: "Bloating and reduced immunity.", exitStrategy: "Add fermented botanicals." },
+                    optimal: { mechanism: "Strong barrier shield.", clinicalImpact: "Zero bloating and peak absorption.", exitStrategy: "Rotate complex fibers." }
+                }
+            };
+            return scenarios[category]?.[status] || { mechanism: "Audit registry active.", clinicalImpact: "Standard baseline.", exitStrategy: "Standard Maintenance." };
+        }
+
+        function generatePatientData(id, name, age, nutshell, overrides = {}) {
+            const calculateStatus = (val, refStr) => {
+                if (!refStr) return 'optimal';
+                if (refStr.startsWith('<')) {
+                    const limit = parseFloat(refStr.replace('<', ''));
+                    return val > limit * 1.15 ? 'critical' : val > limit ? 'warning' : 'optimal';
+                }
+                if (refStr.startsWith('>')) {
+                    const limit = parseFloat(refStr.replace('>', ''));
+                    return val < limit * 0.85 ? 'critical' : val < limit ? 'warning' : 'optimal';
+                }
+                if (refStr.includes('-')) {
+                    const pts = refStr.split('-').map(parseFloat);
+                    if (val < pts[0] || val > pts[1]) return (val < pts[0] * 0.85 || val > pts[1] * 1.15) ? 'critical' : 'warning';
+                }
+                return 'optimal';
+            };
+
+            const markers = {};
+            VIP_MARKERS_FULL.forEach((mDef, idx) => {
+                const o = overrides[mDef.id] || {};
+                let baseVal = 34 + (id * 17 + idx * 11) % 150;
                 
-                <!-- Custom Inline SVG Logo -->
-                <svg class="p4ml-logo" width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z" fill="#06b6d4"/>
-                    <path d="M12 5V2m0 20v-3m7-7h-3m-14 0H5m11.5-4.5l-2.121 2.121m-9.536 9.536l-2.121 2.121m11.657-11.657l2.121-2.121m-9.536 9.536l2.121-2.121M12 8c2.21 0 4 1.79 4 4s-1.79 4-4 4-4-1.79-4-4 1.79-4 4-4z" stroke="#10b981" stroke-width="1.5" stroke-linecap="round"/>
-                    <text x="12" y="16" font-family="Arial" font-size="8" fill="#f8fafc" text-anchor="middle" font-weight="bold">P</text>
-                </svg>
+                if (id === 9) { // PEAK VITALITY HARD CALIBRATION
+                    if (mDef.id === 'glucose') baseVal = 82;
+                    if (mDef.id === 'hba1c') baseVal = 4.9;
+                    if (mDef.id === 'homa_ir') baseVal = 0.9;
+                    if (mDef.id === 'insulin') baseVal = 4.1;
+                    if (mDef.id === 'apo_b') baseVal = 62;
+                    if (mDef.id === 'crp') baseVal = 0.3;
+                    if (mDef.id === 'uric_acid') baseVal = 4.1;
+                    if (mDef.id === 'egfr') baseVal = 105;
+                    if (mDef.id === 'alt') baseVal = 18;
+                    if (mDef.id === 'ast') baseVal = 20;
+                    if (mDef.id === 'ggt') baseVal = 15;
+                    if (mDef.id === 'testosterone') baseVal = 750;
+                    if (mDef.id === 'igf1') baseVal = 180;
+                }
 
-                <span class="text-neon-cyan glow-text">P4ML</span>: Precision for Millions
-            </h1>
-            <p class="text-xl md:text-2xl text-neon-emerald font-medium glow-text">
-                Driving the Next Era of Predictive Health Strategy
-            </p>
-        </header>
+                let val = o.value !== undefined ? o.value : baseVal; 
+                val = parseFloat(val.toFixed(1)); // PRECISION GUARD
+                markers[mDef.id] = { ...mDef, value: val, status: o.status || calculateStatus(val, mDef.ref) };
+            });
 
-        <!-- SECTION 1: OUR MISSION & INNOVATION ECOSYSTEM -->
-        <section class="mb-16">
-            <div class="card-bg p-6 md:p-10 rounded-xl card-shadow">
-                <div class="flex items-center space-x-4 mb-6">
-                    <i class="fas fa-chart-line text-3xl md:text-4xl text-red-400 glow-text" style="text-shadow: 0 0 8px #f87171;"></i>
-                    <h2 class="text-2xl md:text-3xl font-bold text-white">Innovation at the National Level</h2>
+            PHYLA_DEFS.forEach((pDef, idx) => {
+                const o = overrides[pDef.id] || {};
+                // SHAKE GUT MATH: 14%, 23%, 12% Spread
+                let val = 12 + (id * 9 + idx * 7) % 24;
+                if (pDef.id === 'p') val = 0.8 + (id * 0.3) % 1.8;
+                
+                if (id === 9) { // Optimal Gold Standard
+                    if (pDef.id === 'f') val = 24.2;
+                    if (pDef.id === 'b') val = 36.5;
+                    if (pDef.id === 'a') val = 8.1;
+                    if (pDef.id === 'p') val = 1.1;
+                    if (pDef.id === 'v') val = 4.1;
+                }
+
+                if (o.value !== undefined) val = o.value;
+                val = parseFloat(val.toFixed(1));
+
+                let status = 'optimal';
+                if (pDef.id === 'p' && val > 2) status = 'critical';
+                else if (pDef.id === 'f' && val > 35) status = 'critical';
+                else if (pDef.id === 'f' && val > 30) status = 'warning';
+                else if (pDef.id === 'a' && val < 5) status = 'warning';
+
+                markers[pDef.id] = { ...pDef, value: val, status, cat: 'gut', description: pDef.desc };
+            });
+
+            return { id: `P-${id}`, name, age, bioAge: age + (overrides.bioAgeDelta || 0), markers, nutshell };
+        }
+
+        // ==================== 5. UI HELPER COMPONENTS (HOISTED) ====================
+
+        function Icon({ name, className = "w-4 h-4", strokeWidth = 2 }) {
+            const icons = {
+                Activity: <path d="M22 12h-4l-3 9L9 3l-3 9H2" />,
+                Search: <Fragment><circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" /></Fragment>,
+                LayoutDashboard: <Fragment><rect width="7" height="9" x="3" y="3" rx="1" /><rect width="7" height="5" x="14" y="3" rx="1" /><rect width="7" height="9" x="14" y="12" rx="1" /><rect width="7" height="5" x="3" y="15" rx="1" /></Fragment>,
+                Database: <Fragment><ellipse cx="12" cy="5" rx="9" ry="3" /><path d="M3 5V19A9 3 0 0 0 21 19V5" /><path d="M3 12A9 3 0 0 0 21 12" /></Fragment>,
+                Zap: <path d="M13 2 L3 14 L12 14 L11 22 L21 10 L12 10 Z" />,
+                Heart: <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />,
+                Droplet: <path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7Z" />,
+                Microscope: <Fragment><path d="M6 18h8" /><path d="M3 22h18" /><path d="M14 22a7 7 0 1 0-14 0" /><circle cx="14" cy="9" r="4" /><path d="M14 13v1" /><path d="M12 15h4" /></Fragment>,
+                ShieldCheck: <Fragment><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" /><path d="m9 12 2 2 4-4" /></Fragment>,
+                Layers: <Fragment><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.27a1 1 0 0 0 0 1.83l8.58 4.09a2 2 0 0 0 1.66 0l8.58-4.09a1 1 0 0 0 0-1.83Z" /><path d="m3.58 13.49 8.16 3.9a2 2 0 0 0 1.66 0l8.16-3.9" /><path d="m3.58 17.49 8.16 3.9a2 2 0 0 0 1.66 0l8.16-3.9" /></Fragment>,
+                GitCompare: <Fragment><circle cx="18" cy="18" r="3" /><circle cx="6" cy="6" r="3" /><path d="M6 9v7c0 1.1.9 2 2 2h7" /><path d="M18 15V9c0-1.1-.9-2-2-2H9" /></Fragment>,
+                AlertOctagon: <Fragment><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2" /><path d="M12 8v4" /><path d="M12 16h.01" /></Fragment>,
+                Clock: <Fragment><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></Fragment>,
+                Binary: <path d="M10 10V5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v5M10 18v5a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-5M6 10h12M6 14h12" />,
+                Fingerprint: <Fragment><path d="M2 12C2 6.5 6.5 2 12 2s10 4.5 10 10" /><path d="M5 12c0-3.9 3.1-7 7-7s7 3.1 7 7" /><path d="M8 12c0-2.2 1.8-4 4-4s4 1.8 4 4" /></Fragment>,
+                Compass: <Fragment><circle cx="12" cy="12" r="10" /><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" /></Fragment>,
+                Stethoscope: <Fragment><path d="M21 15V2v0a5 5 0 0 0-10 0v4c0 1.1-.9 2-2 2H4a2 2 0 0 0-2 2v4a5 5 0 0 0 10 0v-4" /></Fragment>,
+                X: <Fragment><path d="M18 6 6 18" /><path d="M6 6l12 12" /></Fragment>,
+                BrainCircuit: <path d="M12 4.5a2.5 2.5 0 0 0-4.96-.46 2.5 2.5 0 0 0-1.98 3 2.5 2.5 0 0 0 .94 4.82 2.5 2.5 0 1 0 4.4-2.18 2.5 2.5 0 1 0 4.4 2.18 2.5 2.5 0 0 0 .94-4.82 2.5 2.5 0 0 0-1.98-3 2.5 2.5 0 0 0-4.96.46Z" />,
+                Info: <Fragment><circle cx="12" cy="12" r="10" /><path d="M12 16v-4" /><path d="M12 8h.01" /></Fragment>,
+                Target: <Fragment><circle cx="12" cy="12" r="10" /><circle cx="12" cy="12" r="6" /><circle cx="12" cy="12" r="2" /></Fragment>,
+                Cpu: <Fragment><rect x="4" y="4" width="16" height="16" rx="2" /><path d="M9 9h6v6H9z" /><path d="M15 2v2" /><path d="M15 20v2" /></Fragment>,
+                Wind: <path d="M17.7 7.7A2.5 2.5 0 1 1 20 12H4M17.7 16.3A2.5 2.5 0 1 0 20 12M6.7 14.7A2.5 2.5 0 1 0 9 19h7M6.7 9.3A2.5 2.5 0 1 1 9 5h4" />
+            };
+            return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" className={className}>{icons[name] || <circle cx="12" cy="12" r="10" />}</svg>;
+        }
+
+        function Badge({ status }) {
+            return (
+                <span className={`px-2 py-0.5 rounded-full text-[8px] font-black uppercase tracking-widest ${status === 'critical' ? 'bg-rose-600 text-white' : status === 'warning' ? 'bg-amber-50 text-white' : 'bg-emerald-500 text-white'}`}>
+                    {status}
+                </span>
+            );
+        }
+
+        function ClinicalBadge({ name, colorClass = "text-blue-700 bg-blue-50 border-blue-100" }) {
+            return (
+                <span className={`px-1.5 py-0.5 border rounded text-[9px] font-black uppercase tracking-widest leading-none shadow-sm ${colorClass}`}>
+                    {name}
+                </span>
+            );
+        }
+
+        function CircularProgress({ value, status = 'optimal', size = 80 }) {
+            const radius = (size / 2) - 8;
+            const circumference = 2 * Math.PI * radius;
+            const offset = circumference - (value / 100) * circumference;
+            return (
+                <div className="relative inline-flex items-center justify-center">
+                    <svg width={size} height={size} className="transform -rotate-90">
+                        <circle cx={size/2} cy={size/2} r={radius} stroke="#f1f5f9" strokeWidth="5" fill="transparent" />
+                        <circle cx={size/2} cy={size/2} r={radius} stroke={status === 'critical' ? '#e11d48' : status === 'warning' ? '#f59e0b' : '#10b981'} strokeWidth="5" fill="transparent" strokeDasharray={circumference} strokeDashoffset={offset} strokeLinecap="round" className="transition-all duration-1000 ease-out" />
+                    </svg>
+                    <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+                        <span className="text-xl font-black text-slate-900 leading-none tracking-tighter">{Math.round(value)}</span>
+                        <span className="text-[7px] font-bold text-slate-400 uppercase tracking-tighter leading-none">Score</span>
+                    </div>
                 </div>
-                
-                <p class="text-lg text-gray-300 mb-4">
-                    P4ML was established with the core mission to translate massive biological data into proactive, predictive health strategies for the UAE population, aligning our technology with the Ministry of Economy's national innovation agenda.
-                </p>
-                
-                <!-- Triple Helix Model & Training COE -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-4 border-t border-slate-700">
-                    <div class="p-4 bg-gray-900 rounded-lg border border-red-500/50">
-                        <h3 class="font-bold text-xl text-red-400 flex items-center mb-2"><i class="fas fa-university mr-2"></i> Training Center of Excellence</h3>
-                        <p class="text-sm text-gray-400">
-                            We are establishing a center dedicated to **knowledge transfer** in bioinformatics, data science, **biopharma**, and **microbiome** research, creating a sustainable talent pipeline across the GCC.
-                        </p>
-                    </div>
-                    <div class="p-4 bg-gray-900 rounded-lg border border-red-500/50">
-                        <h3 class="font-bold text-xl text-red-400 flex items-center mb-2"><i class="fas fa-project-diagram mr-2"></i> Triple Helix Innovation</h3>
-                        <p class="text-sm text-gray-400">
-                            We execute a **Triple Helix Model**—fostering deep collaboration between Academia (research validation), Industry (biopharma/microbiome), and Government (national health strategy).
-                        </p>
-                    </div>
-                </div>
-                
-            </div>
-        </section>
+            );
+        }
 
-        <!-- SECTION 2: THE OMIC-ASSIST STUDY (FLAGSHIP PROJECT) -->
-        <section class="mb-16">
-            <div class="card-bg p-6 md:p-10 rounded-xl card-shadow">
-                <div class="flex items-center space-x-4 mb-6">
-                    <i class="fas fa-flask text-3xl md:text-4xl text-neon-cyan glow-text"></i>
-                    <h2 class="text-2xl md:text-3xl font-bold text-white">OMIC-Assist: Our Flagship Initiative</h2>
-                </div>
-                
-                <p class="text-gray-300 mb-6">
-                    The OMIC-Assist Study is the world's largest multi-omic precision medicine research project, leveraging deep data integration to deliver personalized health strategies across the region.
-                </p>
-                
-                <!-- Key Metrics Grid -->
-                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 text-center mb-6">
-                    <div class="p-3 bg-gray-900 rounded-lg border border-cyan-700/50">
-                        <p class="text-3xl font-extrabold text-neon-cyan">2M+</p>
-                        <p class="text-xs text-gray-400 uppercase mt-1">VOLUNTEERS (5 YR GOAL)</p>
-                    </div>
-                    <div class="p-3 bg-gray-900 rounded-lg border border-cyan-700/50">
-                        <p class="text-3xl font-extrabold text-neon-cyan">253</p>
-                        <p class="text-xs text-gray-400 uppercase mt-1">CORE BIOMARKERS ANALYZED</p>
-                    </div>
-                    <div class="p-3 bg-gray-900 rounded-lg border border-cyan-700/50">
-                        <p class="text-3xl font-extrabold text-neon-cyan">47+</p>
-                        <p class="text-xs text-gray-400 uppercase mt-1">REAL-TIME DATA POINTS</p>
-                    </div>
-                    <div class="p-3 bg-gray-900 rounded-lg border border-cyan-700/50">
-                        <p class="text-3xl font-extrabold text-neon-cyan">100</p>
-                        <p class="text-xs text-gray-400 uppercase mt-1">NEW HIGH-SKILLED JOBS</p>
-                    </div>
-                </div>
-
-                <div class="mt-6 pt-4 border-t border-slate-700">
-                    <h3 class="text-xl font-semibold text-neon-emerald mb-4">Strategic Partnerships & Clinical Integration</h3>
-                    
-                    <!-- Partnership Blobs Grid -->
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        
-                        <!-- DHA -->
-                        <div class="partner-blob bg-blue-900/40 border-blue-600/70 shadow-lg shadow-blue-900/50">
-                            <i class="fas fa-hospital-alt text-2xl text-blue-300"></i>
-                            <p class="font-bold text-lg text-white mt-1">DHA</p>
-                            <p class="text-xs text-blue-200">Dubai Health Authority</p>
+        function Modal({ data, onClose }) {
+            if (!data) return null;
+            return (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in" onClick={onClose}>
+                    <div className="bg-white rounded-[2rem] w-full max-w-xl shadow-2xl overflow-hidden zoom-in-95" onClick={e => e.stopPropagation()}>
+                        <div className="p-8 border-b flex justify-between items-center bg-slate-50">
+                            <div className="flex items-center gap-4">
+                                <div className="w-10 h-10 rounded-xl bg-slate-950 flex items-center justify-center shadow-lg text-white"><Icon name="Info" /></div>
+                                <div><h3 className="text-lg font-black uppercase tracking-tight leading-none">{data.title || data.role || data.name}</h3><p className="text-[10px] text-blue-600 font-extrabold uppercase tracking-widest mt-1">Audit Synthesis</p></div>
+                            </div>
+                            <button onClick={onClose} className="p-2 hover:bg-slate-200 rounded-xl transition-colors"><Icon name="X" /></button>
                         </div>
-                        
-                        <!-- Evsop (Biopharma) -->
-                        <div class="partner-blob bg-purple-900/40 border-purple-600/70 shadow-lg shadow-purple-900/50">
-                            <i class="fas fa-syringe text-2xl text-purple-300"></i>
-                            <p class="font-bold text-lg text-white mt-1">Evsop</p>
-                            <p class="text-xs text-purple-200">Biopharma Solutions</p>
-                        </div>
-
-                        <!-- Seqbiome (Microbiome) -->
-                        <div class="partner-blob bg-green-900/40 border-green-600/70 shadow-lg shadow-green-900/50">
-                            <i class="fas fa-microscope text-2xl text-green-300"></i>
-                            <p class="font-bold text-lg text-white mt-1">Seqbiome</p>
-                            <p class="text-xs text-green-200">Microbiome Sequencing</p>
-                        </div>
-
-                        <!-- Fakeeh Hospital -->
-                        <div class="partner-blob bg-red-900/40 border-red-600/70 shadow-lg shadow-red-900/50">
-                            <i class="fas fa-user-md text-2xl text-red-300"></i>
-                            <p class="font-bold text-lg text-white mt-1">Fakeeh Hospital</p>
-                            <p class="text-xs text-red-200">Clinical Validation</p>
+                        <div className="p-10 space-y-8">
+                            <div className="space-y-3">
+                                <p className="text-[11px] font-black uppercase text-blue-500 tracking-widest leading-none">Mechanism</p>
+                                <p className="text-base font-semibold text-slate-800 italic leading-relaxed">"{data.mechanism || "Registry monitoring."}"</p>
+                            </div>
+                            <div className="grid grid-cols-2 gap-6">
+                                <div className="p-5 bg-rose-50 rounded-2xl border border-rose-100 shadow-sm"><p className="text-[10px] font-black uppercase text-rose-500 mb-2">Impact</p><p className="text-sm font-bold text-rose-900 leading-snug">{data.clinicalImpact || "Sub-clinical drift node."}</p></div>
+                                <div className="p-5 bg-emerald-50 rounded-2xl border border-emerald-100 shadow-sm"><p className="text-[10px] font-black uppercase text-emerald-500 mb-2">Resolution</p><p className="text-sm font-bold text-emerald-900 leading-snug">{data.exitStrategy || data.exitPath || "Standard Maintenance."}</p></div>
+                            </div>
+                            {data.markers && data.markers.length > 0 && (
+                                <div className="space-y-3 pt-4 border-t border-slate-100">
+                                    <p className="text-[11px] font-black uppercase text-slate-400 tracking-widest border-b pb-2">Support Evidence</p>
+                                    <div className="grid gap-2 max-h-[250px] overflow-y-auto pr-2">
+                                        {data.markers.map((m, idx) => (
+                                            <div key={idx} className="flex justify-between items-center p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                                                <div><span className="text-[11px] font-black text-slate-900 mr-2">{m.clinicalName}</span><span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{m.role}</span></div>
+                                                <div className="text-right flex items-center gap-4"><span className={`text-base font-black ${getStatusColor(m.status)}`}>{m.value} {m.unit || '%'}</span><Badge status={m.status} /></div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                            <button onClick={onClose} className="w-full py-4 bg-slate-950 text-white rounded-2xl font-black uppercase text-xs tracking-[0.3em] shadow-xl hover:bg-slate-800 transition-all active:scale-95">Acknowledge Audit</button>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            );
+        }
 
-        <!-- SECTION 3: CORPORATE FOOTPRINT & INNOVATION -->
-        <section class="mb-16">
-            <div class="card-bg p-6 md:p-10 rounded-xl card-shadow">
-                <div class="flex items-center space-x-4 mb-6">
-                    <i class="fas fa-satellite-dish text-3xl md:text-4xl text-yellow-400 glow-text" style="text-shadow: 0 0 8px #facc15;"></i>
-                    <h2 class="text-2xl md:text-3xl font-bold text-white">Innovation & Global Reach</h2>
+        // ==================== 6. MAIN APPLICATION ====================
+
+        function App() {
+            const [activeTab, setActiveTab] = useState('dashboard');
+            const [patientId, setPatientId] = useState('P-9'); // Start with the Optimal Profile
+            const [activeModal, setActiveModal] = useState(null);
+            const [isProcessing, setIsProcessing] = useState(false);
+            const [reportGenerated, setReportGenerated] = useState(false);
+            const [searchTerm, setSearchTerm] = useState('');
+
+            const patients = useMemo(() => [
+                generatePatientData(1, "Alpha Crisis Profile", 58, "Severe metabolic signaling collapse with acute phyla over-harvesting.", { hba1c: { value: 7.6 }, f: { value: 38.5 }, p: { value: 2.1 }, bioAgeDelta: 14 }),
+                generatePatientData(2, "Renal-Vascular Stress", 48, "Hyperuricemia paired with significant particle drift.", { uric_acid: { value: 9.2 }, egfr: { value: 58 }, crp: { value: 6.2 }, apo_b: { value: 128 }, bioAgeDelta: 9 }),
+                generatePatientData(3, "Hormonal Lead Drift", 39, "Low-grade metabolic stress disrupting repair signaling pathways.", { testosterone: { value: 245 }, v: { value: 0.6 }, bioAgeDelta: 6 }),
+                generatePatientData(4, "High-Particle risk", 52, "Significant ApoB elevation in the presence of vessel wall stress.", { apo_b: { value: 132 }, p: { value: 3.2 }, bioAgeDelta: 8 }),
+                generatePatientData(5, "Gut Phyla Crisis", 45, "Severe bacterial harvesting (Firmicutes) driving sugar storage.", { f: { value: 44.1 }, p: { value: 4.8 }, bioAgeDelta: 11 }),
+                generatePatientData(6, "Immune Barrier Collapse", 34, "Shield phyla depletion leading to systemic inflammatory fires.", { a: { value: 1.2 }, v: { value: 0.3 }, crp: { value: 5.8 }, bioAgeDelta: 7 }),
+                generatePatientData(9, "Peak Vitality Registry", 32, "Autonomous peak synchronization across all biological systems.", { bioAgeDelta: -6 })
+            ], []);
+
+            const patient = useMemo(() => patients.find(p => p.id === patientId), [patientId, patients]);
+
+            const stats = useMemo(() => {
+                if (!patient) return { healthScore: 0 };
+                const all = Object.values(patient.markers);
+                const optimalCount = all.filter(m => m.status === 'optimal').length;
+                return { healthScore: (optimalCount / all.length) * 100 };
+            }, [patient]);
+
+            const systemicPatterns = useMemo(() => {
+                if (!patient) return [];
+                return Object.entries(SYSTEM_CATEGORIES).map(([key, sys]) => {
+                    const markers = Object.values(patient.markers).filter(m => m.cat === key);
+                    const status = markers.some(m => m.status === 'critical') ? 'critical' : markers.some(m => m.status === 'warning') ? 'warning' : 'optimal';
+                    const narrative = getAuditNarrative(key, status);
+                    return { key, ...sys, markers, status, ...narrative };
+                });
+            }, [patient]);
+
+            const handshakes = useMemo(() => {
+                if (!patient) return [];
+                const bridges = [
+                    { id: 'metabolic_bridge', markers: [patient.markers.f, patient.markers.b, patient.markers.homa_ir] },
+                    { id: 'inflammation_bridge', markers: [patient.markers.a, patient.markers.crp] },
+                    { id: 'cardio_bridge', markers: [patient.markers.apo_b, patient.markers.uric_acid] }
+                ];
+                return bridges.map(b => {
+                    const status = b.markers.some(m => m.status === 'critical') ? 'critical' : b.markers.some(m => m.status === 'warning') ? 'warning' : 'optimal';
+                    const handshakeData = getHandshakeLogic(b.id, status);
+                    return { ...b, status, handshakeText: handshakeData.clinicalImpact, mechanism: handshakeData.mechanism, title: handshakeData.title };
+                });
+            }, [patient]);
+
+            const diseasePrognosis = useMemo(() => {
+                if (!patient) return [];
+                const m = patient.markers;
+                const getRisk = (score, high, low) => score > 35 ? { prob: score > 75 ? '🔴 Danger' : '🟡 Warning', time: score > 75 ? '1-3Y' : '3-7Y', mech: high } : { prob: '🔵 Optimal', time: 'Longevity', mech: low };
+                const t2d = (m.hba1c.status === 'critical' ? 45 : 10) + (m.homa_ir.status === 'critical' ? 45 : 0);
+                const heart = (m.apo_b.status === 'critical' ? 55 : 10) + (m.crp.status !== 'optimal' ? 25 : 0);
+                const renal = (m.uric_acid.status === 'critical' ? 50 : 0) + (m.egfr.status !== 'optimal' ? 50 : 0);
+                return [
+                    { name: 'Metabolic Decay', ...getRisk(t2d, "Your sugar sync is failing.", "Healthy insulin sync active.") },
+                    { name: 'Heart Risk Level', ...getRisk(heart, "Particles sticking to vessel walls.", "Clean heart blood flow.") },
+                    { name: 'Renal Filter Health', ...getRisk(renal, "Kidney pressure is high.", "Waste filtration is efficient.") }
+                ];
+            }, [patient]);
+
+            const dynamicVerdict = useMemo(() => {
+                const crit = systemicPatterns.filter(p => p.status === 'critical').length;
+                if (stats.healthScore > 90) return "Biological Sovereignty Achieved: All systems are in autonomous synchronization. No corrective intervention required. Strategy: Maintain current course.";
+                if (crit > 2) return `Critical Decoherence: ${crit} systems are in active failure. Decay velocity is critical at the gut-vascular bridge. This indicate high probability of clinical events. Immediate reset mandatory.`;
+                return "Sub-Clinical Signaling Drift: Early signaling decoherence detected. Metabolic and Immune bridges are losing stability. Restore biological baseline via phyla-insulin pulse.";
+            }, [stats, systemicPatterns]);
+
+            const runSynthesis = () => { setIsProcessing(true); setTimeout(() => { setIsProcessing(false); setReportGenerated(true); }, 1500); };
+
+            if (!patient) return null;
+
+            return (
+                <div className="min-h-screen relative pb-32 overflow-x-hidden">
+                    <header className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200">
+                        <div className="max-w-6xl mx-auto px-6 py-3 flex justify-between items-center">
+                            <div className="flex items-center gap-4">
+                                <div className="w-10 h-10 bg-slate-950 rounded-xl flex items-center justify-center text-white shadow-lg"><Icon name="Fingerprint" className="w-5 h-5" /></div>
+                                <div><h1 className="text-lg font-black uppercase tracking-tighter leading-none">Burak CASCADE</h1><p className="text-[8px] font-black text-blue-600 uppercase tracking-[0.2em] mt-1">Audit Protocol v9.5</p></div>
+                            </div>
+                            <select value={patientId} onChange={(e) => { setPatientId(e.target.value); setReportGenerated(false); }} className="bg-slate-950 text-white font-black text-[10px] px-4 py-3 rounded-xl outline-none cursor-pointer uppercase shadow-lg border-none">
+                                {patients.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+                            </select>
+                        </div>
+                    </header>
+
+                    <div className="max-w-5xl mx-auto px-6 pt-20 space-y-10 animate-in">
+                        <nav className="flex bg-white/90 p-1.5 rounded-2xl border border-slate-200 shadow-md gap-2 backdrop-blur-md">
+                            {[{ id: 'dashboard', label: 'Summary', icon: 'LayoutDashboard' }, { id: 'markers', label: 'Data Lake', icon: 'Database' }, { id: 'synthesis', label: 'AI Review', icon: 'BrainCircuit' }].map(t => (
+                                <button key={t.id} onClick={() => setActiveTab(t.id)} className={`flex-1 flex items-center justify-center gap-2 py-3.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === t.id ? 'bg-slate-950 text-white shadow-lg scale-[1.01]' : 'text-slate-400 hover:text-slate-900 hover:bg-white'}`}><Icon name={t.id === 'synthesis' ? 'BrainCircuit' : t.icon} className="w-3.5 h-3.5" /> {t.label}</button>
+                            ))}
+                        </nav>
+
+                        {activeTab === 'dashboard' && (
+                            <div className="space-y-10">
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    <div className="bg-white p-6 rounded-[2.5rem] shadow-lg flex items-center gap-8 border border-slate-200 transition-all">
+                                        <CircularProgress value={stats.healthScore} status={stats.healthScore < 60 ? 'critical' : stats.healthScore < 85 ? 'warning' : 'optimal'} size={110} />
+                                        <div><p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 leading-tight">Reliability</p><h2 className="text-4xl font-black tracking-tighter">{stats.healthScore > 90 ? 'A+' : stats.healthScore > 75 ? 'B' : 'C-'}</h2></div>
+                                    </div>
+                                    <div className="bg-white p-6 rounded-[2.5rem] shadow-lg border border-slate-200 flex flex-col justify-center transition-all">
+                                        <p className="text-[10px] font-black text-slate-400 uppercase mb-2 tracking-widest leading-none">Biological Clock</p>
+                                        <div className="flex items-baseline gap-2"><h2 className={`text-5xl font-black ${patient.bioAge > patient.age ? 'text-rose-600' : 'text-emerald-600'} leading-none tracking-tighter`}>{patient.bioAge}</h2><span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Yrs</span></div>
+                                        <p className="text-[9px] font-black text-slate-300 mt-3 tracking-widest leading-none">Registry: {patient.age}Y</p>
+                                    </div>
+                                    <div className="bg-slate-950 p-6 rounded-[2.5rem] text-white shadow-2xl relative overflow-hidden flex flex-col justify-center border-b-8 border-blue-600 transition-all">
+                                        <p className="text-[10px] font-black text-blue-400 uppercase mb-3 tracking-[0.2em]">Strategy Profile</p>
+                                        <p className="text-lg font-bold italic leading-tight">"{patient.nutshell}"</p>
+                                    </div>
+                                </div>
+
+                                {/* GCC INDEX RE-INTEGRATED */}
+                                <div className="bg-white p-8 rounded-[2rem] border border-slate-200 shadow-sm relative overflow-hidden group hover:border-blue-200 transition-all">
+                                    <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none rotate-12"><Icon name="Compass" className="w-16 h-16" /></div>
+                                    <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+                                        <div className="text-center md:text-left border-b md:border-b-0 md:border-r border-slate-100 pb-4 md:pb-0 md:pr-8">
+                                            <p className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-900 leading-none mb-1">GCC Index Calibration</p>
+                                            <p className="text-[8px] font-black text-slate-400 uppercase tracking-[0.2em]">Regional Calibration Index</p>
+                                        </div>
+                                        <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
+                                            {[
+                                                { label: 'Vitamin D', cat: 'vitamin_d', b: 'VIT D', c: 'text-amber-700 bg-amber-50' },
+                                                { label: 'HbA1c', cat: 'hba1c', b: 'SUGAR', c: 'text-blue-700 bg-blue-50' },
+                                                { label: 'Urate', cat: 'uric_acid', b: 'URATE', c: 'text-indigo-700 bg-indigo-50' },
+                                                { label: 'Inflam', cat: 'crp', b: 'hs-CRP', c: 'text-rose-700 bg-rose-50' }
+                                            ].map((item, i) => (
+                                                <div key={i} className="flex flex-col items-center gap-2">
+                                                    <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest">{item.label}</p>
+                                                    <div className="flex items-center gap-2">
+                                                        <ClinicalBadge name={item.b} colorClass={`${item.c} border-transparent shadow-none`} />
+                                                        <p className={`text-xl font-black text-clinical ${getStatusColor(patient.markers[item.cat].status)}`}>{patient.markers[item.cat].value}</p>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                                    {systemicPatterns.map(sys => (
+                                        <button key={sys.key} onClick={() => setActiveModal(sys)} className={`p-8 text-left rounded-[2.5rem] border shadow-sm transition-all hover:scale-105 active:scale-95 flex flex-col gap-6 relative overflow-hidden group ${getStatusBg(sys.status)}`}>
+                                            <div className="flex justify-between items-center"><div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${sys.gradient} flex items-center justify-center text-white shadow-lg`}><Icon name={sys.icon} className="w-5 h-5" /></div><div className={`w-2 h-2 rounded-full ${sys.status === 'critical' ? 'bg-rose-50 animate-ping' : sys.status === 'warning' ? 'bg-amber-50' : 'bg-emerald-50'}`}></div></div>
+                                            <div><p className={`text-[7px] font-black uppercase tracking-widest mb-1 ${getStatusColor(sys.status)}`}>{sys.status.toUpperCase()}</p><h4 className="text-[11px] font-black text-slate-900 uppercase leading-tight tracking-tight">{sys.name}</h4></div>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {activeTab === 'markers' && (
+                            <div className="space-y-10 animate-in">
+                                <div className="bg-white p-3 rounded-3xl border border-slate-200 shadow-sm flex items-center gap-4"><Icon name="Search" className="text-slate-300 w-6 h-6 ml-4" /><input type="text" placeholder="SEARCH CORE DATA LAKE..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value.toUpperCase())} className="flex-1 py-4 bg-transparent font-black text-[11px] uppercase tracking-widest outline-none" /></div>
+                                {Object.entries(SYSTEM_CATEGORIES).map(([catKey, catInfo]) => {
+                                    const markers = Object.values(patient.markers).filter(m => m.cat === catKey && (m.clinicalName.toUpperCase().includes(searchTerm)));
+                                    if (markers.length === 0) return null;
+                                    return (
+                                        <div key={catKey} className="space-y-6">
+                                            <div className="flex items-center gap-4 px-2"><div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${catInfo.gradient} flex items-center justify-center text-white shadow-md`}><Icon name={catInfo.icon} className="w-5 h-5" /></div><h3 className={`text-xs font-black uppercase tracking-[0.3em] ${catInfo.color}`}>{catInfo.name}</h3><div className="flex-1 h-px bg-slate-200"></div></div>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                                                {markers.map(m => (
+                                                    <div key={m.id} onClick={() => setActiveModal(m)} className={`bg-white p-6 rounded-3xl border border-slate-200 cursor-pointer hover:shadow-xl transition-all shadow-sm ${getStatusBg(m.status)}`}>
+                                                        <div className="flex justify-between items-start mb-4"><div><p className="text-[9px] font-black uppercase text-slate-900 leading-tight mb-1">{m.role}</p><ClinicalBadge name={m.clinicalName} /></div><Badge status={m.status} /></div>
+                                                        <p className={`text-3xl font-black text-clinical ${getStatusColor(m.status)}`}>{m.value} <span className="text-[10px] text-slate-400 uppercase tracking-widest ml-1">{m.unit}</span></p>
+                                                        <p className="text-[8px] font-bold text-slate-400 mt-4 tracking-tighter">Sync: {m.ref}</p>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+
+                                {/* SIGNAL VAULT 253 table restored */}
+                                <div className="bg-slate-950 p-8 rounded-[3rem] text-white relative overflow-hidden border-b-[10px] border-blue-600 transition-all hover:scale-[1.01]">
+                                    <div className="absolute top-0 right-0 p-8 opacity-5 pointer-events-none rotate-12"><Icon name="Binary" className="w-32 h-32" /></div>
+                                    <div className="flex flex-col md:flex-row justify-between items-center gap-10 relative z-10">
+                                        <div className="space-y-4 text-center md:text-left max-w-lg">
+                                            <div className="inline-flex items-center gap-3 bg-white/10 px-4 py-1.5 rounded-full border border-white/10 mb-1">
+                                                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                                                <p className="text-[9px] font-black uppercase tracking-[0.3em] text-blue-400 leading-none">Signal Vault 253</p>
+                                            </div>
+                                            <h3 className="text-xl font-black uppercase tracking-tight leading-none">Registry Auxiliary reference</h3>
+                                            <p className="text-[11px] font-medium text-slate-400 leading-relaxed uppercase tracking-[0.1em]">The protocol tracks 253 secondary clinical data nodes autonomously for high-fidelity adaptive drift detection while maintaining focus on Core VIP Biomarkers.</p>
+                                        </div>
+                                        <div className="flex-1 w-full bg-white/5 rounded-[2rem] p-6 border border-white/10">
+                                            <div className="grid grid-cols-4 md:grid-cols-8 gap-2 text-[7px] font-bold uppercase text-slate-500 max-h-[140px] overflow-y-auto pr-2">
+                                                {Array.from({ length: 253 }).map((_, i) => (
+                                                    <div key={i} className="bg-white/5 p-1 text-center rounded border border-white/5 text-slate-400 hover:bg-blue-600/20 transition-colors">NODE-{i+1}</div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {activeTab === 'synthesis' && (
+                            <div className="space-y-12 animate-in pb-20">
+                                {!reportGenerated ? (
+                                    <div className="audit-bg p-20 rounded-[3rem] shadow-2xl relative overflow-hidden flex flex-col items-center border border-white/5 min-h-[450px] justify-center text-center">
+                                        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-transparent opacity-50"></div>
+                                        {isProcessing ? (
+                                            <div className="relative z-10 space-y-12 flex flex-col items-center"><Icon name="Cpu" className="w-20 h-20 text-blue-500 animate-spin" strokeWidth={1} /><p className="text-white font-black uppercase tracking-[0.5em] text-xs">SYNTHESIZING BRIDGES</p></div>
+                                        ) : (
+                                            <div className="relative z-10 flex flex-col items-center space-y-12"><div className="p-8 bg-white/5 rounded-full border border-white/10 text-blue-400 shadow-[0_0_80px_rgba(59,130,246,0.1)]"><Icon name="BrainCircuit" className="w-16 h-16 animate-pulse" /></div><div className="space-y-4 text-center"><h2 className="text-3xl font-black text-white uppercase tracking-tighter leading-none">AI Diagnostic Review</h2><p className="text-slate-400 max-w-lg mx-auto text-[10px] uppercase tracking-widest leading-relaxed">Processing multi-omic registry for {patient.name}.</p></div><button onClick={runSynthesis} className="bg-blue-600 text-white px-12 py-5 rounded-2xl font-black uppercase text-[10px] tracking-[0.3em] hover:bg-blue-50 shadow-xl transition-all">Start Audit</button></div>
+                                        )}
+                                    </div>
+                                ) : (
+                                    <div className="space-y-10">
+                                        <section className="audit-bg p-8 rounded-[3rem] text-white shadow-2xl border border-white/5 overflow-hidden relative">
+                                            <div className="relative z-10 flex items-center justify-between gap-10">
+                                                <div className="flex items-center gap-6">
+                                                    <div className="w-16 h-16 bg-blue-600 rounded-[2rem] shadow-2xl flex items-center justify-center text-white"><Icon name="Stethoscope" className="w-8 h-8" /></div>
+                                                    <div><h3 className="text-2xl font-black uppercase tracking-tight leading-none mb-2">Cascade Registry Audit</h3><div className="flex gap-4"><span className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-400">{patient.name}</span><span className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.2)]">Validated</span></div></div>
+                                                </div>
+                                                <div className="flex gap-8 border-l border-white/10 pl-8">
+                                                    <div className="text-center"><p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1 leading-none">Potential</p><p className="text-4xl font-black text-clinical">{100 - (patient.bioAge - patient.age)}Y</p></div>
+                                                    <div className="text-center"><p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1 leading-none">Reliability</p><p className={`text-4xl font-black text-clinical ${stats.healthScore > 80 ? 'text-emerald-400' : 'text-rose-500'}`}>{stats.healthScore.toFixed(0)}%</p></div>
+                                                </div>
+                                            </div>
+                                        </section>
+
+                                        {/* PHASE 2: Logic Matrix restored */}
+                                        <section className="space-y-6">
+                                            <div className="flex items-center gap-6 px-4"><div className="w-10 h-10 bg-indigo-600 rounded-xl shadow-xl flex items-center justify-center text-white"><Icon name="Layers" className="w-5 h-5" /></div><h3 className="text-sm font-black uppercase tracking-[0.5em] text-slate-900 leading-none">Phase 2: Logic Matrix</h3><div className="flex-1 h-px bg-slate-200"></div></div>
+                                            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                                                {systemicPatterns.map(sys => (
+                                                    <button key={sys.key} onClick={() => setActiveModal({ ...sys, markers: sys.markers })} className={`p-8 text-left rounded-[3rem] border-2 shadow-lg flex flex-col justify-between aspect-square transition-all hover:scale-105 active:scale-95 ${getStatusBg(sys.status)}`}><div className="flex justify-between items-start"><div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${sys.gradient} flex items-center justify-center shadow-md text-white`}><Icon name={sys.icon} className="w-5 h-5" /></div><div className={`w-3 h-3 rounded-full ${sys.status === 'optimal' ? 'bg-emerald-50 shadow-[0_0_10px_#10b981]' : 'bg-rose-500 animate-pulse'}`}></div></div><div className="space-y-1"><p className={`text-[7px] font-black uppercase tracking-widest ${getStatusColor(sys.status)}`}>{sys.status.toUpperCase()}</p><h4 className="text-[13px] font-black text-slate-900 uppercase tracking-tighter leading-none">{sys.name}</h4></div></button>
+                                                ))}
+                                            </div>
+                                        </section>
+
+                                        {/* PHASE 3: THE MICROBIAL ENGINE unique shake */}
+                                        <section className="bg-white p-12 rounded-[4rem] border border-slate-200 shadow-xl space-y-12 relative overflow-hidden">
+                                            <div className="absolute top-0 right-0 p-16 opacity-5 text-indigo-600"><Icon name="Wind" className="w-64 h-64" /></div>
+                                            <div className="space-y-2 border-b pb-8"><h3 className="text-2xl font-black uppercase tracking-tight text-slate-900 leading-none">Phase 3: The Microbial Engine</h3><p className="text-[11px] font-black text-blue-600 uppercase tracking-[0.5em]">Evidence Node Performance & Registry Targets</p></div>
+                                            <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
+                                                {PHYLA_DEFS.map(ph => {
+                                                    const m = patient.markers[ph.id];
+                                                    return (
+                                                        <div key={ph.id} onClick={() => setActiveModal({ ...m, title: ph.clinicalName, markers: [m], ...getAuditNarrative('gut', m.status) })} className="text-center space-y-4 group cursor-pointer">
+                                                            <div className={`aspect-square rounded-[2.5rem] ${getStatusBg(m.status)} flex flex-col items-center justify-center shadow-xl relative transition-all group-hover:scale-110 border-2`}>
+                                                                <span className={`text-[9px] font-black uppercase mb-1 tracking-widest leading-none ${getStatusColor(m.status)}`}>PH%</span>
+                                                                <span className={`text-3xl font-black text-clinical leading-none ${getStatusColor(m.status)}`}>{m.value}%</span>
+                                                                <p className={`text-[8px] font-black uppercase mt-4 tracking-widest px-3 py-1 rounded-full border leading-none bg-white ${getStatusColor(m.status)}`}>TARGET: {ph.ref}</p>
+                                                            </div>
+                                                            <div className="space-y-1"><p className="text-[10px] font-black uppercase text-slate-900 leading-none tracking-widest">{ph.role}</p><Badge status={m.status} /></div>
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                        </section>
+
+                                        {/* Phase 4 & 5 Grid dynamic narratives */}
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                                            {/* Logic Handshakes */}
+                                            <section className="space-y-8">
+                                                <div className="flex items-center gap-6 px-4"><div className="w-12 h-12 bg-blue-600 rounded-2xl shadow-xl flex items-center justify-center text-white"><Icon name="Binary" className="w-6 h-6" /></div><h3 className="text-sm font-black uppercase tracking-[0.5em] text-slate-900 leading-none">Logic Handshakes</h3></div>
+                                                <div className="grid gap-6">
+                                                    {handshakes.map((hs, i) => (
+                                                        <div key={i} onClick={() => setActiveModal({ ...hs, markers: hs.markers })} className={`p-8 rounded-[3rem] border shadow-xl space-y-6 bg-white logic-card cursor-pointer group ${getStatusBg(hs.status)}`}>
+                                                            <div className="flex justify-between items-center"><div className={`p-4 rounded-2xl ${getStatusColor(hs.status).replace('text', 'bg').replace('600', '50')} ${getStatusColor(hs.status)}`}><Icon name="GitCompare" className="w-6 h-6" /></div><Badge status={hs.status} /></div>
+                                                            <div><h4 className="text-lg font-black uppercase tracking-tighter text-slate-900 group-hover:text-blue-600 transition-colors leading-none">{hs.title}</h4><p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-2">{hs.mechanism}</p></div>
+                                                            <p className="text-xs font-semibold text-slate-500 leading-relaxed italic border-l-4 border-slate-100 pl-4">"{hs.handshakeText}"</p>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </section>
+
+                                            {/* Health Prognosis */}
+                                            <section className="space-y-8">
+                                                <div className="flex items-center gap-6 px-4"><div className="w-12 h-12 bg-slate-950 rounded-2xl shadow-xl flex items-center justify-center text-white"><Icon name="AlertOctagon" className="w-6 h-6" /></div><h3 className="text-sm font-black uppercase tracking-[0.5em] text-slate-900 leading-none">Health Prognosis</h3></div>
+                                                <div className="grid gap-6">
+                                                    {diseasePrognosis.map((d, i) => (
+                                                        <div key={i} onClick={() => setActiveModal({ title: d.name, markers: [], ...getAuditNarrative('metabolic', d.prob.includes('Optimal') ? 'optimal' : 'warning') })} className="bg-white p-8 rounded-[3rem] border border-slate-200 shadow-xl space-y-6 group hover:bg-slate-50 cursor-pointer transition-all">
+                                                            <div className="flex justify-between items-start">
+                                                                <div className="space-y-3"><h4 className="font-black text-slate-900 uppercase text-lg tracking-tight group-hover:text-blue-600 transition-colors leading-none">{d.name}</h4><div className="flex items-center gap-3 bg-slate-50 px-3 py-1 rounded-xl border border-slate-100 text-slate-400 shadow-sm"><Icon name="Clock" className="w-3 h-3" /><p className="text-[9px] font-black uppercase tracking-widest leading-none">{d.time}</p></div></div>
+                                                                <span className={`px-4 py-1.5 rounded-xl text-[10px] font-black tracking-widest ${d.prob.includes('Danger') ? 'bg-rose-100 text-rose-600' : 'bg-blue-100 text-blue-600'}`}>{d.prob}</span>
+                                                            </div>
+                                                            <p className="text-xs font-semibold text-slate-500 leading-relaxed italic border-l-4 border-slate-100 pl-4">"{d.mech}"</p>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </section>
+                                        </div>
+
+                                        <div className="audit-bg p-12 rounded-[4rem] text-white text-center space-y-10 border border-white/5 relative overflow-hidden shadow-2xl">
+                                            <div className="absolute inset-0 bg-gradient-to-t from-blue-600/15 to-transparent opacity-50"></div>
+                                            <h4 className="text-3xl font-black uppercase tracking-[0.6em] text-blue-400 relative z-10 leading-none">Diagnostic Synthesis</h4>
+                                            <p className="text-xl text-slate-300 font-medium max-w-4xl mx-auto leading-relaxed uppercase tracking-[0.2em] relative z-10 px-6 text-center">
+                                                {dynamicVerdict} Current signaling indicate a path toward <strong className="text-white border-b-4 border-blue-600 px-3">Biological Sovereignty</strong>.
+                                            </p>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
+                        <footer className="mt-20 pt-16 border-t border-slate-200 text-center flex flex-col items-center gap-8">
+                            <div className="w-12 h-12 bg-slate-950 rounded-xl flex items-center justify-center text-white shadow-2xl transform hover:rotate-12 transition-transform"><Icon name="Fingerprint" className="w-6 h-6" /></div>
+                            <div className="space-y-4">
+                                <h2 className="text-[10px] font-black uppercase tracking-[1.6em] text-slate-300 ml-[1.6em]">Burak Longevity</h2>
+                                <p className="text-[12px] font-black text-slate-600 uppercase tracking-widest">Developed by <span className="text-slate-950 underline decoration-blue-600 decoration-4 underline-offset-4">Waseem Ahanger</span></p>
+                                <div className="flex items-center justify-center gap-3 text-slate-400"><div className="w-1.5 h-1.5 bg-blue-600 rounded-full animate-ping"></div><p className="text-[8px] font-black uppercase tracking-[0.3em] italic">GCP Vertex AI Precision Infrastructure</p></div>
+                            </div>
+                        </footer>
+                    </div>
+                    {activeModal && <Modal data={activeModal} onClose={() => setActiveModal(null)} />}
                 </div>
+            );
+        }
 
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                    <!-- Future 100 / Ministry of Economy -->
-                    <div class="bg-gray-900 p-4 rounded-lg border border-gray-700 sm:col-span-3 lg:col-span-1">
-                        <h4 class="font-bold text-lg text-neon-cyan flex items-center mb-1">
-                             <i class="fas fa-medal mr-2"></i> National Initiative (Ministry of Economy)
-                        </h4>
-                        <p class="text-sm text-gray-400">P4ML is a **Future100** UAE company, aligning with the national initiative launched by the Ministry of Economy to accelerate economic growth through innovation.</p>
-                    </div>
-                    
-                    <!-- BeginNGS -->
-                    <div class="bg-gray-900 p-4 rounded-lg border border-gray-700">
-                        <h4 class="font-bold text-lg text-neon-cyan"><i class="fas fa-baby-carriage mr-2"></i> BeginNGS Consortium</h4>
-                        <p class="text-sm text-gray-400">The first EMEAI technology partner, focused on advancing genomics for newborn screening and rare disease management across the region.</p>
-                    </div>
-                    <!-- UNTOLD Partnership -->
-                    <div class="bg-gray-900 p-4 rounded-lg border border-gray-700">
-                        <h4 class="font-bold text-lg text-neon-cyan"><i class="fas fa-music mr-2"></i> Public Engagement</h4>
-                        <p class="text-sm text-gray-400">P4ML was the first Health & Wellness company to partner with UNTOLD Dubai 2025, bridging high-tech science with youth wellness culture.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-    </div>
-
-    <!-- FOOTER: CONTACT -->
-    <footer class="bg-gray-900/90 py-6 px-4">
-        <div class="max-w-6xl mx-auto text-center">
-            <h3 class="text-xl font-bold text-white mb-2">P4ML | Precision for Millions</h3>
-            <p class="text-sm text-gray-500">
-                <i class="fas fa-envelope mr-2"></i> Contact: <a href="mailto:patrick@p4ml.com" class="text-neon-cyan hover:underline">patrick@p4ml.com</a> | <i class="fas fa-map-marker-alt mr-2"></i> Headquartered: Dubai, UAE
-            </p>
-            <p class="text-xs text-gray-600 mt-2">
-                © 2025 P4ML, Architecting Health Strategy.
-            </p>
-        </div>
-    </footer>
-
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
 </body>
 </html>
