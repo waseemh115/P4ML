@@ -2,3174 +2,1294 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>BURAK Labs | The Gut-Brain Science for ADHD Prevention</title>
-<meta name="description" content="Evidence-based guide to preventing ADHD through gut microbiome optimization in the first 1000 days. Non-commercial, peer-reviewed research.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>BURAK Labs — ADHD Cross-Connections & Early Signals</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&family=Noto+Sans+Arabic:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-
-:root {
-  --bg: #020208;
-  --surface: #0a0a14;
-  --gut-good: #059669;
-  --gut-bad: #dc2626;
-  --brain: #7c3aed;
-  --signal: #fbbf24;
-  --text: #ffffff;
-  --dim: rgba(255,255,255,0.5);
-  --glow-brain: rgba(139,92,246,0.6);
-  --glow-gut: rgba(16,185,129,0.6);
-  --glass: rgba(255,255,255,0.03);
-  --glass-border: rgba(255,255,255,0.08);
-}
-
-* { margin: 0; padding: 0; box-sizing: border-box; }
-html, body { 
-  height: 100%; 
-  overflow: hidden;
-  background: var(--bg);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  color: var(--text);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* Smooth animations for all elements */
-*, *::before, *::after {
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* GPU acceleration for animations */
-.brain, .gut, .signal-up, .signal-down, .bacterium, .neural-fire, .glow-orb {
-  will-change: transform, opacity;
-  transform: translateZ(0);
-  backface-visibility: hidden;
-}
-
-/* Risk Mode Visual States */
-body.risk-mode .brain-shape {
-  background: radial-gradient(ellipse at 35% 30%, #f87171 0%, var(--gut-bad) 40%, #7f1d1d 100%) !important;
-  box-shadow: 0 0 80px rgba(220,38,38,0.6), 0 0 120px rgba(220,38,38,0.3), inset 0 -20px 40px rgba(0,0,0,0.3) !important;
-}
-body.risk-mode .gut-shape {
-  background: radial-gradient(ellipse at 40% 35%, #f87171 0%, var(--gut-bad) 40%, #7f1d1d 100%) !important;
-  box-shadow: 0 0 100px rgba(220,38,38,0.6), 0 0 150px rgba(220,38,38,0.3), inset 0 -30px 50px rgba(0,0,0,0.3) !important;
-}
-body.risk-mode .axis-path {
-  background: linear-gradient(180deg, var(--gut-bad) 0%, #f97316 50%, var(--gut-bad) 100%) !important;
-  box-shadow: 0 0 40px rgba(220,38,38,0.5) !important;
-}
-body.risk-mode .brain-label { color: var(--gut-bad) !important; }
-body.risk-mode .gut-label { color: var(--gut-bad) !important; }
-body.risk-mode .bacterium.bifido,
-body.risk-mode .bacterium.lacto {
-  opacity: 0.15 !important;
-  transform: scale(0.4) !important;
-}
-body.risk-mode .bacterium.harmful {
-  transform: scale(2) !important;
-  box-shadow: 0 0 25px rgba(252,165,165,0.9) !important;
-}
-body.risk-mode .villus {
-  background: linear-gradient(180deg, rgba(248,113,113,0.4), rgba(248,113,113,0.1)) !important;
-  animation: villusDamaged 1s ease-in-out infinite !important;
-}
-@keyframes villusDamaged {
-  0%, 100% { transform: scaleY(0.6); opacity: 0.4; }
-  50% { transform: scaleY(0.5); opacity: 0.3; }
-}
-body.risk-mode .signal-up {
-  background: radial-gradient(circle, var(--gut-bad) 0%, rgba(220,38,38,0) 70%) !important;
-  box-shadow: 0 0 25px var(--gut-bad) !important;
-}
-body.risk-mode .canvas {
-  background: radial-gradient(ellipse at 30% 20%, rgba(220,38,38,0.15) 0%, transparent 50%),
-              radial-gradient(ellipse at 70% 80%, rgba(220,38,38,0.1) 0%, transparent 50%),
-              var(--bg) !important;
-}
-
-/* ========== INTRO SEQUENCE ========== */
-.intro {
-  position: fixed;
-  inset: 0;
-  background: var(--bg);
-  z-index: 1000;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem;
-  overflow: hidden;
-}
-.intro.hidden { display: none; }
-
-/* Animated DNA background */
-.intro-bg {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.dna-helix {
-  position: absolute;
-  left: 50%;
-  top: -100px;
-  width: 4px;
-  height: calc(100% + 200px);
-  background: linear-gradient(180deg, 
-    transparent 0%, 
-    rgba(139,92,246,0.3) 10%,
-    rgba(16,185,129,0.3) 30%,
-    rgba(139,92,246,0.3) 50%,
-    rgba(16,185,129,0.3) 70%,
-    rgba(139,92,246,0.3) 90%,
-    transparent 100%
-  );
-  animation: dnaFloat 20s linear infinite;
-  opacity: 0.5;
-}
-
-@keyframes dnaFloat {
-  0% { transform: translateY(-200px) rotate(0deg); }
-  100% { transform: translateY(0) rotate(360deg); }
-}
-
-.floating-molecule {
-  position: absolute;
-  font-size: 2rem;
-  opacity: 0.15;
-  animation: floatMolecule 15s ease-in-out infinite;
-}
-.m1 { top: 15%; left: 10%; animation-delay: 0s; }
-.m2 { top: 70%; left: 15%; animation-delay: -3s; }
-.m3 { top: 20%; right: 12%; animation-delay: -6s; }
-.m4 { top: 65%; right: 10%; animation-delay: -9s; }
-
-@keyframes floatMolecule {
-  0%, 100% { transform: translate(0, 0) rotate(0deg); }
-  25% { transform: translate(20px, -30px) rotate(90deg); }
-  50% { transform: translate(-10px, -50px) rotate(180deg); }
-  75% { transform: translate(-30px, -20px) rotate(270deg); }
-}
-
-.intro-sequence {
-  max-width: 800px;
-  text-align: center;
-  position: relative;
-  z-index: 2;
-}
-
-.intro-step {
-  display: none;
-  animation: fadeUp 0.8s ease-out forwards;
-}
-.intro-step.active { display: block; }
-
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* ========== BIG BRAND STYLES ========== */
-.brand-logo {
-  margin-bottom: 2rem;
-}
-
-.brand-icon {
-  position: relative;
-  width: 120px;
-  height: 120px;
-  margin: 0 auto 1.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.brand-icon-main {
-  font-size: 4rem;
-  position: relative;
-  z-index: 2;
-  animation: iconPulse 3s ease-in-out infinite;
-}
-
-@keyframes iconPulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.1); }
-}
-
-.brand-icon-orbit {
-  position: absolute;
-  inset: 0;
-  border: 2px solid transparent;
-  border-top-color: var(--brain);
-  border-bottom-color: var(--gut-good);
-  border-radius: 50%;
-  animation: orbit 4s linear infinite;
-}
-
-@keyframes orbit {
-  to { transform: rotate(360deg); }
-}
-
-.brand-name {
-  font-size: 5rem;
-  font-weight: 900;
-  letter-spacing: 0.2em;
-  background: linear-gradient(135deg, #fff 0%, #a78bfa 50%, #34d399 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin: 0;
-  line-height: 1;
-  text-shadow: 0 0 60px rgba(139,92,246,0.5);
-}
-
-.brand-labs {
-  font-size: 1.8rem;
-  font-weight: 300;
-  letter-spacing: 0.8em;
-  color: var(--dim);
-  margin-top: 0.5rem;
-  margin-left: 0.8em;
-}
-
-.brand-tagline {
-  font-size: 1.4rem;
-  color: var(--text);
-  margin-bottom: 1rem;
-  font-weight: 400;
-}
-
-.brand-mission {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem 1.5rem;
-  background: rgba(16,185,129,0.1);
-  border: 1px solid rgba(16,185,129,0.3);
-  border-radius: 100px;
-  font-size: 0.85rem;
-  color: #34d399;
-  margin-bottom: 2.5rem;
-}
-
-.brand-stats {
-  display: flex;
-  justify-content: center;
-  gap: 3rem;
-  margin-bottom: 2.5rem;
-}
-
-.brand-stat {
-  text-align: center;
-}
-
-.brand-stat-num {
-  font-size: 2.5rem;
-  font-weight: 900;
-  background: linear-gradient(135deg, var(--signal), #f59e0b);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.brand-stat-label {
-  font-size: 0.75rem;
-  color: var(--dim);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-top: 0.25rem;
-}
-
-.brand-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 1.25rem 3rem;
-  font-size: 1.1rem;
-}
-
-.btn-arrow {
-  transition: transform 0.3s;
-}
-
-.brand-btn:hover .btn-arrow {
-  transform: translateX(5px);
-}
-
-.brand-footer {
-  font-size: 0.75rem;
-  color: var(--dim);
-  margin-top: 2rem;
-  opacity: 0.6;
-}
-
-/* ========== IMPRESSIVE VISUAL EFFECTS ========== */
-/* Glowing orbs on canvas */
-.glow-orb {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(60px);
-  opacity: 0.4;
-  animation: orbFloat 20s ease-in-out infinite;
-  pointer-events: none;
-}
-
-.orb-1 {
-  width: 300px;
-  height: 300px;
-  background: radial-gradient(circle, var(--brain), transparent);
-  top: 10%;
-  left: 20%;
-  animation-delay: 0s;
-}
-
-.orb-2 {
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, var(--gut-good), transparent);
-  bottom: 10%;
-  right: 15%;
-  animation-delay: -7s;
-}
-
-.orb-3 {
-  width: 200px;
-  height: 200px;
-  background: radial-gradient(circle, var(--signal), transparent);
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  animation-delay: -14s;
-}
-
-@keyframes orbFloat {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  25% { transform: translate(30px, -40px) scale(1.1); }
-  50% { transform: translate(-20px, -60px) scale(0.9); }
-  75% { transform: translate(-40px, -20px) scale(1.05); }
-}
-
-/* Neural network connections */
-.neural-web {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.15;
-}
-
-.neural-line {
-  position: absolute;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--brain), transparent);
-  animation: neuralPulse 3s ease-in-out infinite;
-}
-
-@keyframes neuralPulse {
-  0%, 100% { opacity: 0.1; }
-  50% { opacity: 0.4; }
-}
-
-/* Data stream effect */
-.data-stream {
-  position: absolute;
-  width: 2px;
-  background: linear-gradient(180deg, transparent, var(--signal), transparent);
-  animation: dataFlow 2s linear infinite;
-  opacity: 0.6;
-}
-
-@keyframes dataFlow {
-  0% { transform: translateY(-100%); }
-  100% { transform: translateY(100vh); }
-}
-
-/* Bacteria cluster on gut */
-.bacteria-cluster {
-  position: absolute;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2px;
-  animation: clusterPulse 4s ease-in-out infinite;
-}
-
-@keyframes clusterPulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-}
-
-/* Synapse flash effect */
-.synapse-flash {
-  position: absolute;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: white;
-  box-shadow: 0 0 20px 10px rgba(255,255,255,0.8);
-  animation: synapseFlash 0.3s ease-out forwards;
-  pointer-events: none;
-}
-
-@keyframes synapseFlash {
-  0% { transform: scale(0); opacity: 1; }
-  100% { transform: scale(3); opacity: 0; }
-}
-
-/* Live counter animation */
-.live-counter {
-  font-variant-numeric: tabular-nums;
-  animation: counterGlow 2s ease-in-out infinite;
-}
-
-@keyframes counterGlow {
-  0%, 100% { text-shadow: 0 0 10px currentColor; }
-  50% { text-shadow: 0 0 30px currentColor, 0 0 60px currentColor; }
-}
-
-/* Connection beam between brain and gut */
-.connection-beam {
-  position: absolute;
-  left: 50%;
-  top: 30%;
-  width: 4px;
-  height: 40%;
-  background: linear-gradient(180deg, 
-    rgba(139,92,246,0.8) 0%,
-    rgba(251,191,36,0.6) 50%,
-    rgba(16,185,129,0.8) 100%
-  );
-  transform: translateX(-50%);
-  animation: beamPulse 2s ease-in-out infinite;
-  filter: blur(2px);
-  pointer-events: none;
-}
-
-@keyframes beamPulse {
-  0%, 100% { opacity: 0.3; }
-  50% { opacity: 0.7; }
-}
-
-/* Floating research citations */
-.citation-float {
-  position: absolute;
-  font-size: 0.6rem;
-  color: var(--dim);
-  opacity: 0.3;
-  animation: citationDrift 30s linear infinite;
-  white-space: nowrap;
-}
-
-@keyframes citationDrift {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100vw); }
-}
-
-/* ========== SPECTACULAR NEW EFFECTS ========== */
-
-/* Live bacteria counter */
-.live-bacteria-counter {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background: var(--glass);
-  border: 1px solid var(--glass-border);
-  backdrop-filter: blur(20px);
-  border-radius: 16px;
-  padding: 12px 20px;
-  z-index: 10;
-  text-align: center;
-}
-
-.counter-label {
-  font-size: 0.65rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--dim);
-  margin-bottom: 4px;
-}
-
-.counter-value {
-  font-size: 1.4rem;
-  font-weight: 800;
-  font-variant-numeric: tabular-nums;
-  background: linear-gradient(135deg, var(--gut-good), var(--signal));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-/* Floating molecules */
-.molecule {
-  position: absolute;
-  pointer-events: none;
-  z-index: 5;
-  animation: moleculeFloat 20s ease-in-out infinite;
-}
-
-.molecule svg {
-  width: 40px;
-  height: 40px;
-  opacity: 0.15;
-}
-
-@keyframes moleculeFloat {
-  0%, 100% { transform: translate(0, 0) rotate(0deg); }
-  25% { transform: translate(30px, -50px) rotate(90deg); }
-  50% { transform: translate(-20px, -80px) rotate(180deg); }
-  75% { transform: translate(-50px, -30px) rotate(270deg); }
-}
-
-/* Serotonin molecule paths */
-.serotonin-path {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  overflow: hidden;
-}
-
-.serotonin-dot {
-  position: absolute;
-  width: 6px;
-  height: 6px;
-  background: var(--signal);
-  border-radius: 50%;
-  box-shadow: 0 0 10px var(--signal), 0 0 20px var(--signal);
-  animation: serotoninTravel 4s ease-in-out infinite;
-}
-
-@keyframes serotoninTravel {
-  0% { bottom: 20%; opacity: 0; transform: translateX(-50%) scale(0); }
-  10% { opacity: 1; transform: translateX(-50%) scale(1); }
-  90% { opacity: 1; transform: translateX(-50%) scale(1); }
-  100% { bottom: 80%; opacity: 0; transform: translateX(-50%) scale(0); }
-}
-
-/* Pulsing rings around brain and gut */
-.organ-pulse {
-  position: absolute;
-  border-radius: 50%;
-  border: 2px solid currentColor;
-  opacity: 0;
-  animation: organPulse 3s ease-out infinite;
-  pointer-events: none;
-}
-
-@keyframes organPulse {
-  0% { transform: scale(0.8); opacity: 0.6; }
-  100% { transform: scale(1.5); opacity: 0; }
-}
-
-/* Neurotransmitter labels */
-.neuro-label {
-  position: absolute;
-  font-size: 0.6rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  padding: 4px 10px;
-  border-radius: 20px;
-  background: var(--glass);
-  border: 1px solid var(--glass-border);
-  backdrop-filter: blur(10px);
-  animation: labelFloat 5s ease-in-out infinite;
-  pointer-events: none;
-}
-
-@keyframes labelFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
-
-/* Hexagon grid background */
-.hex-grid {
-  position: absolute;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%237c3aed' fill-opacity='0.03'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-  opacity: 0.5;
-  pointer-events: none;
-}
-
-/* Science fact cards */
-.science-fact {
-  position: absolute;
-  background: var(--glass);
-  border: 1px solid var(--glass-border);
-  backdrop-filter: blur(20px);
-  border-radius: 12px;
-  padding: 12px 16px;
-  max-width: 180px;
-  font-size: 0.75rem;
-  line-height: 1.5;
-  color: var(--dim);
-  opacity: 0;
-  animation: factAppear 8s ease-in-out infinite;
-  pointer-events: none;
-}
-
-.science-fact strong {
-  color: var(--text);
-}
-
-@keyframes factAppear {
-  0%, 100% { opacity: 0; transform: translateY(10px); }
-  10%, 90% { opacity: 1; transform: translateY(0); }
-}
-
-/* Energy particles flowing */
-.energy-particle {
-  position: absolute;
-  width: 3px;
-  height: 3px;
-  background: var(--signal);
-  border-radius: 50%;
-  box-shadow: 0 0 6px var(--signal);
-  animation: energyFlow 3s linear infinite;
-  pointer-events: none;
-}
-
-@keyframes energyFlow {
-  0% { opacity: 0; transform: translateY(0); }
-  10% { opacity: 1; }
-  90% { opacity: 1; }
-  100% { opacity: 0; transform: translateY(-300px); }
-}
-
-/* ========== INTRO TEXT STYLES ========== */
-.intro-question {
-  font-size: 2rem;
-  font-weight: 300;
-  color: var(--dim);
-  margin-bottom: 1rem;
-}
-
-.intro-answer {
-  font-size: 3.5rem;
-  font-weight: 900;
-  line-height: 1.2;
-  margin-bottom: 2rem;
-}
-
-.intro-answer .highlight {
-  background: linear-gradient(135deg, var(--gut-good), #34d399);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.intro-answer .brain-highlight {
-  background: linear-gradient(135deg, var(--brain), #a78bfa);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.intro-answer .danger {
-  background: linear-gradient(135deg, var(--gut-bad), #f87171);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.intro-stat {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 0.5rem;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 100px;
-  padding: 1rem 2rem;
-  margin-bottom: 2rem;
-}
-
-.intro-stat-num {
-  font-size: 3rem;
-  font-weight: 900;
-  color: var(--signal);
-}
-
-.intro-stat-label {
-  font-size: 1rem;
-  color: var(--dim);
-}
-
-.intro-detail {
-  font-size: 1.1rem;
-  color: var(--dim);
-  line-height: 1.8;
-  max-width: 500px;
-  margin: 0 auto 2rem;
-}
-
-.intro-detail strong {
-  color: var(--text);
-}
-
-.intro-btn {
-  padding: 1rem 2.5rem;
-  background: linear-gradient(135deg, var(--brain), #a855f7);
-  border: none;
-  border-radius: 100px;
-  color: white;
-  font-size: 1rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.3s;
-  font-family: inherit;
-}
-.intro-btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 15px 40px rgba(139,92,246,0.4);
-}
-
-.intro-skip {
-  position: absolute;
-  top: 2rem;
-  right: 2rem;
-  padding: 0.5rem 1rem;
-  background: transparent;
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 6px;
-  color: var(--dim);
-  font-size: 0.8rem;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-.intro-skip:hover {
-  border-color: rgba(255,255,255,0.4);
-  color: var(--text);
-}
-
-/* ========== MAIN APP ========== */
-.app {
-  display: none;
-  height: 100%;
-}
-.app.active { display: flex; }
-
-/* ========== VISUAL CANVAS ========== */
-.canvas {
-  flex: 1;
-  position: relative;
-  overflow: hidden;
-  background: 
-    radial-gradient(ellipse at 30% 20%, rgba(139,92,246,0.1) 0%, transparent 50%),
-    radial-gradient(ellipse at 70% 80%, rgba(16,185,129,0.08) 0%, transparent 50%),
-    var(--bg);
-}
-
-/* Ambient particles */
-.ambient {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-.ambient-particle {
-  position: absolute;
-  width: 2px;
-  height: 2px;
-  background: rgba(255,255,255,0.5);
-  border-radius: 50%;
-  animation: float 25s linear infinite;
-}
-@keyframes float {
-  0% { transform: translateY(100vh); opacity: 0; }
-  5% { opacity: 1; }
-  95% { opacity: 1; }
-  100% { transform: translateY(-100vh); opacity: 0; }
-}
-
-/* MAIN SCENE */
-.scene {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 750px;
-  height: 850px;
-}
-
-/* ========== BRAIN ========== */
-.brain {
-  position: absolute;
-  top: 0%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 220px;
-  height: 185px;
-  cursor: pointer;
-  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-.brain:hover { transform: translateX(-50%) scale(1.08); }
-.brain.active { transform: translateX(-50%) scale(1.12); }
-
-.brain-shape {
-  width: 100%;
-  height: 100%;
-  background: 
-    radial-gradient(ellipse at 35% 30%, #a78bfa 0%, var(--brain) 40%, #4c1d95 100%);
-  border-radius: 50% 50% 48% 48% / 55% 55% 45% 45%;
-  box-shadow: 
-    0 0 80px rgba(139,92,246,0.6),
-    0 0 120px rgba(139,92,246,0.3),
-    inset 0 -20px 40px rgba(0,0,0,0.3),
-    inset 0 10px 30px rgba(255,255,255,0.1);
-  position: relative;
-  overflow: hidden;
-}
-
-/* Brain wrinkles */
-.brain-wrinkle {
-  position: absolute;
-  background: rgba(255,255,255,0.08);
-  border-radius: 50%;
-}
-
-/* Neural activity */
-.neural-fires {
-  position: absolute;
-  inset: 0;
-}
-.neural-fire {
-  position: absolute;
-  width: 6px;
-  height: 6px;
-  background: #fff;
-  border-radius: 50%;
-  box-shadow: 0 0 15px #fff, 0 0 30px var(--brain);
-  animation: fire 1.5s ease-out infinite;
-  opacity: 0;
-}
-@keyframes fire {
-  0% { transform: scale(0); opacity: 0; }
-  30% { transform: scale(1.2); opacity: 1; }
-  100% { transform: scale(0); opacity: 0; }
-}
-
-.brain-info {
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  text-align: center;
-  margin-top: 15px;
-  white-space: nowrap;
-}
-.brain-label {
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.2em;
-  color: var(--brain);
-}
-.brain-stat {
-  font-size: 10px;
-  color: var(--dim);
-  margin-top: 3px;
-}
-
-/* ========== GUT-BRAIN AXIS ========== */
-.axis {
-  position: absolute;
-  top: 20%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100px;
-  height: 55%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.axis-path {
-  position: relative;
-  width: 8px;
-  height: 100%;
-  background: linear-gradient(180deg, var(--brain) 0%, #06b6d4 50%, var(--gut-good) 100%);
-  border-radius: 4px;
-  box-shadow: 0 0 30px rgba(139,92,246,0.3), 0 0 30px rgba(16,185,129,0.3);
-  overflow: hidden;
-}
-
-/* Shimmer effect */
-.axis-path::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, transparent, rgba(255,255,255,0.3), transparent);
-  animation: shimmer 2s linear infinite;
-}
-@keyframes shimmer {
-  0% { transform: translateY(-100%); }
-  100% { transform: translateY(100%); }
-}
-
-/* Signals */
-.signals {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-}
-.signal-up {
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: radial-gradient(circle, var(--signal) 0%, rgba(251,191,36,0) 70%);
-  border-radius: 50%;
-  box-shadow: 0 0 20px var(--signal), 0 0 40px var(--signal);
-  animation: riseUp 2.5s ease-in-out infinite;
-}
-@keyframes riseUp {
-  0% { bottom: -5%; opacity: 0; }
-  10% { opacity: 1; }
-  90% { opacity: 1; }
-  100% { bottom: 105%; opacity: 0; }
-}
-
-.signal-down {
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: radial-gradient(circle, #f472b6 0%, rgba(244,114,182,0) 70%);
-  border-radius: 50%;
-  box-shadow: 0 0 15px #f472b6;
-  animation: goDown 3s ease-in-out infinite;
-}
-@keyframes goDown {
-  0% { top: -5%; opacity: 0; }
-  10% { opacity: 1; }
-  90% { opacity: 1; }
-  100% { top: 105%; opacity: 0; }
-}
-
-/* Axis labels */
-.axis-label-left {
-  position: absolute;
-  left: -70px;
-  top: 50%;
-  transform: translateY(-50%) rotate(-90deg);
-  font-size: 9px;
-  font-weight: 600;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--dim);
-  white-space: nowrap;
-}
-
-.axis-label-right {
-  position: absolute;
-  right: -80px;
-  top: 30%;
-  font-size: 9px;
-  color: var(--signal);
-  text-align: left;
-}
-.axis-label-right div {
-  margin-bottom: 4px;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-.axis-label-right .dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--signal);
-}
-
-/* ========== THE GUT ========== */
-.gut {
-  position: absolute;
-  bottom: 2%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 320px;
-  height: 220px;
-  cursor: pointer;
-  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-.gut:hover { transform: translateX(-50%) scale(1.06); }
-.gut.active { transform: translateX(-50%) scale(1.1); }
-
-.gut-shape {
-  width: 100%;
-  height: 100%;
-  background: 
-    radial-gradient(ellipse at 40% 35%, #34d399 0%, var(--gut-good) 40%, #064e3b 100%);
-  border-radius: 55% 55% 50% 50% / 60% 60% 40% 40%;
-  box-shadow: 
-    0 0 100px rgba(16,185,129,0.6),
-    0 0 150px rgba(16,185,129,0.3),
-    inset 0 -30px 50px rgba(0,0,0,0.3),
-    inset 0 15px 40px rgba(255,255,255,0.1);
-  position: relative;
-  overflow: hidden;
-}
-
-/* Inner gut lining */
-.gut-inner {
-  position: absolute;
-  top: 15%;
-  left: 10%;
-  right: 10%;
-  bottom: 20%;
-  background: rgba(0,0,0,0.25);
-  border-radius: inherit;
-}
-
-/* Villi */
-.villi {
-  position: absolute;
-  bottom: 20%;
-  left: 15%;
-  right: 15%;
-  height: 40%;
-  display: flex;
-  justify-content: space-around;
-  align-items: flex-end;
-}
-.villus {
-  width: 12px;
-  background: linear-gradient(180deg, rgba(52,211,153,0.6), rgba(52,211,153,0.2));
-  border-radius: 6px 6px 0 0;
-  animation: villusPulse 2s ease-in-out infinite;
-}
-@keyframes villusPulse {
-  0%, 100% { transform: scaleY(1); }
-  50% { transform: scaleY(1.1); }
-}
-
-/* Bacteria ecosystem */
-.bacteria-world {
-  position: absolute;
-  inset: 20%;
-  overflow: hidden;
-}
-
-.bacterium {
-  position: absolute;
-  border-radius: 50%;
-  animation: swim 5s ease-in-out infinite;
-}
-
-.bacterium.bifido {
-  background: radial-gradient(circle at 30% 30%, #6ee7b7, #059669);
-  box-shadow: 0 0 10px rgba(110,231,183,0.6);
-}
-
-.bacterium.lacto {
-  background: radial-gradient(circle at 30% 30%, #67e8f9, #0891b2);
-  box-shadow: 0 0 10px rgba(103,232,249,0.6);
-}
-
-.bacterium.harmful {
-  background: radial-gradient(circle at 30% 30%, #fca5a5, #dc2626);
-  box-shadow: 0 0 10px rgba(252,165,165,0.6);
-}
-
-@keyframes swim {
-  0%, 100% { transform: translate(0, 0) rotate(0deg); }
-  25% { transform: translate(10px, -15px) rotate(10deg); }
-  50% { transform: translate(-5px, -25px) rotate(-5deg); }
-  75% { transform: translate(-15px, -10px) rotate(-10deg); }
-}
-
-.gut-info {
-  position: absolute;
-  bottom: -45px;
-  left: 50%;
-  transform: translateX(-50%);
-  text-align: center;
-}
-.gut-label {
-  font-size: 14px;
-  font-weight: 800;
-  letter-spacing: 0.15em;
-  color: var(--gut-good);
-}
-.gut-stat {
-  font-size: 11px;
-  color: var(--dim);
-  margin-top: 4px;
-}
-.gut-stat strong {
-  color: var(--signal);
-}
-
-/* ========== MECHANISM POPUPS ========== */
-.mechanism {
-  position: absolute;
-  background: rgba(10,10,20,0.95);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 12px;
-  padding: 12px 16px;
-  backdrop-filter: blur(10px);
-  opacity: 0;
-  transform: translateY(10px);
-  transition: all 0.4s;
-  pointer-events: none;
-  max-width: 200px;
-}
-.mechanism.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-.mechanism-title {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--signal);
-  margin-bottom: 6px;
-}
-.mechanism-text {
-  font-size: 12px;
-  line-height: 1.5;
-  color: var(--dim);
-}
-.mechanism-text strong {
-  color: var(--text);
-}
-
-.mech-serotonin {
-  top: 40%;
-  right: 5%;
-}
-.mech-inflammation {
-  top: 55%;
-  left: 5%;
-}
-
-/* ========== HOTSPOTS ========== */
-.hotspots {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.hotspot {
-  position: absolute;
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.02);
-  border: 2px solid rgba(255,255,255,0.1);
-  backdrop-filter: blur(4px);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  pointer-events: auto;
-  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.hotspot::after {
-  content: '';
-  position: absolute;
-  inset: -4px;
-  border-radius: 50%;
-  border: 1px solid transparent;
-  transition: all 0.3s;
-}
-
-.hotspot:hover {
-  background: rgba(139,92,246,0.12);
-  border-color: rgba(139,92,246,0.5);
-  transform: scale(1.1);
-}
-.hotspot:hover::after {
-  border-color: rgba(139,92,246,0.3);
-}
-
-.hotspot.active {
-  background: rgba(139,92,246,0.18);
-  border-color: var(--brain);
-  box-shadow: 0 0 35px rgba(139,92,246,0.4);
-}
-
-.hotspot-icon { font-size: 26px; }
-.hotspot-label {
-  font-size: 9px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-top: 4px;
-  opacity: 0.7;
-}
-
-.hs-pregnancy { top: 32%; left: 5%; }
-.hs-birth { bottom: 28%; left: 5%; }
-.hs-feeding { top: 32%; right: 5%; }
-.hs-food { bottom: 28%; right: 5%; }
-
-/* ========== JOURNEY CONNECTORS ========== */
-.journey-connectors {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.journey-path {
-  position: absolute;
-  stroke: rgba(139,92,246,0.3);
-  stroke-width: 2;
-  fill: none;
-  stroke-dasharray: 8 4;
-  animation: pathFlow 2s linear infinite;
-}
-@keyframes pathFlow {
-  to { stroke-dashoffset: -24; }
-}
-
-.journey-node {
-  position: absolute;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: var(--brain);
-  border: 3px solid rgba(255,255,255,0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 10px;
-  color: white;
-  font-weight: 700;
-  box-shadow: 0 0 20px rgba(139,92,246,0.5);
-  cursor: pointer;
-  pointer-events: auto;
-  transition: all 0.3s;
-  z-index: 5;
-}
-.journey-node:hover {
-  transform: scale(1.2);
-  box-shadow: 0 0 30px rgba(139,92,246,0.8);
-}
-.journey-node.active {
-  background: var(--signal);
-  box-shadow: 0 0 25px rgba(251,191,36,0.7);
-}
-.journey-node.completed {
-  background: var(--gut-good);
-  box-shadow: 0 0 20px rgba(16,185,129,0.6);
-}
-
-/* Journey nodes positions - curved path around axis */
-.jn-1 { top: 25%; left: 20%; }
-.jn-2 { top: 40%; left: 8%; }
-.jn-3 { top: 58%; left: 12%; }
-.jn-4 { top: 72%; left: 25%; }
-.jn-5 { top: 72%; right: 25%; }
-
-body.ar .jn-1 { left: auto; right: 20%; }
-body.ar .jn-2 { left: auto; right: 8%; }
-body.ar .jn-3 { left: auto; right: 12%; }
-body.ar .jn-4 { left: auto; right: 25%; }
-body.ar .jn-5 { right: auto; left: 25%; }
-
-/* ========== WOW GRAPH STYLES ========== */
-.wow-graph {
-  background: rgba(255,255,255,0.02);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 16px;
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
-}
-.wow-graph-title {
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--dim);
-  margin-bottom: 1rem;
-}
-
-/* Bar chart */
-.bar-chart {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-.bar-row {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-.bar-label {
-  width: 80px;
-  font-size: 0.75rem;
-  color: var(--dim);
-  text-align: right;
-}
-body.ar .bar-label { text-align: left; }
-.bar-track {
-  flex: 1;
-  height: 28px;
-  background: rgba(255,255,255,0.05);
-  border-radius: 6px;
-  overflow: hidden;
-  position: relative;
-}
-.bar-fill {
-  height: 100%;
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding-right: 10px;
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: white;
-  animation: barGrow 1s ease-out forwards;
-  transform-origin: left;
-}
-body.ar .bar-fill {
-  justify-content: flex-start;
-  padding-right: 0;
-  padding-left: 10px;
-  transform-origin: right;
-}
-@keyframes barGrow {
-  from { transform: scaleX(0); }
-  to { transform: scaleX(1); }
-}
-.bar-fill.good { background: linear-gradient(90deg, var(--gut-good), #34d399); }
-.bar-fill.bad { background: linear-gradient(90deg, var(--gut-bad), #f87171); }
-.bar-fill.neutral { background: linear-gradient(90deg, var(--brain), #a78bfa); }
-
-/* Comparison circles */
-.circle-compare {
-  display: flex;
-  justify-content: space-around;
-  align-items: flex-end;
-  padding: 1rem 0;
-}
-.circle-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-}
-.circle-visual {
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 900;
-  color: white;
-  animation: circleGrow 0.8s ease-out forwards;
-}
-@keyframes circleGrow {
-  from { transform: scale(0); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
-.circle-label {
-  font-size: 0.75rem;
-  color: var(--dim);
-  text-align: center;
-  max-width: 80px;
-}
-
-/* Stat counter */
-.stat-counter {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  padding: 1rem 0;
-}
-.stat-item {
-  text-align: center;
-}
-.stat-value {
-  font-size: 2.5rem;
-  font-weight: 900;
-  line-height: 1;
-  background: linear-gradient(135deg, var(--signal), #f59e0b);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-.stat-value.danger {
-  background: linear-gradient(135deg, var(--gut-bad), #f87171);
-  -webkit-background-clip: text;
-}
-.stat-value.good {
-  background: linear-gradient(135deg, var(--gut-good), #34d399);
-  -webkit-background-clip: text;
-}
-.stat-unit {
-  font-size: 0.7rem;
-  color: var(--dim);
-  margin-top: 0.3rem;
-}
-
-/* Timeline mini */
-.mini-timeline {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem 0;
-  position: relative;
-}
-.mini-timeline::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 10%;
-  right: 10%;
-  height: 3px;
-  background: linear-gradient(90deg, var(--gut-good), var(--signal), var(--gut-bad));
-  border-radius: 2px;
-  transform: translateY(-50%);
-}
-.mt-point {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-}
-.mt-dot {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: var(--gut-good);
-  border: 3px solid var(--bg);
-  box-shadow: 0 0 10px rgba(16,185,129,0.5);
-}
-.mt-dot.warning { background: var(--signal); box-shadow: 0 0 10px rgba(251,191,36,0.5); }
-.mt-dot.danger { background: var(--gut-bad); box-shadow: 0 0 10px rgba(220,38,38,0.5); }
-.mt-label {
-  font-size: 0.65rem;
-  color: var(--dim);
-  white-space: nowrap;
-}
-
-/* ========== INFO PANEL ========== */
-.panel {
-  width: 420px;
-  background: linear-gradient(180deg, var(--surface), var(--bg));
-  border-left: 1px solid rgba(255,255,255,0.06);
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-  transform: translateX(100%);
-  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.panel.open { transform: translateX(0); }
-
-.panel-header {
-  padding: 2rem;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-}
-
-.panel-close {
-  position: absolute;
-  top: 1.5rem;
-  right: 1.5rem;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
-  color: var(--text);
-  font-size: 16px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.panel-close:hover { background: rgba(255,255,255,0.1); }
-
-.panel-icon { font-size: 3.5rem; margin-bottom: 1rem; }
-.panel-title { font-size: 1.75rem; font-weight: 800; line-height: 1.2; }
-.panel-subtitle { font-size: 0.9rem; color: var(--brain); margin-top: 0.3rem; }
-
-.panel-content { padding: 0 2rem 2rem; flex: 1; }
-
-/* WOW STAT */
-.wow {
-  background: linear-gradient(135deg, rgba(251,191,36,0.15), rgba(251,191,36,0.03));
-  border: 1px solid rgba(251,191,36,0.3);
-  border-radius: 16px;
-  padding: 1.5rem;
-  text-align: center;
-  margin-bottom: 1.5rem;
-}
-.wow-num {
-  font-size: 4.5rem;
-  font-weight: 900;
-  background: linear-gradient(135deg, #fbbf24, #f59e0b);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  line-height: 1;
-}
-.wow-label {
-  font-size: 1rem;
-  color: var(--text);
-  margin-top: 0.75rem;
-  line-height: 1.5;
-}
-.wow-sub {
-  font-size: 0.8rem;
-  color: var(--dim);
-  margin-top: 0.5rem;
-}
-
-/* COMPARISON BOX */
-.compare {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-.compare-item {
-  background: rgba(255,255,255,0.03);
-  border-radius: 12px;
-  padding: 1rem;
-  text-align: center;
-}
-.compare-item.good {
-  border: 1px solid rgba(16,185,129,0.3);
-}
-.compare-item.bad {
-  border: 1px solid rgba(220,38,38,0.3);
-}
-.compare-num {
-  font-size: 2rem;
-  font-weight: 900;
-  margin-bottom: 0.3rem;
-}
-.compare-item.good .compare-num { color: var(--gut-good); }
-.compare-item.bad .compare-num { color: var(--gut-bad); }
-.compare-label {
-  font-size: 0.75rem;
-  color: var(--dim);
-}
-.compare-vs {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 0.7rem;
-  font-weight: 700;
-  color: var(--dim);
-  background: var(--surface);
-  padding: 0.3rem 0.5rem;
-  border-radius: 4px;
-}
-
-/* MECHANISM EXPLAINER */
-.explainer {
-  background: rgba(139,92,246,0.08);
-  border-left: 3px solid var(--brain);
-  padding: 1.25rem;
-  border-radius: 0 12px 12px 0;
-  margin-bottom: 1.5rem;
-}
-.explainer-tag {
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--brain);
-  margin-bottom: 0.75rem;
-}
-.explainer-flow {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-  margin-bottom: 1rem;
-}
-.explainer-step {
-  background: rgba(255,255,255,0.05);
-  padding: 0.4rem 0.8rem;
-  border-radius: 6px;
-  font-size: 0.8rem;
-  font-weight: 600;
-}
-.explainer-arrow {
-  color: var(--signal);
-  font-weight: bold;
-}
-.explainer-text {
-  font-size: 0.9rem;
-  line-height: 1.7;
-  color: var(--dim);
-}
-.explainer-text strong { color: var(--text); }
-
-/* CONSEQUENCE BOX */
-.consequence {
-  background: linear-gradient(135deg, rgba(220,38,38,0.12), rgba(220,38,38,0.03));
-  border: 1px solid rgba(220,38,38,0.25);
-  border-radius: 12px;
-  padding: 1.25rem;
-  margin-bottom: 1.5rem;
-}
-.consequence-header {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.75rem;
-}
-.consequence-icon { font-size: 1.2rem; }
-.consequence-tag {
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: #f87171;
-}
-.consequence-text {
-  font-size: 0.85rem;
-  line-height: 1.6;
-  color: rgba(255,255,255,0.7);
-}
-.consequence-text strong { color: var(--text); }
-
-/* GCC CONTEXT */
-.gcc {
-  background: linear-gradient(135deg, rgba(251,191,36,0.1), rgba(251,191,36,0.02));
-  border: 1px solid rgba(251,191,36,0.2);
-  border-radius: 12px;
-  padding: 1.25rem;
-  margin-bottom: 1.5rem;
-}
-.gcc-header {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-.gcc-flag { font-size: 1.1rem; }
-.gcc-tag {
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: #fbbf24;
-}
-.gcc-text {
-  font-size: 0.85rem;
-  line-height: 1.6;
-  color: rgba(255,255,255,0.7);
-}
-.gcc-text strong { color: var(--text); }
-
-/* ACTIONS */
-.actions {
-  background: rgba(16,185,129,0.08);
-  border: 1px solid rgba(16,185,129,0.2);
-  border-radius: 12px;
-  padding: 1.25rem;
-}
-.actions-title {
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--gut-good);
-  margin-bottom: 1rem;
-}
-.action {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-  padding: 0.6rem 0;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
-}
-.action:last-child { border: none; }
-.action-icon { font-size: 1.3rem; }
-.action-content {}
-.action-text {
-  font-size: 0.9rem;
-  font-weight: 600;
-  margin-bottom: 0.2rem;
-}
-.action-detail {
-  font-size: 0.75rem;
-  color: var(--dim);
-}
-
-/* ========== HEADER ========== */
-.header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 420px;
-  height: 70px;
-  padding: 0 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  z-index: 100;
-  background: linear-gradient(180deg, rgba(2,2,8,0.95), transparent);
-  transition: right 0.5s;
-}
-.header.shifted { right: 420px; }
-
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-.logo-icon {
-  width: 48px;
-  height: 48px;
-  background: linear-gradient(135deg, var(--brain), var(--gut-good));
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  box-shadow: 0 4px 20px rgba(139,92,246,0.3);
-}
-.logo-content {
-  display: flex;
-  flex-direction: column;
-}
-.logo-text {
-  font-size: 1.4rem;
-  font-weight: 900;
-  letter-spacing: 0.1em;
-  background: linear-gradient(135deg, #fff, #a78bfa);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-.logo-sub {
-  font-size: 0.65rem;
-  color: var(--dim);
-  letter-spacing: 0.05em;
-}
-
-.mission-badge {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.4rem 0.8rem;
-  background: rgba(16,185,129,0.1);
-  border: 1px solid rgba(16,185,129,0.25);
-  border-radius: 20px;
-  font-size: 0.65rem;
-  color: #34d399;
-  margin-right: 0.5rem;
-}
-
-.controls {
-  display: flex;
-  gap: 0.75rem;
-  align-items: center;
-}
-.ctrl-btn {
-  padding: 0.6rem 1.2rem;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 8px;
-  color: var(--text);
-  font-size: 0.8rem;
-  font-weight: 500;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: all 0.3s;
-  font-family: inherit;
-}
-.ctrl-btn:hover { background: rgba(255,255,255,0.08); }
-.ctrl-btn.danger.active {
-  background: rgba(220,38,38,0.2);
-  border-color: rgba(220,38,38,0.4);
-  color: #fca5a5;
-}
-
-/* ========== CHAIN REACTIONS ========== */
-.chain-reactions {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 50;
-}
-
-.chain-particle {
-  position: absolute;
-  border-radius: 50%;
-  pointer-events: none;
-  animation: chainBurst 1.5s ease-out forwards;
-}
-
-@keyframes chainBurst {
-  0% { transform: scale(0); opacity: 1; }
-  50% { opacity: 1; }
-  100% { transform: scale(1) translate(var(--tx), var(--ty)); opacity: 0; }
-}
-
-.chain-text {
-  position: absolute;
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: white;
-  text-shadow: 0 2px 10px rgba(0,0,0,0.8);
-  white-space: nowrap;
-  animation: chainTextPop 2s ease-out forwards;
-  pointer-events: none;
-  z-index: 60;
-}
-
-@keyframes chainTextPop {
-  0% { transform: scale(0) translateY(0); opacity: 0; }
-  20% { transform: scale(1.2) translateY(-10px); opacity: 1; }
-  40% { transform: scale(1) translateY(-20px); opacity: 1; }
-  100% { transform: scale(1) translateY(-40px); opacity: 0; }
-}
-
-.chain-line {
-  position: absolute;
-  height: 3px;
-  background: linear-gradient(90deg, var(--signal), transparent);
-  transform-origin: left center;
-  animation: chainLine 0.8s ease-out forwards;
-  pointer-events: none;
-}
-
-@keyframes chainLine {
-  0% { width: 0; opacity: 1; }
-  100% { width: 150px; opacity: 0; }
-}
-
-.pulse-ring {
-  position: absolute;
-  border-radius: 50%;
-  border: 3px solid var(--brain);
-  animation: pulseRing 1s ease-out forwards;
-  pointer-events: none;
-}
-
-@keyframes pulseRing {
-  0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
-  100% { transform: translate(-50%, -50%) scale(3); opacity: 0; }
-}
-
-/* Mechanism beam animation */
-.mechanism-beam {
-  pointer-events: none;
-  z-index: 55;
-}
-
-@keyframes beamGrow {
-  0% { height: 0; opacity: 1; }
-  50% { opacity: 1; }
-  100% { height: var(--beam-height, 300px); opacity: 0; }
-}
-
-/* Enhanced chain text */
-.chain-text {
-  background: rgba(0,0,0,0.7);
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  border: 1px solid rgba(255,255,255,0.2);
-  backdrop-filter: blur(10px);
-}
-
-/* ========== TIMELINE ========== */
-.timeline {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 420px;
-  height: 80px;
-  background: linear-gradient(0deg, rgba(2,2,8,0.95), transparent);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0 2rem;
-  transition: right 0.5s;
-}
-.timeline.shifted { right: 420px; }
-
-.tl-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  cursor: pointer;
-  opacity: 0.4;
-  transition: all 0.3s;
-}
-.tl-item:hover { opacity: 0.7; }
-.tl-item.active { opacity: 1; }
-
-.tl-dot {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.08);
-  border: 2px solid rgba(255,255,255,0.15);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-  transition: all 0.3s;
-}
-.tl-item.active .tl-dot {
-  background: var(--brain);
-  border-color: var(--brain);
-  box-shadow: 0 0 20px rgba(139,92,246,0.5);
-}
-.tl-item.locked .tl-dot {
-  background: rgba(220,38,38,0.2);
-  border-color: rgba(220,38,38,0.4);
-}
-
-.tl-label {
-  font-size: 10px;
-  margin-top: 6px;
-  font-weight: 500;
-}
-
-.tl-line {
-  width: 40px;
-  height: 2px;
-  background: rgba(255,255,255,0.1);
-}
-
-/* ========== RESPONSIVE ========== */
-@media (max-width: 1100px) {
-  .panel { width: 100%; position: fixed; bottom: 0; top: auto; height: 60%; transform: translateY(100%); border-left: none; border-top: 1px solid rgba(255,255,255,0.1); }
-  .panel.open { transform: translateY(0); }
-  .header, .timeline { right: 0 !important; }
-  .scene { width: 100%; height: 45vh; }
-  .live-bacteria-counter { display: none; }
-  .science-fact { display: none; }
-  .neuro-label { display: none; }
-}
-
-/* Performance: Pause animations when tab hidden */
-body.paused * {
-  animation-play-state: paused !important;
-}
-
-/* Smooth page load */
-body {
-  opacity: 1;
-  transition: opacity 0.3s ease;
-}
-
-/* Selection styling */
-::selection {
-  background: var(--brain);
-  color: white;
-}
+:root{--bg:#0a0a0f;--card:#12121a;--card2:#1a1a25;--border:rgba(255,255,255,0.08);--text:#e8e8ed;--bright:#fff;--dim:#8a8a9a;--primary:#00ffb2;--glow:rgba(0,255,178,0.4);--accent:#bf5af2;--signal:#5ce1e6;--gold:#ffd60a;--danger:#ff453a;--pink:#f472b6;--gut:#fdcb6e;--orange:#ff9f43}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--text);line-height:1.7}
+body.rtl{direction:rtl;text-align:right;font-family:'Noto Sans Arabic','Space Grotesk',sans-serif}
+.ar{display:none}
+body.rtl .en{display:none}
+body.rtl .ar{display:inline}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 40px;display:flex;align-items:center;justify-content:space-between;background:rgba(10,10,15,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-logo{display:flex;flex-direction:column;cursor:pointer}
+.nav-logo-main{font-size:1.4rem;font-weight:800;color:var(--bright)}
+.nav-logo-main span{color:var(--primary)}
+.nav-logo-sub{font-size:0.65rem;color:var(--dim)}
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-link{color:var(--dim);font-size:0.9rem;font-weight:500;cursor:pointer;transition:color 0.3s;border:none;background:none;font-family:inherit}
+.nav-link:hover,.nav-link.active{color:var(--primary)}
+.nav-link.gold{color:var(--gold)}
+.lang-toggle{display:flex;gap:6px}
+.lang-btn{padding:6px 12px;background:transparent;border:1px solid var(--border);color:var(--dim);border-radius:6px;cursor:pointer;font-size:0.8rem;transition:all 0.3s;font-family:inherit}
+.lang-btn.active{background:var(--primary);color:var(--bg);border-color:var(--primary)}
+@media(max-width:768px){.nav-links{gap:12px}.nav{padding:16px 20px}.nav-link{font-size:0.8rem}}
+
+/* PAGES */
+.page{display:none;min-height:100vh;padding-top:80px}
+.page.active{display:block}
+
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;font-size:0.95rem;font-weight:700;border-radius:12px;cursor:pointer;border:none;font-family:inherit;transition:all 0.3s}
+.btn-primary{background:var(--primary);color:var(--bg)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 40px var(--glow)}
+.btn-secondary{background:var(--card2);color:var(--text);border:1px solid var(--border)}
+.btn-secondary:hover{border-color:var(--primary)}
+.btn-signal{background:linear-gradient(135deg,var(--signal),var(--accent));color:var(--bg)}
+
+.page-footer{padding:40px;text-align:center;color:var(--dim);font-size:0.85rem;border-top:1px solid var(--border)}
+
+/* HOME */
+.home-hero{min-height:calc(100vh - 80px);display:flex;align-items:center;justify-content:center;padding:60px 40px;position:relative}
+.home-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 30%,rgba(0,255,178,0.08),transparent 50%),radial-gradient(ellipse at 70% 70%,rgba(191,90,242,0.06),transparent 50%)}
+.home-content{position:relative;max-width:900px;text-align:center}
+.home-badge{display:inline-flex;align-items:center;gap:10px;padding:12px 24px;background:rgba(255,69,58,0.15);border:1px solid rgba(255,69,58,0.4);border-radius:50px;margin-bottom:40px}
+.home-badge .pulse{width:10px;height:10px;background:var(--danger);border-radius:50%;animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.home-badge span{color:#ff6b5b;font-weight:600;font-size:0.9rem}
+.home-title{font-size:clamp(2.5rem,6vw,4rem);font-weight:900;line-height:1.1;margin-bottom:24px}
+.home-title .hl{color:var(--primary);display:block}
+.home-sub{font-size:1.1rem;color:var(--text);max-width:700px;margin:0 auto 40px;line-height:1.9}
+.home-sub strong{color:var(--primary)}
+.home-stats{display:flex;justify-content:center;gap:50px;margin-bottom:50px;flex-wrap:wrap}
+.home-stat{text-align:left;padding-left:16px;border-left:3px solid var(--primary)}
+body.rtl .home-stat{text-align:right;padding-left:0;padding-right:16px;border-left:none;border-right:3px solid var(--primary)}
+.home-stat-num{font-family:'JetBrains Mono',monospace;font-size:2rem;font-weight:700;color:var(--primary)}
+.home-stat-label{font-size:0.85rem;color:var(--dim)}
+.home-ctas{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+
+/* SCIENCE HEADER */
+.science-header{padding:40px;text-align:center;background:var(--card);border-bottom:1px solid var(--border)}
+.science-header h1{font-size:clamp(1.8rem,4vw,2.5rem);font-weight:800;margin-bottom:8px}
+.science-header p{color:var(--dim);font-size:1rem}
+.cohort-badge{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:rgba(255,69,58,0.15);border:1px solid rgba(255,69,58,0.4);border-radius:50px;margin-bottom:16px}
+.cohort-badge .dot{width:8px;height:8px;background:var(--danger);border-radius:50%;animation:pulse 1s infinite}
+.cohort-badge span{color:var(--danger);font-weight:700;font-size:0.8rem;text-transform:uppercase;letter-spacing:1px}
+
+/* TABS */
+.science-tabs{display:flex;justify-content:center;gap:12px;padding:24px 40px;background:var(--bg);border-bottom:1px solid var(--border);flex-wrap:wrap}
+.science-tab{padding:12px 24px;background:var(--card);border:2px solid var(--border);border-radius:50px;cursor:pointer;font-weight:600;font-size:0.85rem;transition:all 0.3s;display:flex;align-items:center;gap:8px}
+.science-tab:hover{border-color:var(--primary)}
+.science-tab.active{background:var(--primary);color:var(--bg);border-color:var(--primary)}
+.science-tab.signal{background:linear-gradient(135deg,rgba(92,225,230,0.15),rgba(191,90,242,0.15));border-color:var(--signal)}
+.science-tab.signal:hover,.science-tab.signal.active{background:linear-gradient(135deg,var(--signal),var(--accent));color:var(--bg);border-color:var(--signal)}
+.tab-new{font-size:0.6rem;padding:2px 6px;background:var(--danger);color:white;border-radius:4px;text-transform:uppercase;font-weight:800}
+
+/* SECTION VIEWS */
+.section-view{display:none}
+.section-view.active{display:block}
+
+/* ==================== CROSS-CONNECTIONS NETWORK ==================== */
+.network-hero{padding:60px 40px;background:linear-gradient(180deg,var(--bg),var(--card));text-align:center;position:relative}
+.network-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(92,225,230,0.1),transparent 60%)}
+.network-hero h2{font-size:clamp(1.8rem,4vw,2.5rem);font-weight:900;margin-bottom:12px;position:relative}
+.network-hero h2 .gradient{background:linear-gradient(135deg,var(--signal),var(--accent),var(--primary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.network-hero p{color:var(--dim);font-size:1.05rem;max-width:700px;margin:0 auto}
+
+/* NETWORK VISUALIZATION */
+.network-section{padding:60px 40px;background:var(--bg);position:relative;overflow:hidden}
+.network-container{max-width:1200px;margin:0 auto;position:relative}
+.network-canvas{position:relative;height:700px;background:var(--card);border:1px solid var(--border);border-radius:24px;overflow:hidden}
+.network-canvas::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,rgba(253,203,110,0.1),transparent 40%),radial-gradient(circle at 20% 30%,rgba(92,225,230,0.08),transparent 30%),radial-gradient(circle at 80% 70%,rgba(191,90,242,0.08),transparent 30%)}
+
+/* SVG CONNECTIONS */
+.network-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.connection-line{stroke-width:2;fill:none;opacity:0.6;transition:opacity 0.3s}
+.connection-line.risk{stroke:var(--danger)}
+.connection-line.protect{stroke:var(--primary)}
+.connection-line.cascade{stroke:var(--signal);stroke-dasharray:8,4;animation:dash 20s linear infinite}
+.connection-line.strong{stroke-width:4;opacity:0.8}
+@keyframes dash{to{stroke-dashoffset:-100}}
+
+/* NETWORK NODES */
+.network-node{position:absolute;transform:translate(-50%,-50%);z-index:10;cursor:pointer;transition:all 0.3s}
+.network-node:hover{z-index:100;transform:translate(-50%,-50%) scale(1.15)}
+
+.node-hub{width:140px;height:140px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-direction:column;border:4px solid}
+.node-hub.gut{background:linear-gradient(135deg,#ffeaa7,var(--gut));border-color:rgba(255,255,255,0.4);box-shadow:0 0 80px rgba(253,203,110,0.5)}
+.node-hub.brain{background:linear-gradient(135deg,#fd79a8,var(--pink));border-color:rgba(255,255,255,0.4);box-shadow:0 0 60px rgba(244,114,182,0.4)}
+.node-hub-icon{font-size:2.8rem}
+.node-hub-label{font-size:0.8rem;font-weight:800;color:#5a4a1e;margin-top:4px;text-transform:uppercase}
+.node-hub.brain .node-hub-label{color:#6b2150}
+
+.node-marker{background:var(--card2);border:3px solid var(--border);border-radius:14px;padding:12px 16px;text-align:center;min-width:100px;box-shadow:0 8px 24px rgba(0,0,0,0.3)}
+.node-marker:hover{box-shadow:0 12px 40px rgba(0,0,0,0.5)}
+.node-marker.risk{border-color:rgba(255,69,58,0.6);background:linear-gradient(135deg,var(--card2),rgba(255,69,58,0.1))}
+.node-marker.protect{border-color:rgba(0,255,178,0.6);background:linear-gradient(135deg,var(--card2),rgba(0,255,178,0.1))}
+.node-marker.signal{border-color:var(--signal);background:linear-gradient(135deg,var(--card2),rgba(92,225,230,0.15));box-shadow:0 0 30px rgba(92,225,230,0.3)}
+.node-marker-icon{font-size:1.5rem;margin-bottom:4px}
+.node-marker-name{font-size:0.75rem;font-weight:700;color:var(--bright)}
+.node-marker-value{font-family:'JetBrains Mono',monospace;font-size:0.65rem;font-weight:700;margin-top:2px}
+.node-marker.risk .node-marker-value{color:var(--danger)}
+.node-marker.protect .node-marker-value{color:var(--primary)}
+.node-marker.signal .node-marker-value{color:var(--signal)}
+
+/* CONNECTION LEGEND */
+.network-legend{position:absolute;bottom:20px;left:20px;background:rgba(10,10,15,0.9);border:1px solid var(--border);border-radius:12px;padding:16px 20px}
+.legend-title{font-size:0.7rem;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
+.legend-item{display:flex;align-items:center;gap:10px;margin-bottom:6px;font-size:0.75rem}
+.legend-line{width:30px;height:3px;border-radius:2px}
+.legend-line.risk{background:var(--danger)}
+.legend-line.protect{background:var(--primary)}
+.legend-line.cascade{background:var(--signal);background:repeating-linear-gradient(90deg,var(--signal) 0,var(--signal) 8px,transparent 8px,transparent 12px)}
+
+/* ==================== EARLY WARNING SIGNALS ==================== */
+.signals-section{padding:60px 40px;background:var(--card)}
+.signals-inner{max-width:1100px;margin:0 auto}
+.signals-header{text-align:center;margin-bottom:50px}
+.signals-header h2{font-size:1.8rem;font-weight:800;margin-bottom:12px}
+.signals-header h2 .alert{color:var(--signal)}
+.signals-header p{color:var(--dim);font-size:1rem}
+
+.signal-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px}
+.signal-card{background:var(--card2);border:2px solid var(--border);border-radius:20px;padding:28px;position:relative;overflow:hidden;transition:all 0.3s}
+.signal-card:hover{transform:translateY(-4px);border-color:var(--signal)}
+.signal-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px}
+.signal-card.critical::before{background:linear-gradient(90deg,var(--danger),var(--orange))}
+.signal-card.warning::before{background:linear-gradient(90deg,var(--orange),var(--gold))}
+.signal-card.watch::before{background:linear-gradient(90deg,var(--signal),var(--accent))}
+
+.signal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.signal-level{display:flex;align-items:center;gap:8px}
+.signal-level-icon{font-size:1.3rem}
+.signal-level-text{font-size:0.7rem;font-weight:800;text-transform:uppercase;letter-spacing:1px}
+.signal-card.critical .signal-level-text{color:var(--danger)}
+.signal-card.warning .signal-level-text{color:var(--orange)}
+.signal-card.watch .signal-level-text{color:var(--signal)}
+.signal-risk{font-family:'JetBrains Mono',monospace;font-size:1.2rem;font-weight:900;padding:6px 12px;border-radius:8px}
+.signal-card.critical .signal-risk{background:rgba(255,69,58,0.15);color:var(--danger)}
+.signal-card.warning .signal-risk{background:rgba(255,159,67,0.15);color:var(--orange)}
+.signal-card.watch .signal-risk{background:rgba(92,225,230,0.15);color:var(--signal)}
+
+.signal-title{font-size:1.1rem;font-weight:700;color:var(--bright);margin-bottom:12px}
+.signal-combo{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.signal-marker{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--card);border:1px solid var(--border);border-radius:8px;font-size:0.8rem}
+.signal-marker-icon{font-size:1rem}
+.signal-plus{color:var(--dim);font-weight:700}
+.signal-desc{font-size:0.9rem;color:var(--dim);line-height:1.7}
+.signal-timing{margin-top:16px;padding-top:16px;border-top:1px solid var(--border);display:flex;align-items:center;gap:8px;font-size:0.8rem;color:var(--signal)}
+.signal-timing-icon{font-size:1rem}
+
+/* ==================== CASCADE PATHWAYS ==================== */
+.cascade-section{padding:60px 40px;background:var(--bg)}
+.cascade-inner{max-width:1100px;margin:0 auto}
+.cascade-header{text-align:center;margin-bottom:50px}
+.cascade-header h2{font-size:1.8rem;font-weight:800;margin-bottom:12px}
+.cascade-header p{color:var(--dim);font-size:1rem}
+
+.pathway-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px;margin-bottom:24px}
+.pathway-title{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.pathway-icon{font-size:2rem}
+.pathway-name{font-size:1.2rem;font-weight:800}
+.pathway-risk{font-family:'JetBrains Mono',monospace;font-size:0.9rem;padding:6px 14px;border-radius:8px;margin-left:auto}
+.pathway-risk.high{background:rgba(255,69,58,0.15);color:var(--danger)}
+.pathway-risk.medium{background:rgba(255,159,67,0.15);color:var(--orange)}
+
+.pathway-flow{display:flex;align-items:center;gap:8px;overflow-x:auto;padding:16px 0}
+.pathway-step{background:var(--card2);border:2px solid var(--border);border-radius:12px;padding:16px 20px;text-align:center;min-width:120px;flex-shrink:0;transition:all 0.3s}
+.pathway-step:hover{transform:translateY(-3px)}
+.pathway-step.trigger{border-color:var(--accent);background:linear-gradient(135deg,var(--card2),rgba(191,90,242,0.15))}
+.pathway-step.gut{border-color:var(--gut);background:linear-gradient(135deg,var(--card2),rgba(253,203,110,0.2));box-shadow:0 0 20px rgba(253,203,110,0.2)}
+.pathway-step.brain{border-color:var(--pink);background:linear-gradient(135deg,var(--card2),rgba(244,114,182,0.15))}
+.pathway-step.outcome{border-color:var(--danger);background:linear-gradient(135deg,var(--card2),rgba(255,69,58,0.15))}
+.pathway-step-icon{font-size:1.6rem;margin-bottom:6px}
+.pathway-step-label{font-size:0.75rem;font-weight:600;color:var(--text)}
+.pathway-step-change{font-family:'JetBrains Mono',monospace;font-size:0.65rem;margin-top:4px;padding:2px 8px;border-radius:4px;display:inline-block}
+.pathway-step-change.up{background:rgba(255,69,58,0.15);color:var(--danger)}
+.pathway-step-change.down{background:rgba(0,255,178,0.15);color:var(--primary)}
+.pathway-arrow{color:var(--signal);font-size:1.2rem;font-weight:700;flex-shrink:0}
+
+.pathway-explain{margin-top:20px;padding:20px;background:var(--card2);border-radius:12px;font-size:0.9rem;color:var(--dim);line-height:1.8}
+.pathway-explain strong{color:var(--bright)}
+
+/* ==================== RISK CALCULATOR ==================== */
+.calculator-section{padding:60px 40px;background:linear-gradient(180deg,var(--card),var(--bg))}
+.calculator-inner{max-width:900px;margin:0 auto}
+.calculator-header{text-align:center;margin-bottom:40px}
+.calculator-header h2{font-size:1.8rem;font-weight:800;margin-bottom:12px}
+.calculator-header p{color:var(--dim);font-size:1rem}
+
+.calculator-box{background:var(--card2);border:2px solid var(--signal);border-radius:24px;padding:40px;position:relative;overflow:hidden}
+.calculator-box::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--signal),var(--accent),var(--primary))}
+
+.calc-factors{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:32px}
+@media(max-width:600px){.calc-factors{grid-template-columns:1fr}}
+.calc-factor{background:var(--card);border:2px solid var(--border);border-radius:14px;padding:16px;cursor:pointer;transition:all 0.3s;display:flex;align-items:center;gap:14px}
+.calc-factor:hover{border-color:var(--dim)}
+.calc-factor.selected{border-color:var(--signal);background:rgba(92,225,230,0.1)}
+.calc-factor.selected.risk-factor{border-color:var(--danger);background:rgba(255,69,58,0.1)}
+.calc-factor.selected.protect-factor{border-color:var(--primary);background:rgba(0,255,178,0.1)}
+.calc-factor-check{width:24px;height:24px;border:2px solid var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.3s}
+.calc-factor.selected .calc-factor-check{background:var(--signal);border-color:var(--signal)}
+.calc-factor.selected.risk-factor .calc-factor-check{background:var(--danger);border-color:var(--danger)}
+.calc-factor.selected.protect-factor .calc-factor-check{background:var(--primary);border-color:var(--primary)}
+.calc-factor-check::after{content:'✓';color:var(--bg);font-weight:700;font-size:0.8rem;opacity:0;transition:opacity 0.3s}
+.calc-factor.selected .calc-factor-check::after{opacity:1}
+.calc-factor-icon{font-size:1.5rem}
+.calc-factor-info{flex:1}
+.calc-factor-name{font-weight:700;font-size:0.9rem;color:var(--bright)}
+.calc-factor-impact{font-family:'JetBrains Mono',monospace;font-size:0.75rem;margin-top:2px}
+.calc-factor.risk-factor .calc-factor-impact{color:var(--danger)}
+.calc-factor.protect-factor .calc-factor-impact{color:var(--primary)}
+
+.calc-result{background:var(--card);border-radius:16px;padding:32px;text-align:center}
+.calc-result-label{font-size:0.8rem;color:var(--dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}
+.calc-result-score{font-family:'JetBrains Mono',monospace;font-size:4rem;font-weight:900;line-height:1;margin-bottom:8px;transition:color 0.3s}
+.calc-result-score.low{color:var(--primary)}
+.calc-result-score.medium{color:var(--gold)}
+.calc-result-score.high{color:var(--orange)}
+.calc-result-score.critical{color:var(--danger)}
+.calc-result-level{font-size:1rem;font-weight:700;margin-bottom:16px}
+.calc-result-bar{height:12px;background:var(--card2);border-radius:6px;overflow:hidden;margin-bottom:20px}
+.calc-result-fill{height:100%;border-radius:6px;transition:width 0.5s,background 0.5s}
+.calc-result-fill.low{background:var(--primary);width:25%}
+.calc-result-fill.medium{background:var(--gold);width:50%}
+.calc-result-fill.high{background:var(--orange);width:75%}
+.calc-result-fill.critical{background:var(--danger);width:100%}
+.calc-result-action{font-size:0.9rem;color:var(--dim);line-height:1.7}
+
+/* ==================== INTERVENTION TIMELINE ==================== */
+.timeline-section{padding:60px 40px;background:var(--card)}
+.timeline-inner{max-width:1000px;margin:0 auto}
+.timeline-header{text-align:center;margin-bottom:50px}
+.timeline-header h2{font-size:1.8rem;font-weight:800;margin-bottom:12px}
+.timeline-header p{color:var(--dim);font-size:1rem}
+
+.timeline{position:relative;padding:20px 0}
+.timeline::before{content:'';position:absolute;left:50%;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--accent),var(--gut),var(--primary),var(--danger));border-radius:2px;transform:translateX(-50%)}
+@media(max-width:768px){.timeline::before{left:20px}}
+
+.timeline-item{display:flex;align-items:center;margin-bottom:40px;position:relative}
+.timeline-item:nth-child(odd){flex-direction:row-reverse}
+@media(max-width:768px){.timeline-item,.timeline-item:nth-child(odd){flex-direction:row}}
+
+.timeline-content{width:45%;padding:24px;background:var(--card2);border:2px solid var(--border);border-radius:16px;position:relative}
+@media(max-width:768px){.timeline-content{width:calc(100% - 60px);margin-left:40px}}
+.timeline-item:hover .timeline-content{border-color:var(--signal)}
+
+.timeline-dot{position:absolute;left:50%;transform:translateX(-50%);width:50px;height:50px;background:var(--card);border:4px solid var(--signal);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.3rem;z-index:10}
+@media(max-width:768px){.timeline-dot{left:20px}}
+
+.timeline-day{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--signal);font-weight:700;margin-bottom:8px}
+.timeline-title{font-size:1rem;font-weight:700;color:var(--bright);margin-bottom:8px}
+.timeline-markers{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.timeline-marker{font-size:0.7rem;padding:4px 10px;background:var(--card);border:1px solid var(--border);border-radius:6px;display:flex;align-items:center;gap:4px}
+.timeline-action{font-size:0.85rem;color:var(--dim);line-height:1.6}
+.timeline-action strong{color:var(--primary)}
+
+/* COLLABORATE */
+.collab-hero{padding:80px 40px;text-align:center}
+.collab-hero h1{font-size:clamp(1.8rem,4vw,2.5rem);font-weight:800;margin-bottom:12px}
+.collab-hero p{color:var(--dim);font-size:1.05rem;max-width:600px;margin:0 auto}
+.contact-section{padding:60px 40px;background:var(--card)}
+.contact-box{max-width:500px;margin:0 auto;background:var(--card2);border:2px solid var(--primary);border-radius:24px;padding:48px;text-align:center}
+.contact-box h2{font-size:1.4rem;font-weight:800;margin-bottom:16px}
+.contact-box p{color:var(--text);margin-bottom:30px}
+.contact-email{font-size:1.2rem;font-weight:700;color:var(--primary);text-decoration:none;display:inline-block;padding:16px 32px;background:rgba(0,255,178,0.1);border-radius:12px;transition:all 0.3s}
+.contact-email:hover{background:rgba(0,255,178,0.2)}
 </style>
 </head>
 <body>
 
-<!-- ========== INTRO SEQUENCE ========== -->
-<div class="intro" id="intro">
-  <button class="intro-skip" onclick="skipIntro()">Skip →</button>
-  
-  <!-- Animated background DNA -->
-  <div class="intro-bg">
-    <div class="dna-helix"></div>
-    <div class="dna-helix" style="left:20%;animation-delay:-5s"></div>
-    <div class="dna-helix" style="left:80%;animation-delay:-10s"></div>
-    <div class="floating-molecule m1">🧬</div>
-    <div class="floating-molecule m2">🦠</div>
-    <div class="floating-molecule m3">🧠</div>
-    <div class="floating-molecule m4">⚡</div>
-  </div>
-  
-  <div class="intro-sequence">
-    <!-- Step 0: Big BURAK Labs Branding -->
-    <div class="intro-step active" id="step0">
-      <div class="brand-logo">
-        <div class="brand-icon">
-          <span class="brand-icon-main">🧬</span>
-          <div class="brand-icon-orbit"></div>
-        </div>
-        <h1 class="brand-name">BURAK</h1>
-        <div class="brand-labs">LABS</div>
-      </div>
-      <p class="brand-tagline" id="brandTagline">Empowering Parents with Science</p>
-      <div class="brand-mission" id="brandMission">
-        <span>🔬</span> Non-Commercial <span>•</span> Evidence-Based <span>•</span> Open Science
-      </div>
-      <div class="brand-stats">
-        <div class="brand-stat">
-          <div class="brand-stat-num">50+</div>
-          <div class="brand-stat-label" id="bsLabel1">Research Papers</div>
-        </div>
-        <div class="brand-stat">
-          <div class="brand-stat-num">1000</div>
-          <div class="brand-stat-label" id="bsLabel2">Critical Days</div>
-        </div>
-        <div class="brand-stat">
-          <div class="brand-stat-num">38T</div>
-          <div class="brand-stat-label" id="bsLabel3">Bacteria in You</div>
-        </div>
-      </div>
-      <button class="intro-btn brand-btn" onclick="nextStep(1)" id="btn0">
-        <span id="btn0Text">Discover the Science</span>
-        <span class="btn-arrow">→</span>
-      </button>
-      <p class="brand-footer" id="brandFooter">Based on peer-reviewed research from Harvard, Stanford, Nature & The Lancet</p>
-    </div>
-    
-    <!-- Step 1 -->
-    <div class="intro-step" id="step1">
-      <p class="intro-question" id="q1">What if everything you knew about ADHD was wrong?</p>
-      <h1 class="intro-answer" id="a1">It doesn't start in the <span class="brain-highlight">BRAIN</span>.</h1>
-      <button class="intro-btn" onclick="nextStep(2)" id="btn1">Continue →</button>
-    </div>
-    
-    <!-- Step 2 -->
-    <div class="intro-step" id="step2">
-      <p class="intro-question" id="q2">Where does it actually begin?</p>
-      <h1 class="intro-answer" id="a2">It starts in the <span class="highlight">GUT</span>.</h1>
-      <div class="intro-stat">
-        <span class="intro-stat-num">90%</span>
-        <span class="intro-stat-label" id="stat2">of serotonin is made here</span>
-      </div>
-      <button class="intro-btn" onclick="nextStep(3)" id="btn2">Continue →</button>
-    </div>
-    
-    <!-- Step 3 -->
-    <div class="intro-step" id="step3">
-      <p class="intro-question" id="q3">How much can you actually change?</p>
-      <h1 class="intro-answer" id="a3"><span class="highlight">70%</span> of ADHD risk is environmental.</h1>
-      <p class="intro-detail" id="detail3">
-        Not genetics. Not luck.<br>
-        <strong>Choices you make</strong> in the first 1000 days.
-      </p>
-      <button class="intro-btn" onclick="nextStep(4)" id="btn3">Continue →</button>
-    </div>
-    
-    <!-- Step 4 -->
-    <div class="intro-step" id="step4">
-      <p class="intro-question" id="q4">But there's a deadline...</p>
-      <h1 class="intro-answer" id="a4">After age <span class="danger">3</span>, the gut <span class="danger">LOCKS</span>.</h1>
-      <p class="intro-detail" id="detail4">
-        The microbiome becomes permanent.<br>
-        <strong>You have 1000 days.</strong> That's it.
-      </p>
-      <button class="intro-btn" onclick="startApp()" id="btn4">Show Me the Science →</button>
-    </div>
-  </div>
+<nav class="nav">
+<div class="nav-logo" onclick="showPage('home')">
+<div class="nav-logo-main">BURAK<span>Labs</span></div>
+<div class="nav-logo-sub"><span class="en">A BURAK Multiomics Initiative</span><span class="ar">مبادرة من بُراق للتحليلات المتعددة</span></div>
+</div>
+<div class="nav-links">
+<span class="nav-link active" data-page="home" onclick="showPage('home')"><span class="en">Home</span><span class="ar">الرئيسية</span></span>
+<span class="nav-link" data-page="science" onclick="showPage('science')"><span class="en">Deep Science</span><span class="ar">العلم العميق</span></span>
+<span class="nav-link" data-page="pipeline" onclick="showPage('pipeline')"><span class="en">ADHD Pipeline</span><span class="ar">خط ADHD</span></span>
+<span class="nav-link gold" data-page="collab" onclick="showPage('collab')"><span class="en">Collaborate</span><span class="ar">تعاون</span></span>
+<div class="lang-toggle">
+<button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
+<button class="lang-btn" id="btn-ar" onclick="setLang('ar')">ع</button>
+</div>
+</div>
+</nav>
+
+<!-- HOME PAGE -->
+<div class="page active" id="page-home">
+<section class="home-hero">
+<div class="home-content">
+<div class="home-badge"><div class="pulse"></div><span><span class="en">Day </span><span class="ar">اليوم </span><strong id="dayCount">0</strong><span class="en"> of 1,000</span><span class="ar"> من 1,000</span></span></div>
+<h1 class="home-title"><span class="en">Where Research Meets</span><span class="ar">حيث يلتقي البحث</span><span class="hl"><span class="en">Child Development</span><span class="ar">بنمو الطفل</span></span></h1>
+<p class="home-sub"><span class="en">BURAK Labs maps the <strong>gut-brain axis</strong> in early childhood. Now with <strong>Cross-Connections</strong> — see how biomarkers interact to predict ADHD risk early.</span><span class="ar">مختبرات بُراق ترسم <strong>محور الأمعاء-الدماغ</strong> في الطفولة المبكرة. الآن مع <strong>الروابط المتقاطعة</strong> — شاهد كيف تتفاعل المؤشرات للتنبؤ بخطر ADHD مبكراً.</span></p>
+<div class="home-stats">
+<div class="home-stat"><div class="home-stat-num">1.9×</div><div class="home-stat-label"><span class="en">ADHD risk</span><span class="ar">خطر ADHD</span></div></div>
+<div class="home-stat"><div class="home-stat-num">12+</div><div class="home-stat-label"><span class="en">Connected markers</span><span class="ar">مؤشر مترابط</span></div></div>
+<div class="home-stat"><div class="home-stat-num">5</div><div class="home-stat-label"><span class="en">Early signals</span><span class="ar">إشارات مبكرة</span></div></div>
+</div>
+<div class="home-ctas">
+<button class="btn btn-signal" onclick="showPage('science');showSection('connections')"><span class="en">🔗 Explore Cross-Connections →</span><span class="ar">← 🔗 استكشف الروابط</span></button>
+<button class="btn btn-secondary" onclick="showPage('science')"><span class="en">Deep Science</span><span class="ar">العلم العميق</span></button>
+</div>
+</div>
+</section>
+
+<!-- WHY TWO PLATFORMS -->
+<section style="padding:80px 40px;background:var(--card)">
+<div style="max-width:1100px;margin:0 auto">
+<div style="text-align:center;margin-bottom:60px">
+<div style="display:inline-flex;align-items:center;gap:8px;padding:8px 16px;background:rgba(191,90,242,0.15);border:1px solid rgba(191,90,242,0.3);border-radius:50px;margin-bottom:20px;font-size:0.8rem;color:var(--accent);font-weight:600">🧬 Platform Philosophy</div>
+<h2 style="font-size:clamp(1.8rem,4vw,2.5rem);font-weight:900;margin-bottom:16px"><span class="en">Two Platforms. <span style="color:var(--primary)">One Mission.</span></span><span class="ar">منصتان. <span style="color:var(--primary)">مهمة واحدة.</span></span></h2>
+<p style="color:var(--dim);font-size:1.05rem;max-width:700px;margin:0 auto"><span class="en">We deliberately separate <strong style="color:var(--text)">Diseases</strong> from <strong style="color:var(--text)">Conditions</strong> — because they require fundamentally different approaches.</span><span class="ar">نفصل عمداً <strong style="color:var(--text)">الأمراض</strong> عن <strong style="color:var(--text)">الحالات</strong> — لأنها تتطلب مقاربات مختلفة جذرياً.</span></p>
 </div>
 
-<!-- ========== MAIN APP ========== -->
-<div class="app" id="app">
-  
-  <!-- HEADER -->
-  <header class="header" id="header">
-    <div class="logo">
-      <div class="logo-icon">🧬</div>
-      <div class="logo-content">
-        <span class="logo-text">BURAK</span>
-        <span class="logo-sub">Labs • Empowering Parents with Science</span>
-      </div>
-    </div>
-    <div class="controls">
-      <div class="mission-badge">
-        <span>🔬</span>
-        <span>Non-Commercial • Evidence-Based</span>
-      </div>
-      <button class="ctrl-btn danger" id="riskBtn" onclick="toggleRisk()">
-        <span>⚠️</span>
-        <span id="riskBtnText">Show Risks</span>
-      </button>
-    </div>
-  </header>
-  
-  <!-- VISUAL CANVAS -->
-  <div class="canvas" id="canvas">
-    <div class="ambient" id="ambient"></div>
-    
-    <!-- HEXAGON GRID BACKGROUND -->
-    <div class="hex-grid"></div>
-    
-    <!-- GLOW ORBS - Impressive visual effect -->
-    <div class="glow-orb orb-1"></div>
-    <div class="glow-orb orb-2"></div>
-    <div class="glow-orb orb-3"></div>
-    
-    <!-- NEURAL WEB - Background connections -->
-    <div class="neural-web" id="neuralWeb"></div>
-    
-    <!-- LIVE BACTERIA COUNTER -->
-    <div class="live-bacteria-counter" id="bacteriaCounter">
-      <div class="counter-label">Live Gut Bacteria</div>
-      <div class="counter-value" id="counterValue">38,000,000,000,000</div>
-    </div>
-    
-    <!-- SCIENCE FACT CARDS -->
-    <div class="science-fact" style="top:15%;left:5%;animation-delay:0s">
-      <strong>90%</strong> of serotonin is made in your gut, not your brain
-    </div>
-    <div class="science-fact" style="top:75%;right:5%;animation-delay:-4s">
-      The vagus nerve sends <strong>400x more</strong> signals UP than down
-    </div>
-    
-    <!-- NEUROTRANSMITTER LABELS -->
-    <div class="neuro-label" style="top:35%;left:8%;color:#fbbf24;animation-delay:0s">Serotonin ↑</div>
-    <div class="neuro-label" style="top:45%;right:8%;color:#f472b6;animation-delay:-2.5s">Dopamine ↑</div>
-    <div class="neuro-label" style="top:55%;left:12%;color:#67e8f9;animation-delay:-1.5s">GABA ↑</div>
-    
-    <!-- ENERGY PARTICLES -->
-    <div id="energyParticles"></div>
-    
-    <!-- DATA STREAMS -->
-    <div class="data-stream" style="left:15%;height:100px;animation-delay:0s"></div>
-    <div class="data-stream" style="left:85%;height:150px;animation-delay:-1s"></div>
-    <div class="data-stream" style="left:25%;height:80px;animation-delay:-0.5s"></div>
-    <div class="data-stream" style="left:75%;height:120px;animation-delay:-1.5s"></div>
-    
-    <!-- FLOATING RESEARCH CITATIONS -->
-    <div class="citation-float" style="top:8%;animation-delay:0s">Nature (2023): Gut microbiome shapes neurodevelopment in first 1000 days</div>
-    <div class="citation-float" style="top:92%;animation-delay:-15s">The Lancet (2022): 70% of ADHD risk factors are environmental and modifiable</div>
-    <div class="citation-float" style="top:50%;animation-delay:-7s">Harvard Medical School: Vagus nerve is the information superhighway between gut and brain</div>
-    
-    <!-- CHAIN REACTION CONTAINER -->
-    <div class="chain-reactions" id="chainReactions"></div>
-    
-    <div class="scene">
-      <!-- BRAIN -->
-      <div class="brain" id="brain" onclick="triggerBrainChain()">
-        <!-- Pulsing rings -->
-        <div class="organ-pulse" style="width:250px;height:210px;color:var(--brain);animation-delay:0s"></div>
-        <div class="organ-pulse" style="width:250px;height:210px;color:var(--brain);animation-delay:1s"></div>
-        <div class="organ-pulse" style="width:250px;height:210px;color:var(--brain);animation-delay:2s"></div>
-        <div class="brain-shape">
-          <div class="brain-wrinkle" style="width:55%;height:25%;top:22%;left:22%;"></div>
-          <div class="brain-wrinkle" style="width:35%;height:18%;top:48%;left:32%;"></div>
-          <div class="brain-wrinkle" style="width:25%;height:12%;top:32%;left:55%;"></div>
-          <div class="neural-fires" id="neuralFires"></div>
-        </div>
-        <div class="brain-info">
-          <div class="brain-label" id="brainLabel">BRAIN</div>
-          <div class="brain-stat" id="brainStat">86 billion neurons</div>
-        </div>
-      </div>
-      
-      <!-- GUT-BRAIN AXIS -->
-      <div class="axis">
-        <div class="axis-path">
-          <div class="signals">
-            <div class="signal-up"></div>
-            <div class="signal-up" style="animation-delay:0.8s"></div>
-            <div class="signal-up" style="animation-delay:1.6s"></div>
-            <div class="signal-down" style="animation-delay:0.4s"></div>
-            <div class="signal-down" style="animation-delay:1.5s"></div>
-          </div>
-        </div>
-        <div class="axis-label-left" id="axisLabel">Vagus Nerve Highway</div>
-        <div class="axis-label-right">
-          <div><span class="dot"></span> <span id="axisSerotoninLabel">Serotonin</span></div>
-          <div><span class="dot" style="background:#f472b6"></span> <span id="axisSignalsLabel">Signals</span></div>
-        </div>
-      </div>
-      
-      <!-- MECHANISM POPUPS -->
-      <div class="mechanism mech-serotonin" id="mechSerotonin">
-        <div class="mechanism-title" id="mechTitle1">How It Works</div>
-        <div class="mechanism-text" id="mechText1">
-          Gut bacteria produce <strong>serotonin</strong> → travels up vagus nerve → 
-          reaches brain → controls <strong>mood & focus</strong>
-        </div>
-      </div>
-      
-      <div class="mechanism mech-inflammation" id="mechInflammation">
-        <div class="mechanism-title" id="mechTitle2">What Goes Wrong</div>
-        <div class="mechanism-text" id="mechText2">
-          Bad bacteria create <strong>inflammation</strong> → crosses blood-brain barrier → 
-          disrupts <strong>dopamine</strong> → ADHD symptoms
-        </div>
-      </div>
-      
-      <!-- THE GUT -->
-      <div class="gut" id="gut" onclick="triggerGutChain()">
-        <!-- Pulsing rings -->
-        <div class="organ-pulse" style="width:350px;height:250px;color:var(--gut-good);animation-delay:0s"></div>
-        <div class="organ-pulse" style="width:350px;height:250px;color:var(--gut-good);animation-delay:1s"></div>
-        <div class="organ-pulse" style="width:350px;height:250px;color:var(--gut-good);animation-delay:2s"></div>
-        <div class="gut-shape">
-          <div class="gut-inner"></div>
-          <div class="villi">
-            <div class="villus" style="height:60%"></div>
-            <div class="villus" style="height:75%;animation-delay:0.2s"></div>
-            <div class="villus" style="height:85%;animation-delay:0.4s"></div>
-            <div class="villus" style="height:80%;animation-delay:0.3s"></div>
-            <div class="villus" style="height:70%;animation-delay:0.5s"></div>
-            <div class="villus" style="height:65%;animation-delay:0.1s"></div>
-          </div>
-          <div class="bacteria-world" id="bacteriaWorld"></div>
-        </div>
-        <div class="gut-info">
-          <div class="gut-label" id="gutLabel">THE GUT</div>
-          <div class="gut-stat" id="gutStat"><strong>100 million</strong> neurons — same as a cat's brain</div>
-        </div>
-      </div>
-      
-      <!-- HOTSPOTS -->
-      <div class="hotspots">
-        <div class="hotspot hs-pregnancy" onclick="openPanel('pregnancy')">
-          <span class="hotspot-icon">🤰</span>
-          <span class="hotspot-label" id="hsLabelPreg">Pregnancy</span>
-        </div>
-        <div class="hotspot hs-birth" onclick="openPanel('birth')">
-          <span class="hotspot-icon">👶</span>
-          <span class="hotspot-label" id="hsLabelBirth">Birth</span>
-        </div>
-        <div class="hotspot hs-feeding" onclick="openPanel('feeding')">
-          <span class="hotspot-icon">🤱</span>
-          <span class="hotspot-label" id="hsLabelFeed">Feeding</span>
-        </div>
-        <div class="hotspot hs-food" onclick="openPanel('food')">
-          <span class="hotspot-icon">🥗</span>
-          <span class="hotspot-label" id="hsLabelFood">Food</span>
-        </div>
-      </div>
-      
-      <!-- JOURNEY CONNECTORS -->
-      <div class="journey-connectors">
-        <svg width="100%" height="100%" style="position:absolute;inset:0">
-          <defs>
-            <linearGradient id="pathGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" style="stop-color:#7c3aed;stop-opacity:0.6"/>
-              <stop offset="50%" style="stop-color:#fbbf24;stop-opacity:0.8"/>
-              <stop offset="100%" style="stop-color:#059669;stop-opacity:0.6"/>
-            </linearGradient>
-          </defs>
-          <!-- Curved journey path -->
-          <path class="journey-path" d="M 130 175 Q 50 280, 80 360 Q 110 440, 170 490 Q 300 550, 430 490 Q 530 430, 500 320" stroke="url(#pathGrad)"/>
-        </svg>
-        
-        <!-- Journey nodes -->
-        <div class="journey-node jn-1" onclick="openPanel('pregnancy')" title="Pregnancy">1</div>
-        <div class="journey-node jn-2" onclick="openPanel('birth')" title="Birth">2</div>
-        <div class="journey-node jn-3" onclick="openPanel('feeding')" title="Feeding">3</div>
-        <div class="journey-node jn-4" onclick="openPanel('food')" title="Solid Food">4</div>
-        <div class="journey-node jn-5" onclick="showLockWarning()" title="Age 3 - Locks!">🔒</div>
-      </div>
-    </div>
-  </div>
-  
-  <!-- INFO PANEL -->
-  <div class="panel" id="panel">
-    <button class="panel-close" onclick="closePanel()">✕</button>
-    
-    <div class="panel-header">
-      <div class="panel-icon" id="panelIcon">🧠</div>
-      <h2 class="panel-title" id="panelTitle">The Gut-Brain Axis</h2>
-      <p class="panel-subtitle" id="panelSubtitle">The connection they never taught you</p>
-    </div>
-    
-    <div class="panel-content" id="panelContent">
-      <!-- Dynamic content loads here -->
-    </div>
-  </div>
-  
-  <!-- TIMELINE -->
-  <div class="timeline" id="timeline">
-    <div class="tl-item" onclick="openPanel('pregnancy')">
-      <div class="tl-dot">🤰</div>
-      <div class="tl-label">Pregnancy</div>
-    </div>
-    <div class="tl-line"></div>
-    <div class="tl-item" onclick="openPanel('birth')">
-      <div class="tl-dot">👶</div>
-      <div class="tl-label">Birth</div>
-    </div>
-    <div class="tl-line"></div>
-    <div class="tl-item" onclick="openPanel('feeding')">
-      <div class="tl-dot">🤱</div>
-      <div class="tl-label">0-6 mo</div>
-    </div>
-    <div class="tl-line"></div>
-    <div class="tl-item" onclick="openPanel('food')">
-      <div class="tl-dot">🥗</div>
-      <div class="tl-label">6-36 mo</div>
-    </div>
-    <div class="tl-line"></div>
-    <div class="tl-item locked">
-      <div class="tl-dot">🔒</div>
-      <div class="tl-label">Age 3 LOCKS</div>
-    </div>
-  </div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-bottom:60px">
+<!-- BURAK Multiomics -->
+<div style="background:linear-gradient(135deg,var(--card2),rgba(191,90,242,0.05));border:2px solid var(--accent);border-radius:24px;padding:36px;position:relative;overflow:hidden">
+<div style="position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--accent),var(--pink))"></div>
+<div style="font-size:2.5rem;margin-bottom:16px">🔬</div>
+<div style="font-size:0.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px">BURAK Multiomics</div>
+<h3 style="font-size:1.4rem;font-weight:800;margin-bottom:16px"><span class="en">For Diseases</span><span class="ar">للأمراض</span></h3>
+<p style="color:var(--dim);font-size:0.95rem;line-height:1.8;margin-bottom:20px"><span class="en">Cancer, infections, metabolic disorders — each disease has <strong style="color:var(--text)">unique molecular signatures</strong>, requires <strong style="color:var(--text)">specialized diagnostic pathways</strong>, and demands <strong style="color:var(--text)">distinct treatment protocols</strong>.</span><span class="ar">السرطان، العدوى، الاضطرابات الأيضية — كل مرض له <strong style="color:var(--text)">توقيعات جزيئية فريدة</strong>، يتطلب <strong style="color:var(--text)">مسارات تشخيصية متخصصة</strong>.</span></p>
+<div style="display:flex;flex-wrap:wrap;gap:8px">
+<span style="padding:6px 12px;background:rgba(191,90,242,0.15);border-radius:8px;font-size:0.75rem">🦠 Unique pathways</span>
+<span style="padding:6px 12px;background:rgba(191,90,242,0.15);border-radius:8px;font-size:0.75rem">🧪 Different biomarkers</span>
+<span style="padding:6px 12px;background:rgba(191,90,242,0.15);border-radius:8px;font-size:0.75rem">💊 Separate treatments</span>
+</div>
+</div>
+
+<!-- BURAK Labs -->
+<div style="background:linear-gradient(135deg,var(--card2),rgba(0,255,178,0.05));border:2px solid var(--primary);border-radius:24px;padding:36px;position:relative;overflow:hidden">
+<div style="position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--primary),var(--signal))"></div>
+<div style="font-size:2.5rem;margin-bottom:16px">🧒</div>
+<div style="font-size:0.7rem;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px">BURAK Labs</div>
+<h3 style="font-size:1.4rem;font-weight:800;margin-bottom:16px"><span class="en">For Conditions</span><span class="ar">للحالات</span></h3>
+<p style="color:var(--dim);font-size:0.95rem;line-height:1.8;margin-bottom:20px"><span class="en">ADHD, Autism, Anxiety, Diabetes risk — these conditions <strong style="color:var(--text)">share the same origin window</strong>, use <strong style="color:var(--text)">overlapping biomarkers</strong>, and respond to <strong style="color:var(--text)">similar early interventions</strong>.</span><span class="ar">ADHD، التوحد، القلق، خطر السكري — هذه الحالات <strong style="color:var(--text)">تشترك في نفس نافذة الأصل</strong>، تستخدم <strong style="color:var(--text)">مؤشرات متداخلة</strong>.</span></p>
+<div style="display:flex;flex-wrap:wrap;gap:8px">
+<span style="padding:6px 12px;background:rgba(0,255,178,0.15);border-radius:8px;font-size:0.75rem">🔗 Shared data lake</span>
+<span style="padding:6px 12px;background:rgba(0,255,178,0.15);border-radius:8px;font-size:0.75rem">🧮 Same math layer</span>
+<span style="padding:6px 12px;background:rgba(0,255,178,0.15);border-radius:8px;font-size:0.75rem">🫃 Gut-brain axis</span>
+</div>
+</div>
+</div>
+
+<!-- The Magic -->
+<div style="background:var(--card2);border:1px solid var(--border);border-radius:20px;padding:40px;text-align:center">
+<div style="font-size:1.3rem;font-weight:800;margin-bottom:16px"><span class="en">💡 The Insight</span><span class="ar">💡 الرؤية</span></div>
+<p style="color:var(--text);font-size:1.1rem;line-height:1.9;max-width:800px;margin:0 auto"><span class="en">Conditions like ADHD, Autism, and Anxiety all trace back to the <strong style="color:var(--primary)">same 1,000-day developmental window</strong>. They share the <strong style="color:var(--primary)">gut-brain axis</strong> as their communication highway. One child's data can inform <strong style="color:var(--primary)">multiple condition risks simultaneously</strong> — that's why BURAK Labs uses a shared architecture.</span><span class="ar">حالات مثل ADHD والتوحد والقلق كلها تعود إلى <strong style="color:var(--primary)">نفس نافذة الألف يوم التنموية</strong>. تشترك في <strong style="color:var(--primary)">محور الأمعاء-الدماغ</strong> كطريق اتصالها السريع. بيانات طفل واحد يمكن أن تُعلم <strong style="color:var(--primary)">مخاطر حالات متعددة في وقت واحد</strong>.</span></p>
+</div>
+</div>
+</section>
+
+<!-- PRE-BIRTH VISION -->
+<section style="padding:80px 40px;background:linear-gradient(180deg,var(--bg),var(--card))">
+<div style="max-width:1100px;margin:0 auto">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center">
+<div>
+<div style="display:inline-flex;align-items:center;gap:8px;padding:8px 16px;background:rgba(255,69,58,0.15);border:1px solid rgba(255,69,58,0.3);border-radius:50px;margin-bottom:20px;font-size:0.8rem;color:var(--danger);font-weight:600"><span style="display:inline-block;width:8px;height:8px;background:var(--danger);border-radius:50%;animation:pulse 1s infinite"></span> <span class="en">Revolutionary Approach</span><span class="ar">نهج ثوري</span></div>
+<h2 style="font-size:clamp(1.8rem,4vw,2.5rem);font-weight:900;margin-bottom:20px;line-height:1.2"><span class="en">We Look at Conditions <span style="color:var(--signal)">Before Birth</span></span><span class="ar">ننظر للحالات <span style="color:var(--signal)">قبل الولادة</span></span></h2>
+<p style="color:var(--dim);font-size:1.05rem;line-height:1.9;margin-bottom:24px"><span class="en">Traditional medicine waits for symptoms — we don't. BURAK Labs screens <strong style="color:var(--text)">during pregnancy</strong>, identifying risk patterns <strong style="color:var(--text)">months or years before</strong> conditions manifest. Prevention, not just treatment.</span><span class="ar">الطب التقليدي ينتظر الأعراض — نحن لا ننتظر. مختبرات بُراق تفحص <strong style="color:var(--text)">أثناء الحمل</strong>، تحدد أنماط الخطر <strong style="color:var(--text)">قبل أشهر أو سنوات</strong> من ظهور الحالات.</span></p>
+<div style="display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;align-items:center;gap:12px"><span style="color:var(--primary);font-size:1.2rem">✓</span><span><span class="en">Screen maternal microbiome during pregnancy</span><span class="ar">فحص ميكروبيوم الأم أثناء الحمل</span></span></div>
+<div style="display:flex;align-items:center;gap:12px"><span style="color:var(--primary);font-size:1.2rem">✓</span><span><span class="en">Predict infant risk trajectories before Day 1</span><span class="ar">التنبؤ بمسارات خطر الرضيع قبل اليوم الأول</span></span></div>
+<div style="display:flex;align-items:center;gap:12px"><span style="color:var(--primary);font-size:1.2rem">✓</span><span><span class="en">Intervene during the critical 1,000-day window</span><span class="ar">التدخل خلال نافذة الألف يوم الحرجة</span></span></div>
+<div style="display:flex;align-items:center;gap:12px"><span style="color:var(--primary);font-size:1.2rem">✓</span><span><span class="en">Track outcomes across multiple conditions simultaneously</span><span class="ar">تتبع النتائج عبر حالات متعددة في وقت واحد</span></span></div>
+</div>
+</div>
+
+<!-- Timeline Visual -->
+<div style="background:var(--card);border:1px solid var(--border);border-radius:24px;padding:32px;position:relative">
+<div style="position:absolute;left:40px;top:80px;bottom:80px;width:4px;background:linear-gradient(180deg,var(--accent),var(--primary),var(--danger));border-radius:2px"></div>
+
+<div style="position:relative;padding-left:60px;margin-bottom:40px">
+<div style="position:absolute;left:30px;top:5px;width:24px;height:24px;background:var(--accent);border-radius:50%;border:4px solid var(--card)"></div>
+<div style="font-size:0.7rem;color:var(--accent);font-weight:700;margin-bottom:4px">DAY -270</div>
+<div style="font-weight:700;margin-bottom:4px"><span class="en">🤰 Pregnancy Screening</span><span class="ar">🤰 فحص الحمل</span></div>
+<div style="font-size:0.85rem;color:var(--dim)"><span class="en">Maternal stress, diet, microbiome baseline</span><span class="ar">توتر الأم، النظام الغذائي، خط الأساس للميكروبيوم</span></div>
+</div>
+
+<div style="position:relative;padding-left:60px;margin-bottom:40px">
+<div style="position:absolute;left:30px;top:5px;width:24px;height:24px;background:var(--signal);border-radius:50%;border:4px solid var(--card)"></div>
+<div style="font-size:0.7rem;color:var(--signal);font-weight:700;margin-bottom:4px">DAY 1</div>
+<div style="font-weight:700;margin-bottom:4px"><span class="en">👶 Birth Event Capture</span><span class="ar">👶 التقاط حدث الولادة</span></div>
+<div style="font-size:0.85rem;color:var(--dim)"><span class="en">Delivery mode, immediate seeding assessment</span><span class="ar">طريقة الولادة، تقييم البذر الفوري</span></div>
+</div>
+
+<div style="position:relative;padding-left:60px;margin-bottom:40px">
+<div style="position:absolute;left:30px;top:5px;width:24px;height:24px;background:var(--primary);border-radius:50%;border:4px solid var(--card)"></div>
+<div style="font-size:0.7rem;color:var(--primary);font-weight:700;margin-bottom:4px">DAY 1-1000</div>
+<div style="font-weight:700;margin-bottom:4px"><span class="en">📊 Continuous Monitoring</span><span class="ar">📊 مراقبة مستمرة</span></div>
+<div style="font-size:0.85rem;color:var(--dim)"><span class="en">Track gut development, intervene early</span><span class="ar">تتبع تطور الأمعاء، التدخل المبكر</span></div>
+</div>
+
+<div style="position:relative;padding-left:60px">
+<div style="position:absolute;left:30px;top:5px;width:24px;height:24px;background:var(--danger);border-radius:50%;border:4px solid var(--card)"></div>
+<div style="font-size:0.7rem;color:var(--danger);font-weight:700;margin-bottom:4px">DAY 2500+</div>
+<div style="font-weight:700;margin-bottom:4px"><span class="en">🎯 Outcome Prevention</span><span class="ar">🎯 منع النتائج</span></div>
+<div style="font-size:0.85rem;color:var(--dim)"><span class="en">ADHD, Autism, Anxiety — risks mitigated</span><span class="ar">ADHD، التوحد، القلق — تم تخفيف المخاطر</span></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- UNIVERSITY PARTNERSHIPS -->
+<section style="padding:80px 40px;background:var(--card)">
+<div style="max-width:1100px;margin:0 auto">
+<div style="text-align:center;margin-bottom:60px">
+<div style="display:inline-flex;align-items:center;gap:8px;padding:8px 16px;background:rgba(255,214,10,0.15);border:1px solid rgba(255,214,10,0.3);border-radius:50px;margin-bottom:20px;font-size:0.8rem;color:var(--gold);font-weight:600">🎓 Open Research Ecosystem</div>
+<h2 style="font-size:clamp(1.8rem,4vw,2.5rem);font-weight:900;margin-bottom:16px"><span class="en">Built With <span style="color:var(--gold)">Universities & Researchers</span></span><span class="ar">مبني مع <span style="color:var(--gold)">الجامعات والباحثين</span></span></h2>
+<p style="color:var(--dim);font-size:1.05rem;max-width:700px;margin:0 auto"><span class="en">BURAK Labs isn't just a product — it's a <strong style="color:var(--text)">collaborative research platform</strong> where academia, clinicians, and technologists converge to advance child development science.</span><span class="ar">مختبرات بُراق ليست مجرد منتج — إنها <strong style="color:var(--text)">منصة بحث تعاونية</strong> حيث يلتقي الأكاديميون والأطباء والتقنيون لتقدم علم نمو الطفل.</span></p>
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;margin-bottom:50px">
+<div style="background:var(--card2);border:1px solid var(--border);border-radius:20px;padding:32px;text-align:center">
+<div style="width:70px;height:70px;background:linear-gradient(135deg,rgba(0,255,178,0.2),rgba(92,225,230,0.1));border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:2rem">🏛️</div>
+<h3 style="font-size:1.1rem;font-weight:700;margin-bottom:12px"><span class="en">University Partnerships</span><span class="ar">شراكات الجامعات</span></h3>
+<p style="color:var(--dim);font-size:0.9rem;line-height:1.7"><span class="en">Joint research programs with medical schools and public health departments. Shared IRB protocols, co-authored publications, graduate student involvement.</span><span class="ar">برامج بحث مشتركة مع كليات الطب وأقسام الصحة العامة. بروتوكولات IRB مشتركة، منشورات مشتركة، مشاركة طلاب الدراسات العليا.</span></p>
+</div>
+
+<div style="background:var(--card2);border:1px solid var(--border);border-radius:20px;padding:32px;text-align:center">
+<div style="width:70px;height:70px;background:linear-gradient(135deg,rgba(191,90,242,0.2),rgba(244,114,182,0.1));border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:2rem">🔬</div>
+<h3 style="font-size:1.1rem;font-weight:700;margin-bottom:12px"><span class="en">Research Data Access</span><span class="ar">الوصول لبيانات البحث</span></h3>
+<p style="color:var(--dim);font-size:0.9rem;line-height:1.7"><span class="en">De-identified datasets available to qualified researchers. Standardized formats, comprehensive documentation, API access for computational studies.</span><span class="ar">مجموعات بيانات مجهولة الهوية متاحة للباحثين المؤهلين. تنسيقات موحدة، توثيق شامل، وصول API للدراسات الحسابية.</span></p>
+</div>
+
+<div style="background:var(--card2);border:1px solid var(--border);border-radius:20px;padding:32px;text-align:center">
+<div style="width:70px;height:70px;background:linear-gradient(135deg,rgba(255,214,10,0.2),rgba(255,159,67,0.1));border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:2rem">🧮</div>
+<h3 style="font-size:1.1rem;font-weight:700;margin-bottom:12px"><span class="en">Algorithm Contributions</span><span class="ar">مساهمات الخوارزميات</span></h3>
+<p style="color:var(--dim);font-size:0.9rem;line-height:1.7"><span class="en">Open math container where researchers can propose, validate, and publish new scoring algorithms. Peer-reviewed before deployment.</span><span class="ar">حاوية رياضيات مفتوحة حيث يمكن للباحثين اقتراح والتحقق من ونشر خوارزميات تسجيل جديدة. مراجعة الأقران قبل النشر.</span></p>
+</div>
+
+<div style="background:var(--card2);border:1px solid var(--border);border-radius:20px;padding:32px;text-align:center">
+<div style="width:70px;height:70px;background:linear-gradient(135deg,rgba(92,225,230,0.2),rgba(0,132,255,0.1));border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:2rem">🌍</div>
+<h3 style="font-size:1.1rem;font-weight:700;margin-bottom:12px"><span class="en">Global Cohort Network</span><span class="ar">شبكة المجموعات العالمية</span></h3>
+<p style="color:var(--dim);font-size:0.9rem;line-height:1.7"><span class="en">Multi-center studies across populations. Compare gut-brain patterns across genetics, geography, diet — build universal & population-specific models.</span><span class="ar">دراسات متعددة المراكز عبر السكان. مقارنة أنماط الأمعاء-الدماغ عبر الجينات والجغرافيا والنظام الغذائي.</span></p>
+</div>
+</div>
+
+<!-- What Researchers Get -->
+<div style="background:linear-gradient(135deg,rgba(255,214,10,0.1),rgba(0,255,178,0.05));border:2px solid var(--gold);border-radius:24px;padding:40px">
+<h3 style="font-size:1.3rem;font-weight:800;margin-bottom:24px;text-align:center"><span class="en">🎁 What Researchers Get</span><span class="ar">🎁 ما يحصل عليه الباحثون</span></h3>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px">
+<div style="display:flex;align-items:flex-start;gap:12px">
+<span style="color:var(--gold);font-size:1.3rem">📊</span>
+<div>
+<div style="font-weight:700;margin-bottom:4px"><span class="en">Curated Datasets</span><span class="ar">مجموعات بيانات منسقة</span></div>
+<div style="font-size:0.85rem;color:var(--dim)"><span class="en">Clean, labeled, ready for analysis</span><span class="ar">نظيفة، مصنفة، جاهزة للتحليل</span></div>
+</div>
+</div>
+<div style="display:flex;align-items:flex-start;gap:12px">
+<span style="color:var(--gold);font-size:1.3rem">🔌</span>
+<div>
+<div style="font-weight:700;margin-bottom:4px"><span class="en">API Access</span><span class="ar">وصول API</span></div>
+<div style="font-size:0.85rem;color:var(--dim)"><span class="en">Programmatic data retrieval</span><span class="ar">استرجاع البيانات برمجياً</span></div>
+</div>
+</div>
+<div style="display:flex;align-items:flex-start;gap:12px">
+<span style="color:var(--gold);font-size:1.3rem">🧮</span>
+<div>
+<div style="font-weight:700;margin-bottom:4px"><span class="en">Math Sandbox</span><span class="ar">صندوق الرياضيات</span></div>
+<div style="font-size:0.85rem;color:var(--dim)"><span class="en">Test algorithms before deployment</span><span class="ar">اختبار الخوارزميات قبل النشر</span></div>
+</div>
+</div>
+<div style="display:flex;align-items:flex-start;gap:12px">
+<span style="color:var(--gold);font-size:1.3rem">📝</span>
+<div>
+<div style="font-weight:700;margin-bottom:4px"><span class="en">Publication Support</span><span class="ar">دعم النشر</span></div>
+<div style="font-size:0.85rem;color:var(--dim)"><span class="en">Co-authorship, data citations</span><span class="ar">تأليف مشترك، استشهادات البيانات</span></div>
+</div>
+</div>
+<div style="display:flex;align-items:flex-start;gap:12px">
+<span style="color:var(--gold);font-size:1.3rem">💰</span>
+<div>
+<div style="font-weight:700;margin-bottom:4px"><span class="en">Grant Collaboration</span><span class="ar">تعاون المنح</span></div>
+<div style="font-size:0.85rem;color:var(--dim)"><span class="en">Joint funding applications</span><span class="ar">طلبات تمويل مشتركة</span></div>
+</div>
+</div>
+<div style="display:flex;align-items:flex-start;gap:12px">
+<span style="color:var(--gold);font-size:1.3rem">🎓</span>
+<div>
+<div style="font-weight:700;margin-bottom:4px"><span class="en">Student Programs</span><span class="ar">برامج الطلاب</span></div>
+<div style="font-size:0.85rem;color:var(--dim)"><span class="en">Internships, thesis projects</span><span class="ar">تدريب، مشاريع أطروحات</span></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- SHARED ARCHITECTURE -->
+<section style="padding:80px 40px;background:var(--bg)">
+<div style="max-width:900px;margin:0 auto;text-align:center">
+<h2 style="font-size:clamp(1.6rem,3vw,2rem);font-weight:800;margin-bottom:40px"><span class="en">🏗️ The Shared Architecture</span><span class="ar">🏗️ الهندسة المشتركة</span></h2>
+
+<div style="background:var(--card);border:1px solid var(--border);border-radius:24px;padding:48px;text-align:center">
+<!-- Data Lake -->
+<div style="background:linear-gradient(135deg,rgba(0,255,178,0.2),rgba(92,225,230,0.1));border:3px solid var(--primary);border-radius:16px;padding:24px;margin-bottom:20px;box-shadow:0 0 40px var(--glow)">
+<div style="font-size:1.8rem;margin-bottom:8px">🗄️</div>
+<div style="font-size:1.1rem;font-weight:800;margin-bottom:4px"><span class="en">Unified Data Lake</span><span class="ar">بحيرة البيانات الموحدة</span></div>
+<div style="font-size:0.85rem;color:var(--dim)"><span class="en">Microbiome • Genomics • Maternal • Infant • Outcomes</span><span class="ar">ميكروبيوم • جينوم • أمومة • رضيع • نتائج</span></div>
+</div>
+
+<div style="font-size:2rem;color:var(--primary);margin-bottom:20px">⬇️</div>
+
+<!-- Math Container -->
+<div style="background:linear-gradient(135deg,rgba(191,90,242,0.2),rgba(244,114,182,0.1));border:3px solid var(--accent);border-radius:16px;padding:24px;margin-bottom:20px">
+<div style="font-size:1.8rem;margin-bottom:8px">🧮</div>
+<div style="font-size:1.1rem;font-weight:800;margin-bottom:4px"><span class="en">Math & Algorithm Container</span><span class="ar">حاوية الرياضيات والخوارزميات</span></div>
+<div style="font-size:0.85rem;color:var(--dim)"><span class="en">Diversity Index • Risk Scoring • Correlation Engine • Predictive ML</span><span class="ar">مؤشر التنوع • تسجيل الخطر • محرك الارتباط • التعلم الآلي التنبؤي</span></div>
+</div>
+
+<div style="font-size:2rem;color:var(--primary);margin-bottom:20px">⬇️</div>
+
+<!-- Condition Cohorts -->
+<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:16px">
+<div style="background:var(--card2);border:3px solid var(--signal);border-radius:14px;padding:16px 24px;box-shadow:0 0 30px rgba(92,225,230,0.3)">
+<div style="font-size:1.5rem;margin-bottom:4px">🧠</div>
+<div style="font-weight:700">ADHD</div>
+<div style="font-size:0.7rem;color:var(--signal)">● ACTIVE</div>
+</div>
+<div style="background:var(--card2);border:2px solid var(--border);border-radius:14px;padding:16px 24px;opacity:0.7">
+<div style="font-size:1.5rem;margin-bottom:4px">🌈</div>
+<div style="font-weight:700">Autism</div>
+<div style="font-size:0.7rem;color:var(--dim)">Q2 2025</div>
+</div>
+<div style="background:var(--card2);border:2px solid var(--border);border-radius:14px;padding:16px 24px;opacity:0.7">
+<div style="font-size:1.5rem;margin-bottom:4px">😰</div>
+<div style="font-weight:700">Anxiety</div>
+<div style="font-size:0.7rem;color:var(--dim)">Q3 2025</div>
+</div>
+<div style="background:var(--card2);border:2px solid var(--border);border-radius:14px;padding:16px 24px;opacity:0.7">
+<div style="font-size:1.5rem;margin-bottom:4px">🩸</div>
+<div style="font-weight:700">T2 Diabetes</div>
+<div style="font-size:0.7rem;color:var(--dim)">Q4 2025</div>
+</div>
+<div style="background:var(--card2);border:2px solid var(--border);border-radius:14px;padding:16px 24px;opacity:0.7">
+<div style="font-size:1.5rem;margin-bottom:4px">🫁</div>
+<div style="font-weight:700">Asthma</div>
+<div style="font-size:0.7rem;color:var(--dim)">2026</div>
+</div>
+</div>
+
+<div style="margin-top:32px;padding-top:32px;border-top:1px solid var(--border)">
+<p style="color:var(--dim);font-size:0.95rem"><span class="en">Each condition gets its own <strong style="color:var(--text)">screening logic</strong> and <strong style="color:var(--text)">intervention guides</strong> — but shares the <strong style="color:var(--primary)">same underlying data and mathematics</strong>. Efficient. Scalable. Powerful.</span><span class="ar">كل حالة تحصل على <strong style="color:var(--text)">منطق فحص</strong> و<strong style="color:var(--text)">أدلة تدخل</strong> خاصة بها — لكن تشترك في <strong style="color:var(--primary)">نفس البيانات والرياضيات الأساسية</strong>. فعال. قابل للتوسع. قوي.</span></p>
+</div>
+</div>
+</div>
+</section>
+
+<div class="page-footer">© 2025 BURAK Labs — A BURAK Multiomics Initiative</div>
+</div>
+
+<!-- DEEP SCIENCE PAGE -->
+<div class="page" id="page-science">
+<div class="science-header">
+<div class="cohort-badge"><div class="dot"></div><span>ADHD COHORT</span></div>
+<h1><span class="en">🧬 ADHD Deep Science</span><span class="ar">🧬 العلم العميق لـ ADHD</span></h1>
+<p><span class="en">Explore the knowledge graph, cross-connections, and early warning signals</span><span class="ar">استكشف خريطة المعرفة والروابط المتقاطعة وإشارات الإنذار المبكر</span></p>
+</div>
+
+<div class="science-tabs">
+<div class="science-tab active" onclick="showSection('overview')">📊 <span class="en">Overview</span><span class="ar">نظرة عامة</span></div>
+<div class="science-tab signal" onclick="showSection('connections')">🔗 <span class="en">Cross-Connections</span><span class="ar">الروابط المتقاطعة</span> <span class="tab-new">NEW</span></div>
+<div class="science-tab" onclick="showSection('signals')">⚡ <span class="en">Early Signals</span><span class="ar">الإشارات المبكرة</span></div>
+<div class="science-tab" onclick="showSection('calculator')">🧮 <span class="en">Risk Calculator</span><span class="ar">حاسبة الخطر</span></div>
+</div>
+
+<!-- OVERVIEW SECTION -->
+<div class="section-view active" id="section-overview">
+<div style="padding:60px 40px;text-align:center">
+<h2 style="font-size:1.5rem;margin-bottom:20px"><span class="en">📊 ADHD Cohort Overview</span><span class="ar">📊 نظرة عامة على مجموعة ADHD</span></h2>
+<p style="color:var(--dim);max-width:600px;margin:0 auto 40px"><span class="en">The foundation — individual factors organized by developmental phase. Click a tab above to explore connections.</span><span class="ar">الأساس — العوامل الفردية منظمة حسب المرحلة التنموية. انقر على علامة تبويب أعلاه لاستكشاف الروابط.</span></p>
+<button class="btn btn-signal" onclick="showSection('connections')"><span class="en">🔗 See How They Connect →</span><span class="ar">← 🔗 شاهد كيف ترتبط</span></button>
+</div>
+</div>
+
+<!-- CROSS-CONNECTIONS SECTION -->
+<div class="section-view" id="section-connections">
+<div class="network-hero">
+<h2><span class="en">🔗 The </span><span class="ar">🔗 شبكة </span><span class="gradient"><span class="en">Cross-Connection Network</span><span class="ar">الروابط المتقاطعة</span></span></h2>
+<p><span class="en">Every marker connects to others. See the cascading effects that compound ADHD risk — or protect against it.</span><span class="ar">كل مؤشر يتصل بالآخرين. شاهد التأثيرات المتسلسلة التي تضاعف خطر ADHD — أو تحمي منه.</span></p>
+</div>
+
+<section class="network-section">
+<div class="network-container">
+<div class="network-canvas">
+<!-- SVG Connections -->
+<svg class="network-svg" viewBox="0 0 1200 700">
+<!-- GUT to Brain -->
+<path class="connection-line cascade strong" d="M600,350 Q600,200 750,180"/>
+<!-- GUT to Cortisol -->
+<path class="connection-line risk" d="M600,350 Q400,250 280,200"/>
+<!-- GUT to Lactobacillus -->
+<path class="connection-line protect" d="M600,350 Q450,380 200,400"/>
+<!-- GUT to Bifidobacterium -->
+<path class="connection-line protect" d="M600,350 Q500,500 280,550"/>
+<!-- GUT to SCFAs -->
+<path class="connection-line protect" d="M600,350 Q750,450 900,500"/>
+<!-- GUT to Inflammation -->
+<path class="connection-line risk" d="M600,350 Q800,300 950,250"/>
+<!-- Cortisol to Lactobacillus -->
+<path class="connection-line risk" d="M280,200 Q200,300 200,400"/>
+<!-- Lactobacillus to Bifidobacterium -->
+<path class="connection-line protect" d="M200,400 Q220,480 280,550"/>
+<!-- SCFAs to Brain -->
+<path class="connection-line cascade" d="M900,500 Q850,350 750,180"/>
+<!-- Inflammation to Brain -->
+<path class="connection-line risk" d="M950,250 Q880,200 750,180"/>
+<!-- Dopamine connections -->
+<path class="connection-line cascade" d="M750,180 Q650,120 500,100"/>
+<!-- Serotonin connections -->
+<path class="connection-line cascade" d="M600,350 Q700,150 500,100"/>
+</svg>
+
+<!-- CENTRAL HUB: GUT -->
+<div class="network-node" style="top:50%;left:50%">
+<div class="node-hub gut">
+<div class="node-hub-icon">🫃</div>
+<div class="node-hub-label">GUT</div>
+</div>
+</div>
+
+<!-- BRAIN HUB -->
+<div class="network-node" style="top:26%;left:62%">
+<div class="node-hub brain" style="width:100px;height:100px">
+<div class="node-hub-icon" style="font-size:2rem">🧠</div>
+<div class="node-hub-label">BRAIN</div>
+</div>
+</div>
+
+<!-- BIOMARKERS -->
+<div class="network-node" style="top:28%;left:23%">
+<div class="node-marker risk">
+<div class="node-marker-icon">🧪</div>
+<div class="node-marker-name">Cortisol</div>
+<div class="node-marker-value">↑ 2-3× stress</div>
+</div>
+</div>
+
+<div class="network-node" style="top:57%;left:17%">
+<div class="node-marker protect">
+<div class="node-marker-icon">🦠</div>
+<div class="node-marker-name">Lactobacillus</div>
+<div class="node-marker-value">↓ depleted</div>
+</div>
+</div>
+
+<div class="network-node" style="top:78%;left:23%">
+<div class="node-marker protect">
+<div class="node-marker-icon">🧫</div>
+<div class="node-marker-name">Bifidobacterium</div>
+<div class="node-marker-value">Key species</div>
+</div>
+</div>
+
+<div class="network-node" style="top:71%;left:75%">
+<div class="node-marker protect">
+<div class="node-marker-icon">⚗️</div>
+<div class="node-marker-name">SCFAs</div>
+<div class="node-marker-value">↑ Brain fuel</div>
+</div>
+</div>
+
+<div class="network-node" style="top:36%;left:79%">
+<div class="node-marker risk">
+<div class="node-marker-icon">🔥</div>
+<div class="node-marker-name">IL-6 / TNF-α</div>
+<div class="node-marker-value">↑ Inflammation</div>
+</div>
+</div>
+
+<div class="network-node" style="top:14%;left:42%">
+<div class="node-marker signal">
+<div class="node-marker-icon">⚡</div>
+<div class="node-marker-name">Dopamine</div>
+<div class="node-marker-value">Attention</div>
+</div>
+</div>
+
+<div class="network-node" style="top:85%;left:50%">
+<div class="node-marker signal">
+<div class="node-marker-icon">😊</div>
+<div class="node-marker-name">Serotonin</div>
+<div class="node-marker-value">90% in gut!</div>
+</div>
+</div>
+
+<div class="network-node" style="top:50%;left:88%">
+<div class="node-marker risk">
+<div class="node-marker-icon">💧</div>
+<div class="node-marker-name">LPS</div>
+<div class="node-marker-value">↑ Leaky gut</div>
+</div>
+</div>
+
+<div class="network-node" style="top:14%;left:78%">
+<div class="node-marker risk">
+<div class="node-marker-icon">🧱</div>
+<div class="node-marker-name">Gut Barrier</div>
+<div class="node-marker-value">↓ Weakened</div>
+</div>
+</div>
+
+<!-- Legend -->
+<div class="network-legend">
+<div class="legend-title">Connections</div>
+<div class="legend-item"><div class="legend-line risk"></div><span>Risk pathway</span></div>
+<div class="legend-item"><div class="legend-line protect"></div><span>Protective pathway</span></div>
+<div class="legend-item"><div class="legend-line cascade"></div><span>Cascade signal</span></div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- CASCADE PATHWAYS -->
+<section class="cascade-section">
+<div class="cascade-inner">
+<div class="cascade-header">
+<h2><span class="en">⛓️ Cascade Pathways</span><span class="ar">⛓️ مسارات التسلسل</span></h2>
+<p><span class="en">See how one disruption triggers a chain reaction through the gut-brain axis</span><span class="ar">شاهد كيف يؤدي اضطراب واحد إلى سلسلة تفاعلات عبر محور الأمعاء-الدماغ</span></p>
+</div>
+
+<div class="pathway-card">
+<div class="pathway-title">
+<div class="pathway-icon">😰</div>
+<div class="pathway-name"><span class="en">Stress Cascade</span><span class="ar">تسلسل التوتر</span></div>
+<div class="pathway-risk high">+40% ADHD Risk</div>
+</div>
+<div class="pathway-flow">
+<div class="pathway-step trigger"><div class="pathway-step-icon">😰</div><div class="pathway-step-label">Maternal Stress</div></div>
+<div class="pathway-arrow">→</div>
+<div class="pathway-step"><div class="pathway-step-icon">🧪</div><div class="pathway-step-label">Cortisol</div><div class="pathway-step-change up">↑ 2-3×</div></div>
+<div class="pathway-arrow">→</div>
+<div class="pathway-step"><div class="pathway-step-icon">🦠</div><div class="pathway-step-label">Lactobacillus</div><div class="pathway-step-change down">↓ -34%</div></div>
+<div class="pathway-arrow">→</div>
+<div class="pathway-step gut"><div class="pathway-step-icon">🫃</div><div class="pathway-step-label">GUT Diversity</div><div class="pathway-step-change down">↓ Reduced</div></div>
+<div class="pathway-arrow">→</div>
+<div class="pathway-step"><div class="pathway-step-icon">⚗️</div><div class="pathway-step-label">SCFAs</div><div class="pathway-step-change down">↓ Low</div></div>
+<div class="pathway-arrow">→</div>
+<div class="pathway-step brain"><div class="pathway-step-icon">⚡</div><div class="pathway-step-label">Dopamine</div><div class="pathway-step-change down">↓ Dysregulated</div></div>
+<div class="pathway-arrow">→</div>
+<div class="pathway-step outcome"><div class="pathway-step-icon">🧠</div><div class="pathway-step-label">ADHD Risk</div><div class="pathway-step-change up">↑ +40%</div></div>
+</div>
+<div class="pathway-explain"><span class="en"><strong>The Chain:</strong> Chronic stress elevates cortisol → depletes vaginal Lactobacillus → baby receives impoverished microbiome at birth → lower gut diversity → reduced SCFA production → less fuel for brain development → dopamine pathway disruption → attention deficits.</span><span class="ar"><strong>السلسلة:</strong> التوتر المزمن يرفع الكورتيزول → يستنزف اللاكتوباسيلس المهبلي → الطفل يتلقى ميكروبيوم فقير عند الولادة → تنوع أمعاء أقل → إنتاج SCFA منخفض → وقود أقل لنمو الدماغ → اضطراب مسار الدوبامين → عجز الانتباه.</span></div>
+</div>
+
+<div class="pathway-card">
+<div class="pathway-title">
+<div class="pathway-icon">💊</div>
+<div class="pathway-name"><span class="en">Antibiotic Cascade</span><span class="ar">تسلسل المضادات الحيوية</span></div>
+<div class="pathway-risk high">+50% Risk (3+ courses)</div>
+</div>
+<div class="pathway-flow">
+<div class="pathway-step trigger"><div class="pathway-step-icon">💊</div><div class="pathway-step-label">Antibiotics</div></div>
+<div class="pathway-arrow">→</div>
+<div class="pathway-step"><div class="pathway-step-icon">💀</div><div class="pathway-step-label">Mass Extinction</div><div class="pathway-step-change down">↓ -90%</div></div>
+<div class="pathway-arrow">→</div>
+<div class="pathway-step gut"><div class="pathway-step-icon">🫃</div><div class="pathway-step-label">GUT Collapse</div><div class="pathway-step-change down">↓ Diversity</div></div>
+<div class="pathway-arrow">→</div>
+<div class="pathway-step"><div class="pathway-step-icon">🧱</div><div class="pathway-step-label">Barrier</div><div class="pathway-step-change down">↓ Weak</div></div>
+<div class="pathway-arrow">→</div>
+<div class="pathway-step"><div class="pathway-step-icon">💧</div><div class="pathway-step-label">LPS Leakage</div><div class="pathway-step-change up">↑ Toxic</div></div>
+<div class="pathway-arrow">→</div>
+<div class="pathway-step"><div class="pathway-step-icon">🔥</div><div class="pathway-step-label">Neuroinflammation</div><div class="pathway-step-change up">↑ IL-6</div></div>
+<div class="pathway-arrow">→</div>
+<div class="pathway-step outcome"><div class="pathway-step-icon">🧠</div><div class="pathway-step-label">ADHD Risk</div><div class="pathway-step-change up">↑ +50%</div></div>
+</div>
+<div class="pathway-explain"><span class="en"><strong>The Chain:</strong> Early antibiotics cause mass bacterial extinction → gut ecosystem collapses → barrier integrity fails → LPS (bacterial toxins) leak into bloodstream → trigger neuroinflammation → IL-6 and TNF-α cross blood-brain barrier → disrupt prefrontal cortex development.</span><span class="ar"><strong>السلسلة:</strong> المضادات المبكرة تسبب انقراض بكتيري جماعي → انهيار النظام البيئي للأمعاء → فشل سلامة الحاجز → تسرب LPS (السموم البكتيرية) إلى مجرى الدم → تحفيز الالتهاب العصبي → IL-6 و TNF-α تعبر حاجز الدم-الدماغ → تعطيل نمو القشرة الجبهية.</span></div>
+</div>
+
+<div class="pathway-card">
+<div class="pathway-title">
+<div class="pathway-icon">🤱</div>
+<div class="pathway-name"><span class="en">Protection Cascade</span><span class="ar">تسلسل الحماية</span></div>
+<div class="pathway-risk medium" style="background:rgba(0,255,178,0.15);color:var(--primary)">-30% ADHD Risk</div>
+</div>
+<div class="pathway-flow">
+<div class="pathway-step trigger" style="border-color:var(--primary);background:rgba(0,255,178,0.1)"><div class="pathway-step-icon">🤱</div><div class="pathway-step-label">Breastfeeding</div></div>
+<div class="pathway-arrow">→</div>
+<div class="pathway-step"><div class="pathway-step-icon">🍯</div><div class="pathway-step-label">HMOs</div><div class="pathway-step-change down">↑ Delivered</div></div>
+<div class="pathway-arrow">→</div>
+<div class="pathway-step"><div class="pathway-step-icon">🧫</div><div class="pathway-step-label">Bifidobacterium</div><div class="pathway-step-change down">↑ 80%</div></div>
+<div class="pathway-arrow">→</div>
+<div class="pathway-step gut"><div class="pathway-step-icon">🫃</div><div class="pathway-step-label">GUT Thrives</div><div class="pathway-step-change down">↑ Diversity</div></div>
+<div class="pathway-arrow">→</div>
+<div class="pathway-step"><div class="pathway-step-icon">⚗️</div><div class="pathway-step-label">SCFAs</div><div class="pathway-step-change down">↑ High</div></div>
+<div class="pathway-arrow">→</div>
+<div class="pathway-step brain"><div class="pathway-step-icon">😊</div><div class="pathway-step-label">Serotonin</div><div class="pathway-step-change down">↑ Balanced</div></div>
+<div class="pathway-arrow">→</div>
+<div class="pathway-step" style="border-color:var(--primary);background:rgba(0,255,178,0.1)"><div class="pathway-step-icon">🛡️</div><div class="pathway-step-label">Protected</div><div class="pathway-step-change down">↓ -30%</div></div>
+</div>
+<div class="pathway-explain"><span class="en"><strong>The Chain:</strong> Breastmilk delivers HMOs (human milk oligosaccharides) → selectively feed Bifidobacterium infantis → gut ecosystem flourishes → strong SCFA production → fuel for brain development + 90% of serotonin made in gut → mood regulation + impulse control → ADHD protection.</span><span class="ar"><strong>السلسلة:</strong> حليب الأم يوصل HMOs (سكريات حليب الأم) → تغذي بشكل انتقائي Bifidobacterium infantis → نظام الأمعاء يزدهر → إنتاج SCFA قوي → وقود لنمو الدماغ + 90% من السيروتونين يُصنع في الأمعاء → تنظيم المزاج + التحكم في الاندفاع → حماية من ADHD.</span></div>
+</div>
+</div>
+</section>
+</div>
+
+<!-- EARLY SIGNALS SECTION -->
+<div class="section-view" id="section-signals">
+<section class="signals-section">
+<div class="signals-inner">
+<div class="signals-header">
+<h2><span class="en">⚡ Early Warning <span class="alert">Signals</span></span><span class="ar">⚡ إشارات <span class="alert">الإنذار المبكر</span></span></h2>
+<p><span class="en">Specific marker combinations that predict elevated ADHD risk — detectable months or years before diagnosis</span><span class="ar">مجموعات مؤشرات محددة تتنبأ بارتفاع خطر ADHD — يمكن اكتشافها قبل أشهر أو سنوات من التشخيص</span></p>
+</div>
+
+<div class="signal-cards">
+<div class="signal-card critical">
+<div class="signal-header">
+<div class="signal-level"><span class="signal-level-icon">🚨</span><span class="signal-level-text">Critical Signal</span></div>
+<div class="signal-risk">2.4×</div>
+</div>
+<div class="signal-title"><span class="en">The Triple Hit</span><span class="ar">الضربة الثلاثية</span></div>
+<div class="signal-combo">
+<span class="signal-marker"><span class="signal-marker-icon">🏥</span> C-Section</span>
+<span class="signal-plus">+</span>
+<span class="signal-marker"><span class="signal-marker-icon">🍼</span> Formula Fed</span>
+<span class="signal-plus">+</span>
+<span class="signal-marker"><span class="signal-marker-icon">💊</span> Early Antibiotics</span>
+</div>
+<div class="signal-desc"><span class="en">When all three factors combine, they create compounding microbiome disruption. Each factor alone increases risk, but together they multiply — the gut never receives proper seeding AND gets wiped out.</span><span class="ar">عندما تجتمع العوامل الثلاثة، تخلق اضطراباً مركباً للميكروبيوم. كل عامل وحده يزيد الخطر، لكن معاً يتضاعفون — الأمعاء لا تتلقى بذراً صحيحاً أبداً وتُمحى أيضاً.</span></div>
+<div class="signal-timing"><span class="signal-timing-icon">⏰</span> <span class="en">Detectable by Day 30</span><span class="ar">قابل للكشف بحلول اليوم 30</span></div>
+</div>
+
+<div class="signal-card critical">
+<div class="signal-header">
+<div class="signal-level"><span class="signal-level-icon">🚨</span><span class="signal-level-text">Critical Signal</span></div>
+<div class="signal-risk">2.1×</div>
+</div>
+<div class="signal-title"><span class="en">Low Diversity + High Inflammation</span><span class="ar">تنوع منخفض + التهاب عالي</span></div>
+<div class="signal-combo">
+<span class="signal-marker"><span class="signal-marker-icon">📊</span> Shannon Index < 2.0</span>
+<span class="signal-plus">+</span>
+<span class="signal-marker"><span class="signal-marker-icon">🔥</span> Fecal Calprotectin ↑</span>
+</div>
+<div class="signal-desc"><span class="en">Low microbial diversity (Shannon index below 2.0) combined with elevated fecal calprotectin indicates gut inflammation. This combo signals a compromised gut-brain axis before behavioral symptoms appear.</span><span class="ar">تنوع ميكروبي منخفض (مؤشر شانون أقل من 2.0) مع ارتفاع كالبروتكتين البراز يشير إلى التهاب الأمعاء. هذا المزيج يشير إلى محور أمعاء-دماغ مخترق قبل ظهور الأعراض السلوكية.</span></div>
+<div class="signal-timing"><span class="signal-timing-icon">⏰</span> <span class="en">Test at 6 months</span><span class="ar">اختبار في 6 أشهر</span></div>
+</div>
+
+<div class="signal-card warning">
+<div class="signal-header">
+<div class="signal-level"><span class="signal-level-icon">⚠️</span><span class="signal-level-text">Warning Signal</span></div>
+<div class="signal-risk">1.8×</div>
+</div>
+<div class="signal-title"><span class="en">Missing Keystone Species</span><span class="ar">فقدان الأنواع الأساسية</span></div>
+<div class="signal-combo">
+<span class="signal-marker"><span class="signal-marker-icon">🧫</span> No B. infantis</span>
+<span class="signal-plus">+</span>
+<span class="signal-marker"><span class="signal-marker-icon">🦠</span> Low Lactobacillus</span>
+</div>
+<div class="signal-desc"><span class="en">Bifidobacterium infantis and Lactobacillus are "keystone species" — their absence at 3 months predicts poor SCFA production and weakened gut barrier. Like missing foundation stones.</span><span class="ar">Bifidobacterium infantis و Lactobacillus هي "أنواع أساسية" — غيابها في 3 أشهر يتنبأ بإنتاج SCFA ضعيف وحاجز أمعاء ضعيف. مثل فقدان حجارة الأساس.</span></div>
+<div class="signal-timing"><span class="signal-timing-icon">⏰</span> <span class="en">Test at 3 months</span><span class="ar">اختبار في 3 أشهر</span></div>
+</div>
+
+<div class="signal-card warning">
+<div class="signal-header">
+<div class="signal-level"><span class="signal-level-icon">⚠️</span><span class="signal-level-text">Warning Signal</span></div>
+<div class="signal-risk">1.6×</div>
+</div>
+<div class="signal-title"><span class="en">Stressed Mom + Diet Gap</span><span class="ar">أم متوترة + فجوة غذائية</span></div>
+<div class="signal-combo">
+<span class="signal-marker"><span class="signal-marker-icon">😰</span> High Prenatal Stress</span>
+<span class="signal-plus">+</span>
+<span class="signal-marker"><span class="signal-marker-icon">🍭</span> Low Fiber Diet</span>
+</div>
+<div class="signal-desc"><span class="en">Prenatal stress depletes maternal microbiome. Without fiber to rebuild, the baby inherits an impoverished bacterial community. This combo is detectable during pregnancy.</span><span class="ar">التوتر قبل الولادة يستنزف ميكروبيوم الأم. بدون ألياف لإعادة البناء، يرث الطفل مجتمعاً بكتيرياً فقيراً. هذا المزيج يمكن اكتشافه أثناء الحمل.</span></div>
+<div class="signal-timing"><span class="signal-timing-icon">⏰</span> <span class="en">Screen during pregnancy</span><span class="ar">فحص أثناء الحمل</span></div>
+</div>
+
+<div class="signal-card watch">
+<div class="signal-header">
+<div class="signal-level"><span class="signal-level-icon">👁️</span><span class="signal-level-text">Watch Signal</span></div>
+<div class="signal-risk">1.4×</div>
+</div>
+<div class="signal-title"><span class="en">SCFA Deficit Pattern</span><span class="ar">نمط عجز SCFA</span></div>
+<div class="signal-combo">
+<span class="signal-marker"><span class="signal-marker-icon">⚗️</span> Low Butyrate</span>
+<span class="signal-plus">+</span>
+<span class="signal-marker"><span class="signal-marker-icon">⚗️</span> Low Propionate</span>
+</div>
+<div class="signal-desc"><span class="en">SCFAs are the gut's signal molecules to the brain. Low butyrate + low propionate = reduced fuel for brain development. Measurable in stool samples at 6-12 months.</span><span class="ar">SCFAs هي جزيئات إشارة الأمعاء للدماغ. بوتيرات منخفض + بروبيونات منخفض = وقود منخفض لنمو الدماغ. قابل للقياس في عينات البراز في 6-12 شهر.</span></div>
+<div class="signal-timing"><span class="signal-timing-icon">⏰</span> <span class="en">Test at 6-12 months</span><span class="ar">اختبار في 6-12 شهر</span></div>
+</div>
+
+<div class="signal-card watch">
+<div class="signal-header">
+<div class="signal-level"><span class="signal-level-icon">👁️</span><span class="signal-level-text">Watch Signal</span></div>
+<div class="signal-risk">1.3×</div>
+</div>
+<div class="signal-title"><span class="en">Proteobacteria Overgrowth</span><span class="ar">فرط نمو البروتيوبكتيريا</span></div>
+<div class="signal-combo">
+<span class="signal-marker"><span class="signal-marker-icon">⚠️</span> Proteobacteria > 15%</span>
+<span class="signal-plus">+</span>
+<span class="signal-marker"><span class="signal-marker-icon">📉</span> Firmicutes ↓</span>
+</div>
+<div class="signal-desc"><span class="en">Proteobacteria are gram-negative bacteria that produce LPS (endotoxin). When they exceed 15% of gut composition while Firmicutes decline, it signals dysbiosis and inflammation risk.</span><span class="ar">البروتيوبكتيريا هي بكتيريا سالبة الغرام تنتج LPS (السموم الداخلية). عندما تتجاوز 15% من تكوين الأمعاء بينما ينخفض Firmicutes، يشير ذلك إلى خلل التوازن وخطر الالتهاب.</span></div>
+<div class="signal-timing"><span class="signal-timing-icon">⏰</span> <span class="en">Test at 12 months</span><span class="ar">اختبار في 12 شهر</span></div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- INTERVENTION TIMELINE -->
+<section class="timeline-section">
+<div class="timeline-inner">
+<div class="timeline-header">
+<h2><span class="en">🎯 Intervention Windows</span><span class="ar">🎯 نوافذ التدخل</span></h2>
+<p><span class="en">When to test, when to act — the critical decision points</span><span class="ar">متى تختبر، متى تتصرف — نقاط القرار الحرجة</span></p>
+</div>
+
+<div class="timeline">
+<div class="timeline-item">
+<div class="timeline-content">
+<div class="timeline-day">Day -270 to -180</div>
+<div class="timeline-title"><span class="en">Pregnancy: Early Intervention</span><span class="ar">الحمل: التدخل المبكر</span></div>
+<div class="timeline-markers">
+<span class="timeline-marker">😰 Stress screening</span>
+<span class="timeline-marker">🥗 Diet assessment</span>
+</div>
+<div class="timeline-action"><span class="en">Screen for maternal stress. Start <strong>fiber supplementation</strong> and stress reduction programs. Build maternal microbiome before transfer.</span><span class="ar">فحص توتر الأم. بدء <strong>مكملات الألياف</strong> وبرامج تقليل التوتر. بناء ميكروبيوم الأم قبل النقل.</span></div>
+</div>
+<div class="timeline-dot">🤰</div>
+</div>
+
+<div class="timeline-item">
+<div class="timeline-content">
+<div class="timeline-day">Day 1</div>
+<div class="timeline-title"><span class="en">Birth: Seeding Event</span><span class="ar">الولادة: حدث البذر</span></div>
+<div class="timeline-markers">
+<span class="timeline-marker">🚪 Delivery mode</span>
+<span class="timeline-marker">🤱 Skin-to-skin</span>
+</div>
+<div class="timeline-action"><span class="en">If C-section required, consider <strong>vaginal seeding protocol</strong>. Immediate skin-to-skin. Early breastfeeding initiation.</span><span class="ar">إذا كانت القيصرية مطلوبة، فكر في <strong>بروتوكول البذر المهبلي</strong>. تلامس جلد بجلد فوري. بدء الرضاعة الطبيعية مبكراً.</span></div>
+</div>
+<div class="timeline-dot">👶</div>
+</div>
+
+<div class="timeline-item">
+<div class="timeline-content">
+<div class="timeline-day">Day 30</div>
+<div class="timeline-title"><span class="en">First Month: Baseline Check</span><span class="ar">الشهر الأول: فحص خط الأساس</span></div>
+<div class="timeline-markers">
+<span class="timeline-marker">🧫 B. infantis check</span>
+<span class="timeline-marker">🦠 Diversity score</span>
+</div>
+<div class="timeline-action"><span class="en">First stool microbiome test. Check for <strong>B. infantis colonization</strong>. If missing + formula fed, consider B. infantis probiotic.</span><span class="ar">أول اختبار ميكروبيوم البراز. تحقق من <strong>استعمار B. infantis</strong>. إذا كان مفقوداً + تغذية صناعية، فكر في بروبيوتيك B. infantis.</span></div>
+</div>
+<div class="timeline-dot">🔬</div>
+</div>
+
+<div class="timeline-item">
+<div class="timeline-content">
+<div class="timeline-day">Day 90-180</div>
+<div class="timeline-title"><span class="en">3-6 Months: Critical Assessment</span><span class="ar">3-6 أشهر: التقييم الحرج</span></div>
+<div class="timeline-markers">
+<span class="timeline-marker">📊 Shannon index</span>
+<span class="timeline-marker">🔥 Calprotectin</span>
+<span class="timeline-marker">⚗️ SCFAs</span>
+</div>
+<div class="timeline-action"><span class="en">Full panel: diversity index, inflammation markers, SCFA levels. This is the <strong>prediction window</strong> — results here correlate with outcomes at age 7.</span><span class="ar">لوحة كاملة: مؤشر التنوع، علامات الالتهاب، مستويات SCFA. هذه <strong>نافذة التنبؤ</strong> — النتائج هنا ترتبط بالنتائج في عمر 7 سنوات.</span></div>
+</div>
+<div class="timeline-dot">⚡</div>
+</div>
+
+<div class="timeline-item">
+<div class="timeline-content">
+<div class="timeline-day">Day 180-365</div>
+<div class="timeline-title"><span class="en">6-12 Months: Diet Transition</span><span class="ar">6-12 شهر: انتقال الغذاء</span></div>
+<div class="timeline-markers">
+<span class="timeline-marker">🥦 Solids introduction</span>
+<span class="timeline-marker">🌈 Diversity building</span>
+</div>
+<div class="timeline-action"><span class="en">Introduce <strong>30+ plant foods</strong>. Avoid ultra-processed. This is the <strong>last major opportunity</strong> to shape the microbiome before it stabilizes.</span><span class="ar">قدم <strong>+30 طعام نباتي</strong>. تجنب المعالج الفائق. هذه <strong>الفرصة الكبرى الأخيرة</strong> لتشكيل الميكروبيوم قبل أن يستقر.</span></div>
+</div>
+<div class="timeline-dot">🥗</div>
+</div>
+
+<div class="timeline-item">
+<div class="timeline-content">
+<div class="timeline-day">Day 1000</div>
+<div class="timeline-title"><span class="en">Lock-In Point</span><span class="ar">نقطة الثبات</span></div>
+<div class="timeline-markers">
+<span class="timeline-marker">🔒 Microbiome stabilizes</span>
+<span class="timeline-marker">📈 Final diversity score</span>
+</div>
+<div class="timeline-action"><span class="en">The microbiome "sets" around age 3. After this point, it becomes much harder to change. <strong>Final assessment</strong> — confirm trajectory.</span><span class="ar">الميكروبيوم "يثبت" حوالي عمر 3 سنوات. بعد هذه النقطة، يصبح تغييره أصعب بكثير. <strong>التقييم النهائي</strong> — تأكيد المسار.</span></div>
+</div>
+<div class="timeline-dot">🔒</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+
+<!-- CALCULATOR SECTION -->
+<div class="section-view" id="section-calculator">
+<section class="calculator-section">
+<div class="calculator-inner">
+<div class="calculator-header">
+<h2><span class="en">🧮 Risk Factor Calculator</span><span class="ar">🧮 حاسبة عوامل الخطر</span></h2>
+<p><span class="en">Select the factors present — see how they combine to affect ADHD risk</span><span class="ar">اختر العوامل الموجودة — شاهد كيف تتحد للتأثير على خطر ADHD</span></p>
+</div>
+
+<div class="calculator-box">
+<div class="calc-factors">
+<div class="calc-factor risk-factor" onclick="toggleFactor(this)" data-risk="0.40">
+<div class="calc-factor-check"></div>
+<div class="calc-factor-icon">😰</div>
+<div class="calc-factor-info">
+<div class="calc-factor-name"><span class="en">Maternal Stress</span><span class="ar">توتر الأم</span></div>
+<div class="calc-factor-impact">+40% risk</div>
+</div>
+</div>
+<div class="calc-factor risk-factor" onclick="toggleFactor(this)" data-risk="0.20">
+<div class="calc-factor-check"></div>
+<div class="calc-factor-icon">🏥</div>
+<div class="calc-factor-info">
+<div class="calc-factor-name"><span class="en">C-Section</span><span class="ar">قيصرية</span></div>
+<div class="calc-factor-impact">+20% risk</div>
+</div>
+</div>
+<div class="calc-factor risk-factor" onclick="toggleFactor(this)" data-risk="0.18">
+<div class="calc-factor-check"></div>
+<div class="calc-factor-icon">💊</div>
+<div class="calc-factor-info">
+<div class="calc-factor-name"><span class="en">Early Antibiotics</span><span class="ar">مضادات مبكرة</span></div>
+<div class="calc-factor-impact">+18% risk/course</div>
+</div>
+</div>
+<div class="calc-factor risk-factor" onclick="toggleFactor(this)" data-risk="0.25">
+<div class="calc-factor-check"></div>
+<div class="calc-factor-icon">🍭</div>
+<div class="calc-factor-info">
+<div class="calc-factor-name"><span class="en">Ultra-Processed Diet</span><span class="ar">غذاء معالج</span></div>
+<div class="calc-factor-impact">+25% risk</div>
+</div>
+</div>
+<div class="calc-factor protect-factor" onclick="toggleFactor(this)" data-risk="-0.30">
+<div class="calc-factor-check"></div>
+<div class="calc-factor-icon">🤱</div>
+<div class="calc-factor-info">
+<div class="calc-factor-name"><span class="en">Breastfeeding 6mo+</span><span class="ar">رضاعة 6 أشهر+</span></div>
+<div class="calc-factor-impact">-30% risk</div>
+</div>
+</div>
+<div class="calc-factor protect-factor" onclick="toggleFactor(this)" data-risk="-0.35">
+<div class="calc-factor-check"></div>
+<div class="calc-factor-icon">🥗</div>
+<div class="calc-factor-info">
+<div class="calc-factor-name"><span class="en">Diverse Diet 30+ foods</span><span class="ar">غذاء متنوع +30</span></div>
+<div class="calc-factor-impact">-35% risk</div>
+</div>
+</div>
+<div class="calc-factor protect-factor" onclick="toggleFactor(this)" data-risk="-0.13">
+<div class="calc-factor-check"></div>
+<div class="calc-factor-icon">🐕</div>
+<div class="calc-factor-info">
+<div class="calc-factor-name"><span class="en">Pets in Home</span><span class="ar">حيوانات أليفة</span></div>
+<div class="calc-factor-impact">-13% risk</div>
+</div>
+</div>
+<div class="calc-factor protect-factor" onclick="toggleFactor(this)" data-risk="-0.20">
+<div class="calc-factor-check"></div>
+<div class="calc-factor-icon">🚪</div>
+<div class="calc-factor-info">
+<div class="calc-factor-name"><span class="en">Vaginal Delivery</span><span class="ar">ولادة طبيعية</span></div>
+<div class="calc-factor-impact">-20% vs C-section</div>
+</div>
+</div>
+</div>
+
+<div class="calc-result">
+<div class="calc-result-label"><span class="en">Combined Risk Modifier</span><span class="ar">معدل الخطر المركب</span></div>
+<div class="calc-result-score low" id="calc-score">0%</div>
+<div class="calc-result-level" id="calc-level"><span class="en">Baseline Risk</span><span class="ar">خطر أساسي</span></div>
+<div class="calc-result-bar"><div class="calc-result-fill low" id="calc-fill"></div></div>
+<div class="calc-result-action" id="calc-action"><span class="en">Select factors above to see combined effect</span><span class="ar">اختر العوامل أعلاه لرؤية التأثير المركب</span></div>
+</div>
+</div>
+</div>
+</section>
+</div>
+
+<div class="page-footer">© 2025 BURAK Labs</div>
+</div>
+
+<!-- PIPELINE PAGE (Placeholder) -->
+<div class="page" id="page-pipeline">
+<section style="padding:60px 40px;background:linear-gradient(180deg,var(--bg),var(--card))">
+<div style="max-width:900px;margin:0 auto;text-align:center">
+<div style="display:inline-flex;align-items:center;gap:8px;padding:8px 16px;background:rgba(92,225,230,0.15);border:1px solid rgba(92,225,230,0.3);border-radius:50px;margin-bottom:20px;font-size:0.8rem;color:var(--signal);font-weight:600">🚀 Coming Soon</div>
+<h1 style="font-size:clamp(1.8rem,4vw,2.5rem);font-weight:900;margin-bottom:16px"><span class="en">🧠 ADHD Screening Pipeline</span><span class="ar">🧠 خط أنابيب فحص ADHD</span></h1>
+<p style="color:var(--dim);font-size:1.05rem;margin-bottom:50px;max-width:600px;margin-left:auto;margin-right:auto"><span class="en">The clinical implementation layer — APIs, interfaces, algorithms, and reports for real-world deployment</span><span class="ar">طبقة التنفيذ السريري — واجهات برمجة التطبيقات والواجهات والخوارزميات والتقارير للنشر الفعلي</span></p>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;text-align:left;margin-bottom:60px">
+<div style="background:var(--card);border:2px solid var(--border);border-radius:20px;padding:28px;transition:all 0.3s" onmouseover="this.style.borderColor='var(--signal)'" onmouseout="this.style.borderColor='var(--border)'">
+<div style="font-size:2rem;margin-bottom:12px">🔌</div>
+<div style="font-weight:800;font-size:1rem;margin-bottom:8px"><span class="en">API Endpoints</span><span class="ar">نقاط API</span></div>
+<div style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--dim);line-height:1.8">
+<div style="padding:4px 0;border-bottom:1px solid var(--border)">/api/v1/adhd/screenings</div>
+<div style="padding:4px 0;border-bottom:1px solid var(--border)">/api/v1/adhd/screening/new</div>
+<div style="padding:4px 0">/api/v1/adhd/risk-report</div>
+</div>
+</div>
+<div style="background:var(--card);border:2px solid var(--border);border-radius:20px;padding:28px;transition:all 0.3s" onmouseover="this.style.borderColor='var(--signal)'" onmouseout="this.style.borderColor='var(--border)'">
+<div style="font-size:2rem;margin-bottom:12px">🖥️</div>
+<div style="font-weight:800;font-size:1rem;margin-bottom:8px"><span class="en">User Interface</span><span class="ar">واجهة المستخدم</span></div>
+<div style="font-size:0.85rem;color:var(--dim);line-height:1.8">
+<div style="padding:4px 0;border-bottom:1px solid var(--border)"><span class="en">3-Step Screening Flow</span><span class="ar">تدفق فحص 3 خطوات</span></div>
+<div style="padding:4px 0;border-bottom:1px solid var(--border)"><span class="en">Maternal Health Dashboard</span><span class="ar">لوحة صحة الأم</span></div>
+<div style="padding:4px 0"><span class="en">Simple Risk Card</span><span class="ar">بطاقة خطر بسيطة</span></div>
+</div>
+</div>
+<div style="background:var(--card);border:2px solid var(--border);border-radius:20px;padding:28px;transition:all 0.3s" onmouseover="this.style.borderColor='var(--signal)'" onmouseout="this.style.borderColor='var(--border)'">
+<div style="font-size:2rem;margin-bottom:12px">🧮</div>
+<div style="font-weight:800;font-size:1rem;margin-bottom:8px"><span class="en">Clinical Algorithms</span><span class="ar">الخوارزميات السريرية</span></div>
+<div style="font-size:0.85rem;color:var(--dim);line-height:1.8">
+<div style="padding:4px 0;border-bottom:1px solid var(--border)"><span class="en">3-marker composite scoring</span><span class="ar">تسجيل مركب 3 علامات</span></div>
+<div style="padding:4px 0;border-bottom:1px solid var(--border)"><span class="en">Maternal-child legacy risk</span><span class="ar">خطر إرث الأم-الطفل</span></div>
+<div style="padding:4px 0"><span class="en">Single handshake (Neuro)</span><span class="ar">المصافحة المفردة (عصبي)</span></div>
+</div>
+</div>
+<div style="background:var(--card);border:2px solid var(--border);border-radius:20px;padding:28px;transition:all 0.3s" onmouseover="this.style.borderColor='var(--signal)'" onmouseout="this.style.borderColor='var(--border)'">
+<div style="font-size:2rem;margin-bottom:12px">📋</div>
+<div style="font-weight:800;font-size:1rem;margin-bottom:8px"><span class="en">Reports</span><span class="ar">التقارير</span></div>
+<div style="font-size:0.85rem;color:var(--dim);line-height:1.8">
+<div style="padding:4px 0;border-bottom:1px solid var(--border)"><span class="en">Simple screening card</span><span class="ar">بطاقة فحص بسيطة</span></div>
+<div style="padding:4px 0;border-bottom:1px solid var(--border)"><span class="en">HIGH / MEDIUM / LOW risk</span><span class="ar">خطر عالي / متوسط / منخفض</span></div>
+<div style="padding:4px 0"><span class="en">Probiotic intervention guide</span><span class="ar">دليل تدخل البروبيوتيك</span></div>
+</div>
+</div>
+<div style="background:var(--card);border:2px solid var(--border);border-radius:20px;padding:28px;transition:all 0.3s" onmouseover="this.style.borderColor='var(--signal)'" onmouseout="this.style.borderColor='var(--border)'">
+<div style="font-size:2rem;margin-bottom:12px">🎯</div>
+<div style="font-weight:800;font-size:1rem;margin-bottom:8px"><span class="en">Target Market</span><span class="ar">السوق المستهدف</span></div>
+<div style="font-size:0.85rem;color:var(--dim);line-height:1.8">
+<div style="padding:4px 0;border-bottom:1px solid var(--border)"><span class="en">Pregnant women</span><span class="ar">النساء الحوامل</span></div>
+<div style="padding:4px 0;border-bottom:1px solid var(--border)"><span class="en">Infants (0-24 months)</span><span class="ar">الرضع (0-24 شهر)</span></div>
+<div style="padding:4px 0"><span class="en">OB/GYN & pediatric clinics</span><span class="ar">عيادات التوليد والأطفال</span></div>
+</div>
+</div>
+</div>
+
+<!-- Interested Box -->
+<div style="background:linear-gradient(135deg,rgba(92,225,230,0.1),rgba(191,90,242,0.05));border:2px solid var(--signal);border-radius:24px;padding:40px;max-width:600px;margin:0 auto">
+<div style="font-size:2rem;margin-bottom:16px">🤝</div>
+<h3 style="font-size:1.2rem;font-weight:800;margin-bottom:12px"><span class="en">Interested in Early Access?</span><span class="ar">مهتم بالوصول المبكر؟</span></h3>
+<p style="color:var(--dim);font-size:0.95rem;margin-bottom:24px"><span class="en">We're looking for pilot partners — clinics, researchers, and health systems ready to implement early ADHD screening.</span><span class="ar">نبحث عن شركاء تجريبيين — عيادات وباحثين وأنظمة صحية مستعدة لتنفيذ فحص ADHD المبكر.</span></p>
+<button class="btn btn-signal" onclick="showPage('collab')"><span class="en">Contact Us →</span><span class="ar">← اتصل بنا</span></button>
+</div>
+</div>
+</section>
+
+<div class="page-footer">© 2025 BURAK Labs — A BURAK Multiomics Initiative</div>
+</div>
+
+<!-- COLLABORATE PAGE -->
+<div class="page" id="page-collab">
+<section class="collab-hero">
+<h1><span class="en">Research Flourishes When Experts Unite</span><span class="ar">البحث يزدهر عندما يتحد الخبراء</span></h1>
+<p><span class="en">BURAK Labs is a platform for universities and research institutes to share best practices.</span><span class="ar">مختبرات بُراق هي منصة للجامعات ومعاهد البحث لمشاركة أفضل الممارسات.</span></p>
+</section>
+<section class="contact-section">
+<div class="contact-box">
+<h2><span class="en">Let's Build Together</span><span class="ar">لنبني معاً</span></h2>
+<p><span class="en">Whether you're a university, research institute, or clinical expert — we want to hear from you.</span><span class="ar">سواء كنت جامعة أو معهد بحث أو خبير سريري — نريد أن نسمع منك.</span></p>
+<a href="mailto:contactus@burakomics.com" class="contact-email">contactus@burakomics.com</a>
+</div>
+</section>
+<div class="page-footer">© 2025 BURAK Labs</div>
 </div>
 
 <script>
-// ========== DATA ==========
-const PANELS = {
-  brain: {
-    icon: '🧠',
-    title: 'The Gut-Brain Axis',
-    subtitle: 'Your gut is your second brain',
-    content: `
-      <div class="wow">
-        <div class="wow-num">90%</div>
-        <div class="wow-label">of your serotonin is made in the GUT, not the brain</div>
-        <div class="wow-sub">Your gut literally controls your mood</div>
-      </div>
-      
-      <div class="compare" style="position:relative">
-        <div class="compare-item good">
-          <div class="compare-num">100M</div>
-          <div class="compare-label">neurons in gut</div>
-        </div>
-        <div class="compare-item" style="border-color:rgba(139,92,246,0.3)">
-          <div class="compare-num" style="color:var(--brain)">86B</div>
-          <div class="compare-label">neurons in brain</div>
-        </div>
-      </div>
-      
-      <div class="explainer">
-        <div class="explainer-tag">How The Connection Works</div>
-        <div class="explainer-flow">
-          <span class="explainer-step">Gut bacteria</span>
-          <span class="explainer-arrow">→</span>
-          <span class="explainer-step">Produce serotonin</span>
-          <span class="explainer-arrow">→</span>
-          <span class="explainer-step">Vagus nerve</span>
-          <span class="explainer-arrow">→</span>
-          <span class="explainer-step">Brain</span>
-        </div>
-        <p class="explainer-text">
-          The vagus nerve is a <strong>direct highway</strong> from gut to brain. 
-          Whatever your gut bacteria produce goes <strong>straight to your brain</strong> in milliseconds.
-        </p>
-      </div>
-      
-      <div class="consequence">
-        <div class="consequence-header">
-          <span class="consequence-icon">⚠️</span>
-          <span class="consequence-tag">When It Goes Wrong</span>
-        </div>
-        <p class="consequence-text">
-          Imbalanced gut bacteria produce <strong>inflammatory compounds</strong> that cross the blood-brain barrier.
-          This disrupts dopamine production — the <strong>core mechanism of ADHD</strong>.
-        </p>
-      </div>
-      
-      <div class="gcc">
-        <div class="gcc-header">
-          <span class="gcc-flag">🌴</span>
-          <span class="gcc-tag">GCC Context</span>
-        </div>
-        <p class="gcc-text">
-          <strong>Laban, camel milk, and fermented pickles</strong> are traditional probiotics. 
-          Your grandmothers knew this before the science proved it.
-        </p>
-      </div>
-      
-      <div class="actions">
-        <div class="actions-title">What This Means</div>
-        <div class="action">
-          <span class="action-icon">🧠</span>
-          <div class="action-content">
-            <div class="action-text">Fix the gut first</div>
-            <div class="action-detail">Brain symptoms often have gut causes</div>
-          </div>
-        </div>
-        <div class="action">
-          <span class="action-icon">🦠</span>
-          <div class="action-content">
-            <div class="action-text">Feed good bacteria</div>
-            <div class="action-detail">They produce the neurotransmitters your brain needs</div>
-          </div>
-        </div>
-      </div>
-    `
-  },
-  
-  gut: {
-    icon: '🦠',
-    title: 'The Microbiome',
-    subtitle: '38 trillion bacteria living inside you',
-    content: `
-      <div class="wow">
-        <div class="wow-num">38T</div>
-        <div class="wow-label">bacteria living in your gut right now</div>
-        <div class="wow-sub">More than all the human cells in your body</div>
-      </div>
-      
-      <div class="compare" style="position:relative">
-        <div class="compare-item good">
-          <div class="compare-num">2kg</div>
-          <div class="compare-label">weight of gut bacteria</div>
-        </div>
-        <div class="compare-item" style="border-color:rgba(139,92,246,0.3)">
-          <div class="compare-num" style="color:var(--brain)">1.4kg</div>
-          <div class="compare-label">weight of human brain</div>
-        </div>
-      </div>
-      
-      <div class="explainer">
-        <div class="explainer-tag">The Key Players</div>
-        <div class="explainer-flow">
-          <span class="explainer-step" style="background:rgba(16,185,129,0.2)">Bifidobacteria</span>
-          <span class="explainer-step" style="background:rgba(6,182,212,0.2)">Lactobacillus</span>
-          <span class="explainer-step" style="background:rgba(220,38,38,0.2)">Candida ⚠️</span>
-        </div>
-        <p class="explainer-text">
-          <strong>Bifidobacteria</strong> produce serotonin and GABA (calming).
-          <strong>Lactobacillus</strong> reduces anxiety and inflammation.
-          <strong>Candida</strong> (yeast) produces toxins that cause brain fog and attention issues.
-        </p>
-      </div>
-      
-      <div class="consequence">
-        <div class="consequence-header">
-          <span class="consequence-icon">⚠️</span>
-          <span class="consequence-tag">The Modern Gut Crisis</span>
-        </div>
-        <p class="consequence-text">
-          Children today have <strong>40% less bacterial diversity</strong> than children 50 years ago.
-          Processed food, antibiotics, and C-sections have devastated the microbiome.
-        </p>
-      </div>
-      
-      <div class="actions">
-        <div class="actions-title">Build A Diverse Gut</div>
-        <div class="action">
-          <span class="action-icon">🌱</span>
-          <div class="action-content">
-            <div class="action-text">30+ different plants per week</div>
-            <div class="action-detail">Each plant feeds different bacteria = 2x diversity</div>
-          </div>
-        </div>
-        <div class="action">
-          <span class="action-icon">🥛</span>
-          <div class="action-content">
-            <div class="action-text">Daily fermented foods</div>
-            <div class="action-detail">Laban, yogurt, pickles, kefir</div>
-          </div>
-        </div>
-        <div class="action">
-          <span class="action-icon">🚫</span>
-          <div class="action-content">
-            <div class="action-text">Sugar < 15g/day</div>
-            <div class="action-detail">Sugar feeds harmful bacteria and yeast</div>
-          </div>
-        </div>
-      </div>
-    `
-  },
-  
-  pregnancy: {
-    icon: '🤰',
-    title: 'Pregnancy: The First Transfer',
-    subtitle: 'Your bacteria reach your baby before birth',
-    content: `
-      <div class="wow">
-        <div class="wow-num">50%</div>
-        <div class="wow-label">of baby's gut bacteria come from mom during pregnancy</div>
-        <div class="wow-sub">Before they even take their first breath</div>
-      </div>
-      
-      <div class="explainer">
-        <div class="explainer-tag">The Mechanism</div>
-        <div class="explainer-flow">
-          <span class="explainer-step">Mom's gut</span>
-          <span class="explainer-arrow">→</span>
-          <span class="explainer-step">Bloodstream</span>
-          <span class="explainer-arrow">→</span>
-          <span class="explainer-step">Placenta</span>
-          <span class="explainer-arrow">→</span>
-          <span class="explainer-step">Baby's gut</span>
-        </div>
-        <p class="explainer-text">
-          Your bacteria <strong>cross the placenta</strong> and colonize your baby.
-          Your diet, stress, and medications during pregnancy <strong>directly shape your baby's microbiome</strong> — 
-          and therefore their brain development.
-        </p>
-      </div>
-      
-      <div class="consequence">
-        <div class="consequence-header">
-          <span class="consequence-icon">⚠️</span>
-          <span class="consequence-tag">Risk Factors</span>
-        </div>
-        <p class="consequence-text">
-          <strong>Maternal stress</strong> releases cortisol that crosses placenta and damages baby's developing gut.<br><br>
-          <strong>Antibiotics during pregnancy</strong> wipe out 30% of bacteria that would transfer to baby.<br><br>
-          <strong>High sugar diet</strong> feeds harmful bacteria that colonize baby.
-        </p>
-      </div>
-      
-      <div class="gcc">
-        <div class="gcc-header">
-          <span class="gcc-flag">🌴</span>
-          <span class="gcc-tag">GCC Context</span>
-        </div>
-        <p class="gcc-text">
-          During <strong>Ramadan</strong>, pregnant women are exempt — baby needs constant nutrition.
-          Traditional foods: <strong>dates, fish, lentils, leafy greens</strong> feed good bacteria.
-        </p>
-      </div>
-      
-      <div class="actions">
-        <div class="actions-title">During Pregnancy</div>
-        <div class="action">
-          <span class="action-icon">🌱</span>
-          <div class="action-content">
-            <div class="action-text">30+ plants weekly</div>
-            <div class="action-detail">Diversity transfers to baby</div>
-          </div>
-        </div>
-        <div class="action">
-          <span class="action-icon">💊</span>
-          <div class="action-content">
-            <div class="action-text">Avoid antibiotics unless essential</div>
-            <div class="action-detail">Each course destroys bacteria meant for baby</div>
-          </div>
-        </div>
-        <div class="action">
-          <span class="action-icon">🧘</span>
-          <div class="action-content">
-            <div class="action-text">Manage stress actively</div>
-            <div class="action-detail">Cortisol crosses placenta and damages baby's gut</div>
-          </div>
-        </div>
-      </div>
-    `
-  },
-  
-  birth: {
-    icon: '👶',
-    title: 'Birth: The Seeding Moment',
-    subtitle: 'The most critical bacteria transfer of life',
-    content: `
-      <div class="wow">
-        <div class="wow-num">33%</div>
-        <div class="wow-label">higher ADHD risk with C-section vs vaginal birth</div>
-        <div class="wow-sub">1 in 3 increased chance</div>
-      </div>
-      
-      <div class="compare" style="position:relative">
-        <div class="compare-item good">
-          <div class="compare-num">300+</div>
-          <div class="compare-label">bacteria species (vaginal)</div>
-        </div>
-        <div class="compare-item bad">
-          <div class="compare-num">~50</div>
-          <div class="compare-label">bacteria species (C-section)</div>
-        </div>
-      </div>
-      
-      <div class="explainer">
-        <div class="explainer-tag">Why Vaginal Birth Matters</div>
-        <p class="explainer-text">
-          During vaginal birth, baby swallows <strong>300+ bacteria species</strong> from the birth canal.
-          This "seeds" the gut with the exact bacteria needed to produce neurotransmitters for life.<br><br>
-          C-section babies are colonized by <strong>skin and hospital bacteria</strong> instead — 
-          completely different species that don't produce the same brain chemicals.
-        </p>
-      </div>
-      
-      <div class="consequence">
-        <div class="consequence-header">
-          <span class="consequence-icon">⚠️</span>
-          <span class="consequence-tag">If C-Section Is Necessary</span>
-        </div>
-        <p class="consequence-text">
-          GCC has <strong>30%+ C-section rate</strong> — one of the highest in the world.<br><br>
-          If C-section is medically necessary, you can still transfer bacteria through:
-          <strong>immediate skin-to-skin (2+ hours)</strong>, <strong>vaginal seeding</strong>, and 
-          <strong>breastfeeding within first hour</strong>.
-        </p>
-      </div>
-      
-      <div class="actions">
-        <div class="actions-title">At Birth</div>
-        <div class="action">
-          <span class="action-icon">👶</span>
-          <div class="action-content">
-            <div class="action-text">Immediate skin-to-skin: 2+ hours</div>
-            <div class="action-detail">Transfers bacteria through skin contact</div>
-          </div>
-        </div>
-        <div class="action">
-          <span class="action-icon">🤱</span>
-          <div class="action-content">
-            <div class="action-text">Breastfeed within first hour</div>
-            <div class="action-detail">Colostrum contains concentrated bacteria</div>
-          </div>
-        </div>
-        <div class="action">
-          <span class="action-icon">🏥</span>
-          <div class="action-content">
-            <div class="action-text">Ask about vaginal seeding</div>
-            <div class="action-detail">Swabbing baby with vaginal bacteria (discuss with doctor)</div>
-          </div>
-        </div>
-      </div>
-    `
-  },
-  
-  feeding: {
-    icon: '🤱',
-    title: 'Breastmilk: Living Medicine',
-    subtitle: 'It\'s not just nutrition — it\'s a microbiome transplant',
-    content: `
-      <div class="wow">
-        <div class="wow-num">140x</div>
-        <div class="wow-label">more bacteria species in breastmilk than formula</div>
-        <div class="wow-sub">700+ species vs 5-10</div>
-      </div>
-      
-      <div class="compare" style="position:relative">
-        <div class="compare-item good">
-          <div class="compare-num">700+</div>
-          <div class="compare-label">bacteria in breastmilk</div>
-        </div>
-        <div class="compare-item bad">
-          <div class="compare-num">5-10</div>
-          <div class="compare-label">bacteria in formula</div>
-        </div>
-      </div>
-      
-      <div class="explainer">
-        <div class="explainer-tag">What Breastmilk Contains</div>
-        <p class="explainer-text">
-          <strong>700+ bacteria species</strong> — living organisms that colonize baby's gut.<br><br>
-          <strong>HMOs (Human Milk Oligosaccharides)</strong> — special sugars that ONLY feed good bacteria. 
-          Formula doesn't have these.<br><br>
-          <strong>Antibodies</strong> — protect baby while gut develops.
-        </p>
-      </div>
-      
-      <div class="consequence">
-        <div class="consequence-header">
-          <span class="consequence-icon">📊</span>
-          <span class="consequence-tag">The Math</span>
-        </div>
-        <p class="consequence-text">
-          Each month of breastfeeding = <strong>5% less ADHD risk</strong><br>
-          6 months = <strong>30% reduction</strong><br>
-          12 months = <strong>60% reduction</strong><br><br>
-          This is one of the most powerful interventions that exists.
-        </p>
-      </div>
-      
-      <div class="gcc">
-        <div class="gcc-header">
-          <span class="gcc-flag">🌴</span>
-          <span class="gcc-tag">GCC Context</span>
-        </div>
-        <p class="gcc-text">
-          <strong>Lactation consultants</strong> available in most GCC hospitals — ask for one.
-          Wet nursing has Islamic permissibility and shares microbiome benefits.
-        </p>
-      </div>
-      
-      <div class="actions">
-        <div class="actions-title">Feeding Strategy</div>
-        <div class="action">
-          <span class="action-icon">🤱</span>
-          <div class="action-content">
-            <div class="action-text">Breastfeed 6+ months if possible</div>
-            <div class="action-detail">Every month counts. Some is better than none.</div>
-          </div>
-        </div>
-        <div class="action">
-          <span class="action-icon">🦠</span>
-          <div class="action-content">
-            <div class="action-text">If formula: add B. infantis probiotic</div>
-            <div class="action-detail">The specific strain babies need most</div>
-          </div>
-        </div>
-        <div class="action">
-          <span class="action-icon">🍼</span>
-          <div class="action-content">
-            <div class="action-text">Avoid unnecessary formula supplementation</div>
-            <div class="action-detail">Even one bottle can disrupt microbiome</div>
-          </div>
-        </div>
-      </div>
-    `
-  },
-  
-  food: {
-    icon: '🥗',
-    title: 'Food: Gut Medicine',
-    subtitle: 'You are feeding bacteria, not just your child',
-    content: `
-      <div class="wow">
-        <div class="wow-num">30+</div>
-        <div class="wow-label">different plants per week = 2x gut diversity</div>
-        <div class="wow-sub">Each plant feeds different bacteria</div>
-      </div>
-      
-      <div class="compare" style="position:relative">
-        <div class="compare-item good">
-          <div class="compare-num">Fiber</div>
-          <div class="compare-label">feeds good bacteria</div>
-        </div>
-        <div class="compare-item bad">
-          <div class="compare-num">Sugar</div>
-          <div class="compare-label">feeds bad bacteria</div>
-        </div>
-      </div>
-      
-      <div class="explainer">
-        <div class="explainer-tag">How Food Affects the Brain</div>
-        <div class="explainer-flow">
-          <span class="explainer-step">Sugar</span>
-          <span class="explainer-arrow">→</span>
-          <span class="explainer-step">Feeds Candida</span>
-          <span class="explainer-arrow">→</span>
-          <span class="explainer-step">Inflammation</span>
-          <span class="explainer-arrow">→</span>
-          <span class="explainer-step">Brain fog</span>
-        </div>
-        <p class="explainer-text" style="margin-top:1rem">
-          <strong>Sugar feeds harmful bacteria</strong> that produce inflammatory compounds.
-          These cross the blood-brain barrier and <strong>disrupt dopamine production</strong> — 
-          causing attention problems, hyperactivity, and mood swings.
-        </p>
-      </div>
-      
-      <div class="consequence">
-        <div class="consequence-header">
-          <span class="consequence-icon">⚠️</span>
-          <span class="consequence-tag">GCC Diet Risk</span>
-        </div>
-        <p class="consequence-text">
-          Average GCC child consumes <strong>50-70g sugar daily</strong> (recommendation: <15g).<br><br>
-          Sugary drinks (Vimto, Tang, juice), processed snacks, and sweets are 
-          <strong>directly feeding the bacteria that cause ADHD symptoms</strong>.
-        </p>
-      </div>
-      
-      <div class="gcc">
-        <div class="gcc-header">
-          <span class="gcc-flag">🌴</span>
-          <span class="gcc-tag">Traditional Foods That Heal</span>
-        </div>
-        <p class="gcc-text">
-          <strong>Laban</strong> — natural probiotic<br>
-          <strong>Hummus</strong> — fiber feeds good bacteria<br>
-          <strong>Tabbouleh</strong> — diversity of plants<br>
-          <strong>Dates</strong> — prebiotic fiber<br>
-          <strong>Fish</strong> — omega-3 reduces inflammation
-        </p>
-      </div>
-      
-      <div class="actions">
-        <div class="actions-title">Food Rules</div>
-        <div class="action">
-          <span class="action-icon">🌱</span>
-          <div class="action-content">
-            <div class="action-text">30+ plants per week</div>
-            <div class="action-detail">Vegetables, fruits, legumes, grains, nuts, seeds</div>
-          </div>
-        </div>
-        <div class="action">
-          <span class="action-icon">🚫</span>
-          <div class="action-content">
-            <div class="action-text">Sugar < 15g/day</div>
-            <div class="action-detail">Read labels. Most snacks exceed this in one serving.</div>
-          </div>
-        </div>
-        <div class="action">
-          <span class="action-icon">🥛</span>
-          <div class="action-content">
-            <div class="action-text">Daily fermented food</div>
-            <div class="action-detail">Laban, yogurt, pickles with every meal</div>
-          </div>
-        </div>
-      </div>
-    `
-  }
-};
-
-// ========== FUNCTIONS ==========
-let currentStep = 0;
-
-function nextStep(n) {
-  document.getElementById('step' + currentStep).classList.remove('active');
-  document.getElementById('step' + n).classList.add('active');
-  currentStep = n;
+function showPage(id) {
+document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+const page = document.getElementById('page-' + id);
+if (page) page.classList.add('active');
+document.querySelectorAll('.nav-link[data-page="' + id + '"]').forEach(l => l.classList.add('active'));
+window.scrollTo(0, 0);
 }
 
-function skipIntro() {
-  document.getElementById('intro').classList.add('hidden');
-  document.getElementById('app').classList.add('active');
+function showSection(id) {
+document.querySelectorAll('.section-view').forEach(s => s.classList.remove('active'));
+document.querySelectorAll('.science-tab').forEach(t => t.classList.remove('active'));
+const section = document.getElementById('section-' + id);
+if (section) section.classList.add('active');
+// Highlight the clicked tab
+event.target.closest('.science-tab')?.classList.add('active');
 }
 
-function startApp() {
-  document.getElementById('intro').classList.add('hidden');
-  document.getElementById('app').classList.add('active');
+function setLang(lang) {
+document.body.classList.toggle('rtl', lang === 'ar');
+document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+document.getElementById('btn-ar').classList.toggle('active', lang === 'ar');
 }
 
-function createAmbient() {
-  const container = document.getElementById('ambient');
-  for (let i = 0; i < 40; i++) {
-    const p = document.createElement('div');
-    p.className = 'ambient-particle';
-    p.style.left = Math.random() * 100 + '%';
-    p.style.animationDuration = (20 + Math.random() * 15) + 's';
-    p.style.animationDelay = Math.random() * 25 + 's';
-    container.appendChild(p);
-  }
+// Calculator logic
+function toggleFactor(el) {
+el.classList.toggle('selected');
+calculateRisk();
 }
 
-function createNeuralFires() {
-  const container = document.getElementById('neuralFires');
-  for (let i = 0; i < 10; i++) {
-    const fire = document.createElement('div');
-    fire.className = 'neural-fire';
-    fire.style.left = (15 + Math.random() * 70) + '%';
-    fire.style.top = (15 + Math.random() * 70) + '%';
-    fire.style.animationDelay = Math.random() * 1.5 + 's';
-    fire.style.animationDuration = (1 + Math.random() * 0.5) + 's';
-    container.appendChild(fire);
-  }
+function calculateRisk() {
+let totalRisk = 0;
+document.querySelectorAll('.calc-factor.selected').forEach(f => {
+totalRisk += parseFloat(f.dataset.risk);
+});
+
+const scoreEl = document.getElementById('calc-score');
+const levelEl = document.getElementById('calc-level');
+const fillEl = document.getElementById('calc-fill');
+const actionEl = document.getElementById('calc-action');
+
+const pct = Math.round(totalRisk * 100);
+const sign = pct >= 0 ? '+' : '';
+scoreEl.textContent = sign + pct + '%';
+
+// Update level
+let level, action;
+if (pct <= -30) {
+level = 'low'; 
+scoreEl.className = 'calc-result-score low';
+fillEl.className = 'calc-result-fill low';
+levelEl.innerHTML = '<span class="en">🛡️ Well Protected</span><span class="ar">🛡️ محمي جيداً</span>';
+action = '<span class="en">Multiple protective factors in place. Continue these practices!</span><span class="ar">عوامل وقائية متعددة في مكانها. استمر في هذه الممارسات!</span>';
+} else if (pct <= 0) {
+level = 'low';
+scoreEl.className = 'calc-result-score low';
+fillEl.className = 'calc-result-fill low';
+levelEl.innerHTML = '<span class="en">✓ Below Baseline</span><span class="ar">✓ تحت خط الأساس</span>';
+action = '<span class="en">Good protective factors present. Consider adding more.</span><span class="ar">عوامل وقائية جيدة موجودة. فكر في إضافة المزيد.</span>';
+} else if (pct <= 30) {
+level = 'medium';
+scoreEl.className = 'calc-result-score medium';
+fillEl.className = 'calc-result-fill medium';
+levelEl.innerHTML = '<span class="en">⚠️ Moderate Elevation</span><span class="ar">⚠️ ارتفاع معتدل</span>';
+action = '<span class="en">Some risk factors present. Focus on adding protective factors.</span><span class="ar">بعض عوامل الخطر موجودة. ركز على إضافة عوامل وقائية.</span>';
+} else if (pct <= 60) {
+level = 'high';
+scoreEl.className = 'calc-result-score high';
+fillEl.className = 'calc-result-fill high';
+levelEl.innerHTML = '<span class="en">⚠️ Elevated Risk</span><span class="ar">⚠️ خطر مرتفع</span>';
+action = '<span class="en">Multiple risk factors compounding. Consider microbiome testing and interventions.</span><span class="ar">تضاعف عوامل خطر متعددة. فكر في اختبار الميكروبيوم والتدخلات.</span>';
+} else {
+level = 'critical';
+scoreEl.className = 'calc-result-score critical';
+fillEl.className = 'calc-result-fill critical';
+levelEl.innerHTML = '<span class="en">🚨 High Risk Pattern</span><span class="ar">🚨 نمط خطر عالي</span>';
+action = '<span class="en">Critical combination detected. Recommend comprehensive assessment and intervention plan.</span><span class="ar">تم اكتشاف مزيج حرج. يوصى بتقييم شامل وخطة تدخل.</span>';
+}
+actionEl.innerHTML = action;
 }
 
-function createBacteria() {
-  const container = document.getElementById('bacteriaWorld');
-  const types = ['bifido', 'bifido', 'bifido', 'lacto', 'lacto', 'harmful'];
-  
-  for (let i = 0; i < 25; i++) {
-    const b = document.createElement('div');
-    b.className = 'bacterium ' + types[Math.floor(Math.random() * types.length)];
-    const size = 6 + Math.random() * 12;
-    b.style.width = size + 'px';
-    b.style.height = size + 'px';
-    b.style.left = Math.random() * 90 + '%';
-    b.style.top = Math.random() * 90 + '%';
-    b.style.animationDelay = Math.random() * 5 + 's';
-    b.style.animationDuration = (4 + Math.random() * 4) + 's';
-    container.appendChild(b);
-  }
+// Day counter animation
+document.addEventListener('DOMContentLoaded', function() {
+const el = document.getElementById('dayCount');
+if (!el) return;
+let start = performance.now();
+function step(now) {
+let p = Math.min((now - start) / 2000, 1);
+el.textContent = Math.floor(p * p * 1000);
+if (p < 1) requestAnimationFrame(step);
 }
-
-function openPanel(key) {
-  const data = PANELS[key];
-  if (!data) return;
-  
-  document.getElementById('panelIcon').textContent = data.icon;
-  document.getElementById('panelTitle').textContent = typeof data.title === 'object' ? data.title[currentLang] : data.title;
-  document.getElementById('panelSubtitle').textContent = typeof data.subtitle === 'object' ? data.subtitle[currentLang] : data.subtitle;
-  document.getElementById('panelContent').innerHTML = typeof data.content === 'object' ? data.content[currentLang] : data.content;
-  
-  document.getElementById('panel').classList.add('open');
-  document.getElementById('header').classList.add('shifted');
-  document.getElementById('timeline').classList.add('shifted');
-  
-  // Show mechanism popups
-  if (key === 'brain' || key === 'gut') {
-    document.getElementById('mechSerotonin').classList.add('visible');
-    document.getElementById('mechInflammation').classList.add('visible');
-  } else {
-    document.getElementById('mechSerotonin').classList.remove('visible');
-    document.getElementById('mechInflammation').classList.remove('visible');
-  }
-  
-  // Update hotspot states
-  document.querySelectorAll('.hotspot').forEach(h => h.classList.remove('active'));
-  document.querySelector('.hs-' + key)?.classList.add('active');
-  
-  // Update journey nodes
-  const nodeMap = { pregnancy: 1, birth: 2, feeding: 3, food: 4 };
-  document.querySelectorAll('.journey-node').forEach((n, i) => {
-    n.classList.remove('active');
-    if (nodeMap[key] === i + 1) n.classList.add('active');
-  });
-  
-  // Update timeline
-  document.querySelectorAll('.tl-item').forEach(t => t.classList.remove('active'));
-}
-
-function showLockWarning() {
-  alert(currentLang === 'ar' ? 
-    '🔒 بعد عمر ٣ سنوات، يصبح الميكروبيوم دائماً!\n\nلديك ١٠٠٠ يوم فقط لبناء أساس صحي.' : 
-    '🔒 After age 3, the microbiome becomes permanent!\n\nYou have only 1000 days to build a healthy foundation.');
-}
-
-function closePanel() {
-  document.getElementById('panel').classList.remove('open');
-  document.getElementById('header').classList.remove('shifted');
-  document.getElementById('timeline').classList.remove('shifted');
-  document.getElementById('mechSerotonin').classList.remove('visible');
-  document.getElementById('mechInflammation').classList.remove('visible');
-  document.querySelectorAll('.hotspot').forEach(h => h.classList.remove('active'));
-}
-
-function toggleRisk() {
-  document.body.classList.toggle('risk-mode');
-  const isRisk = document.body.classList.contains('risk-mode');
-  document.getElementById('riskBtn').classList.toggle('active', isRisk);
-  document.getElementById('riskBtnText').textContent = isRisk ? 'Hide Risks' : 'Show Risks';
-}
-
-// ========== CHAIN REACTION SYSTEM ==========
-function triggerBrainChain() {
-  const brain = document.getElementById('brain');
-  const rect = brain.getBoundingClientRect();
-  const canvas = document.getElementById('canvas').getBoundingClientRect();
-  const container = document.getElementById('chainReactions');
-  
-  // Center of brain
-  const cx = rect.left - canvas.left + rect.width/2;
-  const cy = rect.top - canvas.top + rect.height/2;
-  
-  // Create multiple pulse rings
-  createPulseRing(container, cx, cy, '#7c3aed');
-  setTimeout(() => createPulseRing(container, cx, cy, '#a78bfa'), 200);
-  setTimeout(() => createPulseRing(container, cx, cy, '#c4b5fd'), 400);
-  
-  // Show mechanism popup
-  document.getElementById('mechSerotonin').classList.add('visible');
-  
-  // MECHANISM CHAIN REACTION - The science flow
-  const mechanismSteps = [
-    { text: '🧠 BRAIN receives neurotransmitters', delay: 0, y: -30 },
-    { text: '⚡ Dopamine controls FOCUS', delay: 600, y: -70 },
-    { text: '🎯 Serotonin controls MOOD', delay: 1200, y: -110 },
-    { text: '💭 ADHD = disrupted signals', delay: 1800, y: -150 },
-  ];
-  
-  mechanismSteps.forEach(step => {
-    setTimeout(() => {
-      createChainText(container, cx, cy + step.y, step.text);
-    }, step.delay);
-  });
-  
-  // Create particles burst
-  for(let i = 0; i < 20; i++) {
-    setTimeout(() => {
-      createChainParticle(container, cx, cy, '#a78bfa', i * 18);
-    }, i * 40);
-  }
-  
-  // Create connection beam to gut
-  setTimeout(() => {
-    createMechanismBeam(container, cx, cy + 80, cx, cy + 400, '#7c3aed');
-  }, 500);
-  
-  // Open panel after animation
-  setTimeout(() => openPanel('brain'), 2500);
-}
-
-function triggerGutChain() {
-  const gut = document.getElementById('gut');
-  const rect = gut.getBoundingClientRect();
-  const canvas = document.getElementById('canvas').getBoundingClientRect();
-  const container = document.getElementById('chainReactions');
-  
-  const cx = rect.left - canvas.left + rect.width/2;
-  const cy = rect.top - canvas.top + rect.height/2;
-  
-  // Create multiple pulse rings
-  createPulseRing(container, cx, cy, '#059669');
-  setTimeout(() => createPulseRing(container, cx, cy, '#34d399'), 200);
-  setTimeout(() => createPulseRing(container, cx, cy, '#6ee7b7'), 400);
-  
-  // Show mechanism popup
-  document.getElementById('mechInflammation').classList.add('visible');
-  
-  // MECHANISM CHAIN REACTION - The science flow
-  const mechanismSteps = [
-    { text: '🦠 38 TRILLION bacteria in your gut', delay: 0, y: -30 },
-    { text: '⚗️ They produce 90% of SEROTONIN', delay: 600, y: -70 },
-    { text: '🧪 Good bacteria = calm, focused brain', delay: 1200, y: -110 },
-    { text: '⚠️ Bad bacteria = inflammation → ADHD', delay: 1800, y: -150 },
-    { text: '🎯 FIX THE GUT → FIX THE BRAIN', delay: 2400, y: -190 },
-  ];
-  
-  mechanismSteps.forEach(step => {
-    setTimeout(() => {
-      createChainText(container, cx, cy + step.y, step.text);
-    }, step.delay);
-  });
-  
-  // Create bacteria burst with variety
-  const colors = ['#34d399', '#67e8f9', '#fbbf24', '#f472b6'];
-  for(let i = 0; i < 25; i++) {
-    setTimeout(() => {
-      createChainParticle(container, cx, cy, colors[i % 4], i * 14.4);
-    }, i * 30);
-  }
-  
-  // Create connection beam to brain
-  setTimeout(() => {
-    createMechanismBeam(container, cx, cy - 80, cx, cy - 400, '#059669');
-  }, 500);
-  
-  // Open panel after animation
-  setTimeout(() => openPanel('gut'), 3000);
-}
-
-// Create animated beam between brain and gut
-function createMechanismBeam(container, x1, y1, x2, y2, color) {
-  const beam = document.createElement('div');
-  beam.className = 'mechanism-beam';
-  beam.style.position = 'absolute';
-  beam.style.left = x1 + 'px';
-  beam.style.top = Math.min(y1, y2) + 'px';
-  beam.style.width = '4px';
-  beam.style.height = '0px';
-  beam.style.background = `linear-gradient(180deg, ${color}, transparent)`;
-  beam.style.borderRadius = '4px';
-  beam.style.boxShadow = `0 0 20px ${color}, 0 0 40px ${color}`;
-  beam.style.animation = 'beamGrow 0.8s ease-out forwards';
-  beam.style.transformOrigin = 'top center';
-  container.appendChild(beam);
-  
-  // Add beam grow animation dynamically
-  beam.style.setProperty('--beam-height', Math.abs(y2 - y1) + 'px');
-  
-  setTimeout(() => beam.remove(), 1500);
-}
-
-function createPulseRing(container, x, y, color) {
-  const ring = document.createElement('div');
-  ring.className = 'pulse-ring';
-  ring.style.left = x + 'px';
-  ring.style.top = y + 'px';
-  ring.style.width = '100px';
-  ring.style.height = '100px';
-  ring.style.borderColor = color;
-  container.appendChild(ring);
-  setTimeout(() => ring.remove(), 1000);
-}
-
-function createChainText(container, x, y, text) {
-  const el = document.createElement('div');
-  el.className = 'chain-text';
-  el.textContent = text;
-  el.style.left = x + 'px';
-  el.style.top = y + 'px';
-  el.style.transform = 'translateX(-50%)';
-  container.appendChild(el);
-  setTimeout(() => el.remove(), 2000);
-}
-
-function createChainParticle(container, x, y, color, angle) {
-  const el = document.createElement('div');
-  el.className = 'chain-particle';
-  el.style.left = x + 'px';
-  el.style.top = y + 'px';
-  el.style.width = (8 + Math.random() * 8) + 'px';
-  el.style.height = el.style.width;
-  el.style.background = color;
-  el.style.boxShadow = `0 0 15px ${color}`;
-  
-  const distance = 80 + Math.random() * 60;
-  const rad = angle * Math.PI / 180;
-  el.style.setProperty('--tx', Math.cos(rad) * distance + 'px');
-  el.style.setProperty('--ty', Math.sin(rad) * distance + 'px');
-  
-  container.appendChild(el);
-  setTimeout(() => el.remove(), 1500);
-}
-
-function createChainLine(container, x, y, angle, color) {
-  const el = document.createElement('div');
-  el.className = 'chain-line';
-  el.style.left = x + 'px';
-  el.style.top = y + 'px';
-  el.style.background = `linear-gradient(90deg, ${color}, transparent)`;
-  el.style.transform = `rotate(${angle}deg)`;
-  container.appendChild(el);
-  setTimeout(() => el.remove(), 800);
-}
-
-// ========== LIVE BACTERIA COUNTER ==========
-let bacteriaCount = 38000000000000;
-const bacteriaVariation = 100000000;
-
-function updateBacteriaCounter() {
-  // Simulate live bacteria count fluctuation
-  bacteriaCount += Math.floor((Math.random() - 0.5) * bacteriaVariation);
-  const counter = document.getElementById('counterValue');
-  if (counter) {
-    counter.textContent = bacteriaCount.toLocaleString();
-  }
-}
-
-// ========== ENERGY PARTICLES ==========
-function createEnergyParticle() {
-  const container = document.getElementById('energyParticles');
-  if (!container || !document.getElementById('intro').classList.contains('hidden')) return;
-  
-  const particle = document.createElement('div');
-  particle.className = 'energy-particle';
-  particle.style.left = (40 + Math.random() * 20) + '%';
-  particle.style.bottom = '30%';
-  particle.style.animationDelay = Math.random() * 0.5 + 's';
-  
-  // Random color from our palette
-  const colors = ['#fbbf24', '#34d399', '#a78bfa', '#f472b6'];
-  particle.style.background = colors[Math.floor(Math.random() * colors.length)];
-  particle.style.boxShadow = `0 0 6px ${particle.style.background}`;
-  
-  container.appendChild(particle);
-  setTimeout(() => particle.remove(), 3000);
-}
-
-// Create neural web background
-function createNeuralWeb() {
-  const container = document.getElementById('neuralWeb');
-  if (!container) return;
-  
-  for (let i = 0; i < 20; i++) {
-    const line = document.createElement('div');
-    line.className = 'neural-line';
-    line.style.left = Math.random() * 100 + '%';
-    line.style.top = Math.random() * 100 + '%';
-    line.style.width = (50 + Math.random() * 200) + 'px';
-    line.style.transform = `rotate(${Math.random() * 360}deg)`;
-    line.style.animationDelay = Math.random() * 3 + 's';
-    container.appendChild(line);
-  }
-}
-
-// Create synapse flashes periodically
-function createSynapseFlash() {
-  const canvas = document.getElementById('canvas');
-  if (!canvas || !document.getElementById('intro').classList.contains('hidden')) return;
-  
-  const flash = document.createElement('div');
-  flash.className = 'synapse-flash';
-  flash.style.left = (20 + Math.random() * 60) + '%';
-  flash.style.top = (15 + Math.random() * 70) + '%';
-  canvas.appendChild(flash);
-  setTimeout(() => flash.remove(), 300);
-}
-
-// ========== INITIALIZATION ==========
-function initializeApp() {
-  createAmbient();
-  createNeuralFires();
-  createBacteria();
-  createNeuralWeb();
-  
-  // Start periodic effects
-  setInterval(createSynapseFlash, 1500);
-  setInterval(updateBacteriaCounter, 100);
-  setInterval(createEnergyParticle, 300);
-  
-  // Preload animations
-  document.body.classList.add('loaded');
-}
-
-// Initialize when ready
-initializeApp();
-
-// Performance: Pause animations when tab is hidden
-document.addEventListener('visibilitychange', () => {
-  if (document.hidden) {
-    document.body.classList.add('paused');
-  } else {
-    document.body.classList.remove('paused');
-  }
+setTimeout(() => requestAnimationFrame(step), 500);
 });
 </script>
 </body>
