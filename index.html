@@ -1,1484 +1,728 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>BURAK Labs — ADHD Cross-Connections & Early Signals</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&family=Noto+Sans+Arabic:wght@400;600;700;800&display=swap" rel="stylesheet">
-<style>
-:root{--bg:#0a0a0f;--card:#12121a;--card2:#1a1a25;--border:rgba(255,255,255,0.08);--text:#e8e8ed;--bright:#fff;--dim:#8a8a9a;--primary:#00ffb2;--glow:rgba(0,255,178,0.4);--accent:#bf5af2;--signal:#5ce1e6;--gold:#ffd60a;--danger:#ff453a;--pink:#f472b6;--gut:#fdcb6e;--orange:#ff9f43}
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--text);line-height:1.7}
-body.rtl{direction:rtl;text-align:right;font-family:'Noto Sans Arabic','Space Grotesk',sans-serif}
-.ar{display:none}
-body.rtl .en{display:none}
-body.rtl .ar{display:inline}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Handshake Pathways - Mechanistic Disease Gospel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        
+        :root {
+            --bg-primary: #f8fafc;
+            --card-bg: #ffffff;
+        }
 
-/* NAV */
-.nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 40px;display:flex;align-items:center;justify-content:space-between;background:rgba(10,10,15,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
-.nav-logo{display:flex;flex-direction:column;cursor:pointer}
-.nav-logo-main{font-size:1.4rem;font-weight:800;color:var(--bright)}
-.nav-logo-main span{color:var(--primary)}
-.nav-logo-sub{font-size:0.65rem;color:var(--dim)}
-.nav-links{display:flex;align-items:center;gap:28px}
-.nav-link{color:var(--dim);font-size:0.9rem;font-weight:500;cursor:pointer;transition:color 0.3s;border:none;background:none;font-family:inherit}
-.nav-link:hover,.nav-link.active{color:var(--primary)}
-.nav-link.gold{color:var(--gold)}
-.lang-toggle{display:flex;gap:6px}
-.lang-btn{padding:6px 12px;background:transparent;border:1px solid var(--border);color:var(--dim);border-radius:6px;cursor:pointer;font-size:0.8rem;transition:all 0.3s;font-family:inherit}
-.lang-btn.active{background:var(--primary);color:var(--bg);border-color:var(--primary)}
-@media(max-width:768px){.nav-links{gap:12px}.nav{padding:16px 20px}.nav-link{font-size:0.8rem}}
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg-primary);
+            color: #1e293b;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(99, 102, 241, 0.05) 0px, transparent 50%);
+        }
 
-/* PAGES */
-.page{display:none;min-height:100vh;padding-top:80px}
-.page.active{display:block}
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid #e2e8f0;
+        }
 
-.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;font-size:0.95rem;font-weight:700;border-radius:12px;cursor:pointer;border:none;font-family:inherit;transition:all 0.3s}
-.btn-primary{background:var(--primary);color:var(--bg)}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 40px var(--glow)}
-.btn-secondary{background:var(--card2);color:var(--text);border:1px solid var(--border)}
-.btn-secondary:hover{border-color:var(--primary)}
-.btn-signal{background:linear-gradient(135deg,var(--signal),var(--accent));color:var(--bg)}
+        .category-group {
+            background: var(--card-bg);
+            border: 1px solid #e2e8f0;
+            border-radius: 1.5rem;
+            margin-bottom: 1.25rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-.page-footer{padding:40px;text-align:center;color:var(--dim);font-size:0.85rem;border-top:1px solid var(--border)}
+        .category-group.active {
+            border-color: #cbd5e1;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
+        }
 
-/* HOME */
-.home-hero{min-height:calc(100vh - 80px);display:flex;align-items:center;justify-content:center;padding:60px 40px;position:relative}
-.home-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 30%,rgba(0,255,178,0.08),transparent 50%),radial-gradient(ellipse at 70% 70%,rgba(191,90,242,0.06),transparent 50%)}
-.home-content{position:relative;max-width:900px;text-align:center}
-.home-badge{display:inline-flex;align-items:center;gap:10px;padding:12px 24px;background:rgba(255,69,58,0.15);border:1px solid rgba(255,69,58,0.4);border-radius:50px;margin-bottom:40px}
-.home-badge .pulse{width:10px;height:10px;background:var(--danger);border-radius:50%;animation:pulse 1s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
-.home-badge span{color:#ff6b5b;font-weight:600;font-size:0.9rem}
-.home-title{font-size:clamp(2.5rem,6vw,4rem);font-weight:900;line-height:1.1;margin-bottom:24px}
-.home-title .hl{color:var(--primary);display:block}
-.home-sub{font-size:1.1rem;color:var(--text);max-width:700px;margin:0 auto 40px;line-height:1.9}
-.home-sub strong{color:var(--primary)}
-.home-stats{display:flex;justify-content:center;gap:50px;margin-bottom:50px;flex-wrap:wrap}
-.home-stat{text-align:left;padding-left:16px;border-left:3px solid var(--primary)}
-body.rtl .home-stat{text-align:right;padding-left:0;padding-right:16px;border-left:none;border-right:3px solid var(--primary)}
-.home-stat-num{font-family:'JetBrains Mono',monospace;font-size:2rem;font-weight:700;color:var(--primary)}
-.home-stat-label{font-size:0.85rem;color:var(--dim)}
-.home-ctas{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+        .category-header {
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+        }
 
-/* SCIENCE HEADER */
-.science-header{padding:40px;text-align:center;background:var(--card);border-bottom:1px solid var(--border)}
-.science-header h1{font-size:clamp(1.8rem,4vw,2.5rem);font-weight:800;margin-bottom:8px}
-.science-header p{color:var(--dim);font-size:1rem}
-.cohort-badge{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:rgba(255,69,58,0.15);border:1px solid rgba(255,69,58,0.4);border-radius:50px;margin-bottom:16px}
-.cohort-badge .dot{width:8px;height:8px;background:var(--danger);border-radius:50%;animation:pulse 1s infinite}
-.cohort-badge span{color:var(--danger);font-weight:700;font-size:0.8rem;text-transform:uppercase;letter-spacing:1px}
+        .category-content {
+            display: none;
+            padding: 0 1.5rem 1.5rem;
+        }
 
-/* TABS */
-.science-tabs{display:flex;justify-content:center;gap:12px;padding:24px 40px;background:var(--bg);border-bottom:1px solid var(--border);flex-wrap:wrap}
-.science-tab{padding:12px 24px;background:var(--card);border:2px solid var(--border);border-radius:50px;cursor:pointer;font-weight:600;font-size:0.85rem;transition:all 0.3s;display:flex;align-items:center;gap:8px}
-.science-tab:hover{border-color:var(--primary)}
-.science-tab.active{background:var(--primary);color:var(--bg);border-color:var(--primary)}
-.science-tab.signal{background:linear-gradient(135deg,rgba(92,225,230,0.15),rgba(191,90,242,0.15));border-color:var(--signal)}
-.science-tab.signal:hover,.science-tab.signal.active{background:linear-gradient(135deg,var(--signal),var(--accent));color:var(--bg);border-color:var(--signal)}
-.tab-new{font-size:0.6rem;padding:2px 6px;background:var(--danger);color:white;border-radius:4px;text-transform:uppercase;font-weight:800}
+        .category-group.active .category-content {
+            display: block;
+        }
 
-/* SECTION VIEWS */
-.section-view{display:none}
-.section-view.active{display:block}
+        .chain-node {
+            position: relative;
+            background: #fdfdfe;
+            border: 1px solid #f1f5f9;
+            border-radius: 1.25rem;
+            padding: 1.75rem;
+            margin-bottom: 1.25rem;
+        }
 
-/* ==================== CROSS-CONNECTIONS NETWORK ==================== */
-.network-hero{padding:60px 40px;background:linear-gradient(180deg,var(--bg),var(--card));text-align:center;position:relative}
-.network-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(92,225,230,0.1),transparent 60%)}
-.network-hero h2{font-size:clamp(1.8rem,4vw,2.5rem);font-weight:900;margin-bottom:12px;position:relative}
-.network-hero h2 .gradient{background:linear-gradient(135deg,var(--signal),var(--accent),var(--primary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.network-hero p{color:var(--dim);font-size:1.05rem;max-width:700px;margin:0 auto}
+        .chain-node::after {
+            content: '';
+            position: absolute;
+            left: 42px;
+            bottom: -35px;
+            height: 35px;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--accent-color), transparent);
+            z-index: 0;
+            opacity: 0.2;
+        }
+        
+        .chain-node:last-child::after { display: none; }
+        
+        .handshake-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            background: white;
+            border: 2px solid var(--accent-color);
+            box-shadow: 0 8px 20px -6px var(--accent-color);
+            position: relative;
+            z-index: 10;
+        }
 
-/* NETWORK VISUALIZATION */
-.network-section{padding:60px 40px;background:var(--bg);position:relative;overflow:hidden}
-.network-container{max-width:1200px;margin:0 auto;position:relative}
-.network-canvas{position:relative;height:700px;background:var(--card);border:1px solid var(--border);border-radius:24px;overflow:hidden}
-.network-canvas::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,rgba(253,203,110,0.1),transparent 40%),radial-gradient(circle at 20% 30%,rgba(92,225,230,0.08),transparent 30%),radial-gradient(circle at 80% 70%,rgba(191,90,242,0.08),transparent 30%)}
+        .pathway-step {
+            background: #f8fafc;
+            border: 1px solid #f1f5f9;
+            padding: 12px 6px;
+            border-radius: 10px;
+            text-align: center;
+            flex: 1;
+            font-size: 11px;
+        }
 
-/* SVG CONNECTIONS */
-.network-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
-.connection-line{stroke-width:2;fill:none;opacity:0.6;transition:opacity 0.3s}
-.connection-line.risk{stroke:var(--danger)}
-.connection-line.protect{stroke:var(--primary)}
-.connection-line.cascade{stroke:var(--signal);stroke-dasharray:8,4;animation:dash 20s linear infinite}
-.connection-line.strong{stroke-width:4;opacity:0.8}
-@keyframes dash{to{stroke-dashoffset:-100}}
+        .pathway-step.active {
+            background: white;
+            border: 2px solid var(--accent-color);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            font-weight: 700;
+        }
 
-/* NETWORK NODES */
-.network-node{position:absolute;transform:translate(-50%,-50%);z-index:10;cursor:pointer;transition:all 0.3s}
-.network-node:hover{z-index:100;transform:translate(-50%,-50%) scale(1.15)}
+        .analysis-card {
+            background: #ffffff;
+            border: 1px solid #f1f5f9;
+            border-left: 4px solid var(--accent-color);
+            padding: 1.25rem;
+            border-radius: 4px 12px 12px 4px;
+            margin-top: 1.25rem;
+        }
 
-.node-hub{width:140px;height:140px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-direction:column;border:4px solid}
-.node-hub.gut{background:linear-gradient(135deg,#ffeaa7,var(--gut));border-color:rgba(255,255,255,0.4);box-shadow:0 0 80px rgba(253,203,110,0.5)}
-.node-hub.brain{background:linear-gradient(135deg,#fd79a8,var(--pink));border-color:rgba(255,255,255,0.4);box-shadow:0 0 60px rgba(244,114,182,0.4)}
-.node-hub-icon{font-size:2.8rem}
-.node-hub-label{font-size:0.8rem;font-weight:800;color:#5a4a1e;margin-top:4px;text-transform:uppercase}
-.node-hub.brain .node-hub-label{color:#6b2150}
+        /* Tooltip Logic */
+        .tooltip {
+            position: relative;
+            display: inline-flex;
+            cursor: help;
+        }
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 300px;
+            background-color: #0f172a;
+            color: #fff;
+            text-align: left;
+            border-radius: 12px;
+            padding: 16px;
+            position: absolute;
+            z-index: 100;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -150px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 11px;
+            line-height: 1.5;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
+            font-weight: normal;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
 
-.node-marker{background:var(--card2);border:3px solid var(--border);border-radius:14px;padding:12px 16px;text-align:center;min-width:100px;box-shadow:0 8px 24px rgba(0,0,0,0.3)}
-.node-marker:hover{box-shadow:0 12px 40px rgba(0,0,0,0.5)}
-.node-marker.risk{border-color:rgba(255,69,58,0.6);background:linear-gradient(135deg,var(--card2),rgba(255,69,58,0.1))}
-.node-marker.protect{border-color:rgba(0,255,178,0.6);background:linear-gradient(135deg,var(--card2),rgba(0,255,178,0.1))}
-.node-marker.signal{border-color:var(--signal);background:linear-gradient(135deg,var(--card2),rgba(92,225,230,0.15));box-shadow:0 0 30px rgba(92,225,230,0.3)}
-.node-marker-icon{font-size:1.5rem;margin-bottom:4px}
-.node-marker-name{font-size:0.75rem;font-weight:700;color:var(--bright)}
-.node-marker-value{font-family:'JetBrains Mono',monospace;font-size:0.65rem;font-weight:700;margin-top:2px}
-.node-marker.risk .node-marker-value{color:var(--danger)}
-.node-marker.protect .node-marker-value{color:var(--primary)}
-.node-marker.signal .node-marker-value{color:var(--signal)}
+        /* Category Color Accents */
+        .layer-foundation { --accent-color: #f59e0b; }
+        .layer-ams { --accent-color: #7c3aed; } 
+        .layer-trigger { --accent-color: #ef4444; }
+        .layer-disease { --accent-color: #3b82f6; }
+        .layer-organ { --accent-color: #06b6d4; }
+        .layer-future { --accent-color: #8b5cf6; }
 
-/* CONNECTION LEGEND */
-.network-legend{position:absolute;bottom:20px;left:20px;background:rgba(10,10,15,0.9);border:1px solid var(--border);border-radius:12px;padding:16px 20px}
-.legend-title{font-size:0.7rem;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
-.legend-item{display:flex;align-items:center;gap:10px;margin-bottom:6px;font-size:0.75rem}
-.legend-line{width:30px;height:3px;border-radius:2px}
-.legend-line.risk{background:var(--danger)}
-.legend-line.protect{background:var(--primary)}
-.legend-line.cascade{background:var(--signal);background:repeating-linear-gradient(90deg,var(--signal) 0,var(--signal) 8px,transparent 8px,transparent 12px)}
+        .chevron { transition: transform 0.3s ease; }
+        .active .chevron { transform: rotate(180deg); }
 
-/* ==================== EARLY WARNING SIGNALS ==================== */
-.signals-section{padding:60px 40px;background:var(--card)}
-.signals-inner{max-width:1100px;margin:0 auto}
-.signals-header{text-align:center;margin-bottom:50px}
-.signals-header h2{font-size:1.8rem;font-weight:800;margin-bottom:12px}
-.signals-header h2 .alert{color:var(--signal)}
-.signals-header p{color:var(--dim);font-size:1rem}
-
-.signal-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px}
-.signal-card{background:var(--card2);border:2px solid var(--border);border-radius:20px;padding:28px;position:relative;overflow:hidden;transition:all 0.3s}
-.signal-card:hover{transform:translateY(-4px);border-color:var(--signal)}
-.signal-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px}
-.signal-card.critical::before{background:linear-gradient(90deg,var(--danger),var(--orange))}
-.signal-card.warning::before{background:linear-gradient(90deg,var(--orange),var(--gold))}
-.signal-card.watch::before{background:linear-gradient(90deg,var(--signal),var(--accent))}
-
-.signal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.signal-level{display:flex;align-items:center;gap:8px}
-.signal-level-icon{font-size:1.3rem}
-.signal-level-text{font-size:0.7rem;font-weight:800;text-transform:uppercase;letter-spacing:1px}
-.signal-card.critical .signal-level-text{color:var(--danger)}
-.signal-card.warning .signal-level-text{color:var(--orange)}
-.signal-card.watch .signal-level-text{color:var(--signal)}
-.signal-risk{font-family:'JetBrains Mono',monospace;font-size:1.2rem;font-weight:900;padding:6px 12px;border-radius:8px}
-.signal-card.critical .signal-risk{background:rgba(255,69,58,0.15);color:var(--danger)}
-.signal-card.warning .signal-risk{background:rgba(255,159,67,0.15);color:var(--orange)}
-.signal-card.watch .signal-risk{background:rgba(92,225,230,0.15);color:var(--signal)}
-
-.signal-title{font-size:1.1rem;font-weight:700;color:var(--bright);margin-bottom:12px}
-.signal-combo{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
-.signal-marker{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--card);border:1px solid var(--border);border-radius:8px;font-size:0.8rem}
-.signal-marker-icon{font-size:1rem}
-.signal-plus{color:var(--dim);font-weight:700}
-.signal-desc{font-size:0.9rem;color:var(--dim);line-height:1.7}
-.signal-timing{margin-top:16px;padding-top:16px;border-top:1px solid var(--border);display:flex;align-items:center;gap:8px;font-size:0.8rem;color:var(--signal)}
-.signal-timing-icon{font-size:1rem}
-
-/* ==================== CASCADE PATHWAYS ==================== */
-.cascade-section{padding:60px 40px;background:var(--bg)}
-.cascade-inner{max-width:1100px;margin:0 auto}
-.cascade-header{text-align:center;margin-bottom:50px}
-.cascade-header h2{font-size:1.8rem;font-weight:800;margin-bottom:12px}
-.cascade-header p{color:var(--dim);font-size:1rem}
-
-.pathway-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px;margin-bottom:24px}
-.pathway-title{display:flex;align-items:center;gap:12px;margin-bottom:24px}
-.pathway-icon{font-size:2rem}
-.pathway-name{font-size:1.2rem;font-weight:800}
-.pathway-risk{font-family:'JetBrains Mono',monospace;font-size:0.9rem;padding:6px 14px;border-radius:8px;margin-left:auto}
-.pathway-risk.high{background:rgba(255,69,58,0.15);color:var(--danger)}
-.pathway-risk.medium{background:rgba(255,159,67,0.15);color:var(--orange)}
-
-.pathway-flow{display:flex;align-items:center;gap:8px;overflow-x:auto;padding:16px 0}
-.pathway-step{background:var(--card2);border:2px solid var(--border);border-radius:12px;padding:16px 20px;text-align:center;min-width:120px;flex-shrink:0;transition:all 0.3s}
-.pathway-step:hover{transform:translateY(-3px)}
-.pathway-step.trigger{border-color:var(--accent);background:linear-gradient(135deg,var(--card2),rgba(191,90,242,0.15))}
-.pathway-step.gut{border-color:var(--gut);background:linear-gradient(135deg,var(--card2),rgba(253,203,110,0.2));box-shadow:0 0 20px rgba(253,203,110,0.2)}
-.pathway-step.brain{border-color:var(--pink);background:linear-gradient(135deg,var(--card2),rgba(244,114,182,0.15))}
-.pathway-step.outcome{border-color:var(--danger);background:linear-gradient(135deg,var(--card2),rgba(255,69,58,0.15))}
-.pathway-step-icon{font-size:1.6rem;margin-bottom:6px}
-.pathway-step-label{font-size:0.75rem;font-weight:600;color:var(--text)}
-.pathway-step-change{font-family:'JetBrains Mono',monospace;font-size:0.65rem;margin-top:4px;padding:2px 8px;border-radius:4px;display:inline-block}
-.pathway-step-change.up{background:rgba(255,69,58,0.15);color:var(--danger)}
-.pathway-step-change.down{background:rgba(0,255,178,0.15);color:var(--primary)}
-.pathway-arrow{color:var(--signal);font-size:1.2rem;font-weight:700;flex-shrink:0}
-
-.pathway-explain{margin-top:20px;padding:20px;background:var(--card2);border-radius:12px;font-size:0.9rem;color:var(--dim);line-height:1.8}
-.pathway-explain strong{color:var(--bright)}
-
-/* ==================== RISK CALCULATOR ==================== */
-.calculator-section{padding:60px 40px;background:linear-gradient(180deg,var(--card),var(--bg))}
-.calculator-inner{max-width:900px;margin:0 auto}
-.calculator-header{text-align:center;margin-bottom:40px}
-.calculator-header h2{font-size:1.8rem;font-weight:800;margin-bottom:12px}
-.calculator-header p{color:var(--dim);font-size:1rem}
-
-.calculator-box{background:var(--card2);border:2px solid var(--signal);border-radius:24px;padding:40px;position:relative;overflow:hidden}
-.calculator-box::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--signal),var(--accent),var(--primary))}
-
-.calc-factors{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:32px}
-@media(max-width:600px){.calc-factors{grid-template-columns:1fr}}
-.calc-factor{background:var(--card);border:2px solid var(--border);border-radius:14px;padding:16px;cursor:pointer;transition:all 0.3s;display:flex;align-items:center;gap:14px}
-.calc-factor:hover{border-color:var(--dim)}
-.calc-factor.selected{border-color:var(--signal);background:rgba(92,225,230,0.1)}
-.calc-factor.selected.risk-factor{border-color:var(--danger);background:rgba(255,69,58,0.1)}
-.calc-factor.selected.protect-factor{border-color:var(--primary);background:rgba(0,255,178,0.1)}
-.calc-factor-check{width:24px;height:24px;border:2px solid var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.3s}
-.calc-factor.selected .calc-factor-check{background:var(--signal);border-color:var(--signal)}
-.calc-factor.selected.risk-factor .calc-factor-check{background:var(--danger);border-color:var(--danger)}
-.calc-factor.selected.protect-factor .calc-factor-check{background:var(--primary);border-color:var(--primary)}
-.calc-factor-check::after{content:'✓';color:var(--bg);font-weight:700;font-size:0.8rem;opacity:0;transition:opacity 0.3s}
-.calc-factor.selected .calc-factor-check::after{opacity:1}
-.calc-factor-icon{font-size:1.5rem}
-.calc-factor-info{flex:1}
-.calc-factor-name{font-weight:700;font-size:0.9rem;color:var(--bright)}
-.calc-factor-impact{font-family:'JetBrains Mono',monospace;font-size:0.75rem;margin-top:2px}
-.calc-factor.risk-factor .calc-factor-impact{color:var(--danger)}
-.calc-factor.protect-factor .calc-factor-impact{color:var(--primary)}
-
-.calc-result{background:var(--card);border-radius:16px;padding:32px;text-align:center}
-.calc-result-label{font-size:0.8rem;color:var(--dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}
-.calc-result-score{font-family:'JetBrains Mono',monospace;font-size:4rem;font-weight:900;line-height:1;margin-bottom:8px;transition:color 0.3s}
-.calc-result-score.low{color:var(--primary)}
-.calc-result-score.medium{color:var(--gold)}
-.calc-result-score.high{color:var(--orange)}
-.calc-result-score.critical{color:var(--danger)}
-.calc-result-level{font-size:1rem;font-weight:700;margin-bottom:16px}
-.calc-result-bar{height:12px;background:var(--card2);border-radius:6px;overflow:hidden;margin-bottom:20px}
-.calc-result-fill{height:100%;border-radius:6px;transition:width 0.5s,background 0.5s}
-.calc-result-fill.low{background:var(--primary);width:25%}
-.calc-result-fill.medium{background:var(--gold);width:50%}
-.calc-result-fill.high{background:var(--orange);width:75%}
-.calc-result-fill.critical{background:var(--danger);width:100%}
-.calc-result-action{font-size:0.9rem;color:var(--dim);line-height:1.7}
-
-/* ==================== INTERVENTION TIMELINE ==================== */
-.timeline-section{padding:60px 40px;background:var(--card)}
-.timeline-inner{max-width:1000px;margin:0 auto}
-.timeline-header{text-align:center;margin-bottom:50px}
-.timeline-header h2{font-size:1.8rem;font-weight:800;margin-bottom:12px}
-.timeline-header p{color:var(--dim);font-size:1rem}
-
-.timeline{position:relative;padding:20px 0}
-.timeline::before{content:'';position:absolute;left:50%;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--accent),var(--gut),var(--primary),var(--danger));border-radius:2px;transform:translateX(-50%)}
-@media(max-width:768px){.timeline::before{left:20px}}
-
-.timeline-item{display:flex;align-items:center;margin-bottom:40px;position:relative}
-.timeline-item:nth-child(odd){flex-direction:row-reverse}
-@media(max-width:768px){.timeline-item,.timeline-item:nth-child(odd){flex-direction:row}}
-
-.timeline-content{width:45%;padding:24px;background:var(--card2);border:2px solid var(--border);border-radius:16px;position:relative}
-@media(max-width:768px){.timeline-content{width:calc(100% - 60px);margin-left:40px}}
-.timeline-item:hover .timeline-content{border-color:var(--signal)}
-
-.timeline-dot{position:absolute;left:50%;transform:translateX(-50%);width:50px;height:50px;background:var(--card);border:4px solid var(--signal);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.3rem;z-index:10}
-@media(max-width:768px){.timeline-dot{left:20px}}
-
-.timeline-day{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--signal);font-weight:700;margin-bottom:8px}
-.timeline-title{font-size:1rem;font-weight:700;color:var(--bright);margin-bottom:8px}
-.timeline-markers{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
-.timeline-marker{font-size:0.7rem;padding:4px 10px;background:var(--card);border:1px solid var(--border);border-radius:6px;display:flex;align-items:center;gap:4px}
-.timeline-action{font-size:0.85rem;color:var(--dim);line-height:1.6}
-.timeline-action strong{color:var(--primary)}
-
-/* COLLABORATE */
-.collab-hero{padding:80px 40px;text-align:center}
-.collab-hero h1{font-size:clamp(1.8rem,4vw,2.5rem);font-weight:800;margin-bottom:12px}
-.collab-hero p{color:var(--dim);font-size:1.05rem;max-width:600px;margin:0 auto}
-.contact-section{padding:60px 40px;background:var(--card)}
-.contact-box{max-width:500px;margin:0 auto;background:var(--card2);border:2px solid var(--primary);border-radius:24px;padding:48px;text-align:center}
-.contact-box h2{font-size:1.4rem;font-weight:800;margin-bottom:16px}
-.contact-box p{color:var(--text);margin-bottom:30px}
-.contact-email{font-size:1.2rem;font-weight:700;color:var(--primary);text-decoration:none;display:inline-block;padding:16px 32px;background:rgba(0,255,178,0.1);border-radius:12px;transition:all 0.3s}
-.contact-email:hover{background:rgba(0,255,178,0.2)}
-</style>
+        .logic-label {
+            font-size: 9px;
+            font-weight: 800;
+            padding: 2px 8px;
+            border-radius: 4px;
+            background: #f1f5f9;
+            color: #64748b;
+            text-transform: uppercase;
+        }
+    </style>
 </head>
-<body>
-
-<nav class="nav">
-<div class="nav-logo" onclick="showPage('home')">
-<div class="nav-logo-main">BURAK<span>Labs</span></div>
-<div class="nav-logo-sub"><span class="en">A BURAK Multiomics Initiative</span><span class="ar">مبادرة من بُراق للتحليلات المتعددة</span></div>
-</div>
-<div class="nav-links">
-<span class="nav-link active" data-page="home" onclick="showPage('home')"><span class="en">Home</span><span class="ar">الرئيسية</span></span>
-<span class="nav-link" data-page="science" onclick="showPage('science')"><span class="en">Deep Science</span><span class="ar">العلم العميق</span></span>
-<span class="nav-link" data-page="pipeline" onclick="showPage('pipeline')"><span class="en">ADHD Pipeline</span><span class="ar">خط ADHD</span></span>
-<span class="nav-link gold" data-page="collab" onclick="showPage('collab')"><span class="en">Collaborate</span><span class="ar">تعاون</span></span>
-<div class="lang-toggle">
-<button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
-<button class="lang-btn" id="btn-ar" onclick="setLang('ar')">ع</button>
-</div>
-</div>
-</nav>
-
-<!-- HOME PAGE -->
-<div class="page active" id="page-home">
-<section class="home-hero">
-<div class="home-content">
-<div class="home-badge"><div class="pulse"></div><span><span class="en">Day </span><span class="ar">اليوم </span><strong id="dayCount">0</strong><span class="en"> of 1,000</span><span class="ar"> من 1,000</span></span></div>
-<h1 class="home-title"><span class="en">Where Research Meets</span><span class="ar">حيث يلتقي البحث</span><span class="hl"><span class="en">Child Development</span><span class="ar">بنمو الطفل</span></span></h1>
-<p class="home-sub"><span class="en">BURAK Labs maps the <strong>gut-brain axis</strong> in early childhood. Now with <strong>Cross-Connections</strong> — see how biomarkers interact to predict ADHD risk early.</span><span class="ar">مختبرات بُراق ترسم <strong>محور الأمعاء-الدماغ</strong> في الطفولة المبكرة. الآن مع <strong>الروابط المتقاطعة</strong> — شاهد كيف تتفاعل المؤشرات للتنبؤ بخطر ADHD مبكراً.</span></p>
-<div class="home-stats">
-<div class="home-stat"><div class="home-stat-num">1.9×</div><div class="home-stat-label"><span class="en">ADHD risk</span><span class="ar">خطر ADHD</span></div></div>
-<div class="home-stat"><div class="home-stat-num">12+</div><div class="home-stat-label"><span class="en">Connected markers</span><span class="ar">مؤشر مترابط</span></div></div>
-<div class="home-stat"><div class="home-stat-num">5</div><div class="home-stat-label"><span class="en">Early signals</span><span class="ar">إشارات مبكرة</span></div></div>
-</div>
-<div class="home-ctas">
-<button class="btn btn-signal" onclick="showPage('science');showSection('connections')"><span class="en">🔗 Explore Cross-Connections →</span><span class="ar">← 🔗 استكشف الروابط</span></button>
-<button class="btn btn-secondary" onclick="showPage('science')"><span class="en">Deep Science</span><span class="ar">العلم العميق</span></button>
-</div>
-</div>
-</section>
-
-<!-- PHASE 1 PIPELINE -->
-<section style="padding:80px 40px;background:linear-gradient(180deg,var(--card),var(--bg))">
-<div style="max-width:1100px;margin:0 auto">
-<div style="text-align:center;margin-bottom:60px">
-<div style="display:inline-flex;align-items:center;gap:8px;padding:8px 16px;background:rgba(255,159,67,0.15);border:1px solid rgba(255,159,67,0.3);border-radius:50px;margin-bottom:20px;font-size:0.8rem;color:var(--orange);font-weight:600"><span style="display:inline-block;width:8px;height:8px;background:var(--orange);border-radius:50%;animation:pulse 1s infinite"></span> <span class="en">Phase 1 — In Production</span><span class="ar">المرحلة 1 — قيد الإنتاج</span></div>
-<h2 style="font-size:clamp(1.8rem,4vw,2.5rem);font-weight:900;margin-bottom:16px"><span class="en">Building the <span style="color:var(--orange)">Foundation</span></span><span class="ar">بناء <span style="color:var(--orange)">الأساس</span></span></h2>
-<p style="color:var(--dim);font-size:1.05rem;max-width:700px;margin:0 auto"><span class="en">Processing <strong style="color:var(--text)">multiomics data</strong> and <strong style="color:var(--text)">standard lab reports</strong> — building the data infrastructure that powers everything.</span><span class="ar">معالجة <strong style="color:var(--text)">بيانات الأوميكس المتعددة</strong> و<strong style="color:var(--text)">تقارير المختبر القياسية</strong> — بناء البنية التحتية للبيانات.</span></p>
-</div>
-
-<!-- 3 Layer Pipeline -->
-<div style="display:flex;flex-direction:column;gap:0;max-width:800px;margin:0 auto">
-<!-- Layer 1 -->
-<div style="background:linear-gradient(135deg,rgba(0,255,178,0.15),rgba(92,225,230,0.08));border:2px solid var(--primary);border-radius:20px 20px 0 0;padding:32px;position:relative">
-<div style="position:absolute;top:-12px;left:32px;background:var(--primary);color:var(--bg);padding:4px 16px;border-radius:20px;font-size:0.7rem;font-weight:800">LAYER 1</div>
-<div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap">
-<div style="font-size:2.5rem">🔬</div>
-<div style="flex:1;min-width:200px">
-<div style="font-size:1.2rem;font-weight:800;margin-bottom:8px"><span class="en">Data Ingestion Layer</span><span class="ar">طبقة استيعاب البيانات</span></div>
-<p style="color:var(--dim);font-size:0.9rem;margin:0"><span class="en">Processing <strong style="color:var(--text)">multiomics data</strong> (microbiome, genomics, metabolomics) and <strong style="color:var(--text)">standard lab reports</strong> into unified format</span><span class="ar">معالجة <strong style="color:var(--text)">بيانات الأوميكس المتعددة</strong> (الميكروبيوم، الجينوم) و<strong style="color:var(--text)">تقارير المختبر القياسية</strong></span></p>
-</div>
-</div>
-</div>
-
-<!-- Arrow -->
-<div style="text-align:center;font-size:2rem;color:var(--primary);margin:-10px 0;position:relative;z-index:10">⬇️</div>
-
-<!-- Layer 2 -->
-<div style="background:linear-gradient(135deg,rgba(191,90,242,0.15),rgba(244,114,182,0.08));border:2px solid var(--accent);border-top:none;padding:32px;position:relative">
-<div style="position:absolute;top:-12px;left:32px;background:var(--accent);color:white;padding:4px 16px;border-radius:20px;font-size:0.7rem;font-weight:800">LAYER 2</div>
-<div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap">
-<div style="font-size:2.5rem">🧮</div>
-<div style="flex:1;min-width:200px">
-<div style="font-size:1.2rem;font-weight:800;margin-bottom:8px"><span class="en">IP Cascade Pattern Analysis</span><span class="ar">تحليل نمط التتابع IP</span></div>
-<p style="color:var(--dim);font-size:0.9rem;margin:0"><span class="en"><strong style="color:var(--text)">7-layer deep analysis</strong> — our proprietary pattern recognition engine identifying signals across data types</span><span class="ar"><strong style="color:var(--text)">تحليل عميق من 7 طبقات</strong> — محرك التعرف على الأنماط الخاص بنا</span></p>
-</div>
-<div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 20px">
-<div style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--accent);font-weight:700">PROPRIETARY IP</div>
-</div>
-</div>
-</div>
-
-<!-- Arrow -->
-<div style="text-align:center;font-size:2rem;color:var(--accent);margin:-10px 0;position:relative;z-index:10">⬇️</div>
-
-<!-- Layer 3 -->
-<div style="background:linear-gradient(135deg,rgba(255,214,10,0.15),rgba(255,159,67,0.08));border:2px solid var(--gold);border-top:none;border-radius:0 0 20px 20px;padding:32px;position:relative">
-<div style="position:absolute;top:-12px;left:32px;background:var(--gold);color:var(--bg);padding:4px 16px;border-radius:20px;font-size:0.7rem;font-weight:800">LAYER 3</div>
-<div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap">
-<div style="font-size:2.5rem">👥</div>
-<div style="flex:1;min-width:200px">
-<div style="font-size:1.2rem;font-weight:800;margin-bottom:8px"><span class="en">Population Intelligence Layer</span><span class="ar">طبقة ذكاء السكان</span></div>
-<p style="color:var(--dim);font-size:0.9rem;margin:0"><span class="en">Aggregated <strong style="color:var(--text)">cohort data</strong> powers prediction models — from individual patterns to <strong style="color:var(--text)">population-level insights</strong></span><span class="ar">بيانات <strong style="color:var(--text)">المجموعة</strong> المجمعة تشغل نماذج التنبؤ</span></p>
-</div>
-</div>
-</div>
-</div>
-
-<!-- Phase 1 Status -->
-<div style="text-align:center;margin-top:40px">
-<div style="display:inline-block;background:linear-gradient(135deg,rgba(255,159,67,0.15),rgba(255,214,10,0.1));border:2px solid var(--orange);border-radius:16px;padding:20px 40px">
-<div style="font-size:0.7rem;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px"><span class="en">Phase 1 Status</span><span class="ar">حالة المرحلة 1</span></div>
-<div style="font-size:1.2rem;font-weight:800"><span class="en">🟠 In Production Development</span><span class="ar">🟠 قيد تطوير الإنتاج</span></div>
-</div>
-</div>
-</div>
-</section>
-
-<!-- PHASE 2 PLANNING -->
-<section style="padding:80px 40px;background:var(--bg)">
-<div style="max-width:1000px;margin:0 auto">
-<div style="text-align:center;margin-bottom:50px">
-<div style="display:inline-flex;align-items:center;gap:8px;padding:8px 16px;background:rgba(92,225,230,0.15);border:1px solid rgba(92,225,230,0.3);border-radius:50px;margin-bottom:20px;font-size:0.8rem;color:var(--signal);font-weight:600">📋 <span class="en">Phase 2 — Planning Stage</span><span class="ar">المرحلة 2 — مرحلة التخطيط</span></div>
-<h2 style="font-size:clamp(1.6rem,3vw,2rem);font-weight:900;margin-bottom:16px"><span class="en">BURAK Labs <span style="color:var(--signal)">Condition Pipelines</span></span><span class="ar">خطوط أنابيب حالات <span style="color:var(--signal)">مختبرات بُراق</span></span></h2>
-<p style="color:var(--dim);font-size:1rem;max-width:600px;margin:0 auto"><span class="en">Once Phase 1 foundation is complete, we deploy condition-specific screening — starting with ADHD, then immediate vertical expansion to Diabetes.</span><span class="ar">بمجرد اكتمال أساس المرحلة 1، ننشر الفحص الخاص بالحالة — بدءاً بـ ADHD، ثم التوسع الرأسي الفوري للسكري.</span></p>
-</div>
-
-<!-- Phase 2 Cards -->
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:40px">
-<div style="background:var(--card);border:2px solid var(--signal);border-radius:24px;padding:32px;position:relative">
-<div style="position:absolute;top:-12px;right:24px;background:var(--signal);color:var(--bg);padding:4px 12px;border-radius:20px;font-size:0.65rem;font-weight:800"><span class="en">FIRST</span><span class="ar">أولاً</span></div>
-<div style="font-size:2.5rem;margin-bottom:16px">🧠</div>
-<div style="font-size:0.7rem;font-weight:700;color:var(--signal);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">BURAK Labs</div>
-<div style="font-size:1.4rem;font-weight:800;margin-bottom:12px"><span class="en">ADHD Pipeline</span><span class="ar">خط أنابيب ADHD</span></div>
-<div style="color:var(--dim);font-size:0.9rem;line-height:1.7">
-<div style="margin-bottom:8px"><span class="en">→ Screening APIs & Algorithms</span><span class="ar">→ واجهات برمجة وخوارزميات الفحص</span></div>
-<div style="margin-bottom:8px"><span class="en">→ Risk Reports (High/Medium/Low)</span><span class="ar">→ تقارير المخاطر (عالي/متوسط/منخفض)</span></div>
-<div style="margin-bottom:8px"><span class="en">→ Cross-connection Science (Gut → Brain)</span><span class="ar">→ علم الترابط (الأمعاء → الدماغ)</span></div>
-<div><span class="en">→ Intervention Timeline</span><span class="ar">→ جدول التدخل الزمني</span></div>
-</div>
-</div>
-
-<div style="background:var(--card);border:2px solid var(--border);border-radius:24px;padding:32px;position:relative">
-<div style="position:absolute;top:-12px;right:24px;background:var(--gold);color:var(--bg);padding:4px 12px;border-radius:20px;font-size:0.65rem;font-weight:800"><span class="en">THEN</span><span class="ar">ثم</span></div>
-<div style="font-size:2.5rem;margin-bottom:16px">🩸</div>
-<div style="font-size:0.7rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px"><span class="en">Vertical Expansion</span><span class="ar">التوسع الرأسي</span></div>
-<div style="font-size:1.4rem;font-weight:800;margin-bottom:12px"><span class="en">Diabetes Cohort</span><span class="ar">مجموعة السكري</span></div>
-<div style="color:var(--dim);font-size:0.9rem;line-height:1.7">
-<div style="margin-bottom:8px"><span class="en">→ <strong style="color:var(--text)">Same Data Lake</strong></span><span class="ar">→ <strong style="color:var(--text)">نفس بحيرة البيانات</strong></span></div>
-<div style="margin-bottom:8px"><span class="en">→ <strong style="color:var(--text)">Same Algorithm Container</strong></span><span class="ar">→ <strong style="color:var(--text)">نفس حاوية الخوارزميات</strong></span></div>
-<div style="margin-bottom:8px"><span class="en">→ Different Screening Logic</span><span class="ar">→ منطق فحص مختلف</span></div>
-<div><span class="en">→ <strong style="color:var(--primary)">Instant Scale</strong></span><span class="ar">→ <strong style="color:var(--primary)">توسع فوري</strong></span></div>
-</div>
-</div>
-</div>
-
-<!-- Phase 2 Status + The Play -->
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
-<div style="background:var(--card2);border:1px solid var(--border);border-radius:16px;padding:24px;text-align:center">
-<div style="font-size:0.7rem;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px"><span class="en">Phase 2 Status</span><span class="ar">حالة المرحلة 2</span></div>
-<div style="font-size:1.1rem;font-weight:800"><span class="en">📋 Planning Stage</span><span class="ar">📋 مرحلة التخطيط</span></div>
-</div>
-<div style="background:linear-gradient(135deg,rgba(0,255,178,0.1),rgba(191,90,242,0.05));border:2px solid var(--primary);border-radius:16px;padding:24px;text-align:center">
-<div style="font-size:1.3rem;font-weight:900"><span class="en">Build once. <span style="color:var(--primary)">Scale infinitely.</span></span><span class="ar">ابنِ مرة. <span style="color:var(--primary)">وسّع بلا حدود.</span></span></div>
-<p style="color:var(--dim);font-size:0.85rem;margin:8px 0 0 0"><span class="en">That's the play.</span><span class="ar">هذه هي الخطة.</span></p>
-</div>
-</div>
-</div>
-</section>
-
-<!-- ACADEMIC CONVERSATIONS -->
-<section style="padding:80px 40px;background:var(--bg)">
-<div style="max-width:900px;margin:0 auto">
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center">
-<div>
-<div style="display:inline-flex;align-items:center;gap:8px;padding:8px 16px;background:rgba(255,69,58,0.15);border:1px solid rgba(255,69,58,0.3);border-radius:50px;margin-bottom:20px;font-size:0.8rem;color:var(--danger);font-weight:600">🎓 Academic Conversations</div>
-<h2 style="font-size:clamp(1.6rem,3vw,2rem);font-weight:900;margin-bottom:16px;line-height:1.3"><span class="en">Final-Stage Discussions with<br><span style="color:var(--danger)">Universidad de Granada</span></span><span class="ar">مناقشات المرحلة النهائية مع<br><span style="color:var(--danger)">جامعة غرناطة</span></span></h2>
-<p style="color:var(--dim);font-size:1rem;line-height:1.8;margin-bottom:24px"><span class="en">One of Europe's leading research institutions in <strong style="color:var(--text)">computational biology</strong> and <strong style="color:var(--text)">health informatics</strong>. The conversation has been fantastic. We're not building in isolation — we're building with science.</span><span class="ar">واحدة من المؤسسات البحثية الرائدة في أوروبا في <strong style="color:var(--text)">البيولوجيا الحسابية</strong> و<strong style="color:var(--text)">المعلوماتية الصحية</strong>. المحادثات كانت رائعة.</span></p>
-<div style="font-size:0.85rem;color:var(--dim);margin-bottom:16px"><span class="en">What we're exploring together:</span><span class="ar">ما نستكشفه معاً:</span></div>
-<div style="display:flex;flex-direction:column;gap:12px">
-<div style="display:flex;align-items:center;gap:12px"><span style="color:var(--danger);font-size:1.2rem">→</span><span><span class="en">Joint research protocols</span><span class="ar">بروتوكولات بحث مشتركة</span></span></div>
-<div style="display:flex;align-items:center;gap:12px"><span style="color:var(--danger);font-size:1.2rem">→</span><span><span class="en">Shared datasets for validation</span><span class="ar">مجموعات بيانات مشتركة للتحقق</span></span></div>
-<div style="display:flex;align-items:center;gap:12px"><span style="color:var(--danger);font-size:1.2rem">→</span><span><span class="en">Co-developed algorithms</span><span class="ar">خوارزميات مطورة بشكل مشترك</span></span></div>
-<div style="display:flex;align-items:center;gap:12px"><span style="color:var(--danger);font-size:1.2rem">→</span><span><span class="en">Peer-reviewed publications</span><span class="ar">منشورات محكمة</span></span></div>
-</div>
-</div>
-<div style="background:var(--card);border:2px solid var(--danger);border-radius:24px;padding:40px;text-align:center">
-<div style="font-size:4rem;margin-bottom:16px">🇪🇸</div>
-<div style="font-size:1.3rem;font-weight:800;margin-bottom:8px">Universidad de Granada</div>
-<div style="color:var(--dim);font-size:0.9rem;margin-bottom:20px"><span class="en">Est. 1531 • Top 5 in Spain • Leading in Health Informatics</span><span class="ar">تأسست 1531 • أفضل 5 في إسبانيا • رائدة في المعلوماتية الصحية</span></div>
-<div style="display:inline-block;background:linear-gradient(135deg,rgba(255,159,67,0.2),rgba(255,214,10,0.1));border:1px solid var(--orange);border-radius:12px;padding:12px 24px">
-<div style="font-size:0.7rem;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:1px"><span class="en">Final Stage Discussions</span><span class="ar">مناقشات المرحلة النهائية</span></div>
-</div>
-</div>
-</div>
-
-<div style="text-align:center;margin-top:40px;padding:24px;background:var(--card);border-radius:16px;border:1px solid var(--border)">
-<p style="font-size:1.1rem;font-weight:600;margin:0"><span class="en">💡 <strong>When academia meets deep tech, science moves faster.</strong></span><span class="ar">💡 <strong>عندما يلتقي الأكاديميا بالتقنية العميقة، يتحرك العلم أسرع.</strong></span></p>
-</div>
-</div>
-</section>
-
-<!-- ECOSYSTEM INTEREST -->
-<section style="padding:80px 40px;background:var(--card)">
-<div style="max-width:900px;margin:0 auto;text-align:center">
-<div style="display:inline-flex;align-items:center;gap:8px;padding:8px 16px;background:rgba(92,225,230,0.15);border:1px solid rgba(92,225,230,0.3);border-radius:50px;margin-bottom:20px;font-size:0.8rem;color:var(--signal);font-weight:600">📡 Ecosystem Interest</div>
-<h2 style="font-size:clamp(1.6rem,3vw,2rem);font-weight:900;margin-bottom:16px"><span class="en">Where the <span style="color:var(--signal)">Energy</span> is Flowing</span><span class="ar">أين تتدفق <span style="color:var(--signal)">الطاقة</span></span></h2>
-<p style="color:var(--dim);font-size:1.05rem;max-width:600px;margin:0 auto 40px"><span class="en">We currently have <strong style="color:var(--text)">active applications</strong> with the region's most exciting ecosystems. Four ecosystems. Two countries. All reviewing the same vision.</span><span class="ar">لدينا حالياً <strong style="color:var(--text)">طلبات نشطة</strong> مع أكثر الأنظمة البيئية إثارة في المنطقة. أربعة أنظمة. دولتان. كلها تراجع نفس الرؤية.</span></p>
-
-<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:40px">
-<div style="background:var(--card2);border:1px solid var(--border);border-radius:16px;padding:24px;transition:all 0.3s" onmouseover="this.style.borderColor='var(--signal)'" onmouseout="this.style.borderColor='var(--border)'">
-<div style="font-size:0.65rem;color:var(--dim);margin-bottom:8px">🇦🇪 Abu Dhabi</div>
-<div style="font-size:1.1rem;font-weight:800">Hub71</div>
-<div style="font-size:0.75rem;color:var(--dim);margin-top:8px"><span class="en">Global tech ecosystem</span><span class="ar">نظام تقني عالمي</span></div>
-</div>
-<div style="background:var(--card2);border:1px solid var(--border);border-radius:16px;padding:24px;transition:all 0.3s" onmouseover="this.style.borderColor='var(--signal)'" onmouseout="this.style.borderColor='var(--border)'">
-<div style="font-size:0.65rem;color:var(--dim);margin-bottom:8px">🔬 Validation</div>
-<div style="font-size:1.1rem;font-weight:800">Eureka</div>
-<div style="font-size:0.75rem;color:var(--dim);margin-top:8px"><span class="en">Science meets rigor</span><span class="ar">العلم يلتقي بالدقة</span></div>
-</div>
-<div style="background:var(--card2);border:1px solid var(--border);border-radius:16px;padding:24px;transition:all 0.3s" onmouseover="this.style.borderColor='var(--signal)'" onmouseout="this.style.borderColor='var(--border)'">
-<div style="font-size:0.65rem;color:var(--dim);margin-bottom:8px">🇦🇪 Dubai</div>
-<div style="font-size:1.1rem;font-weight:800">in5</div>
-<div style="font-size:0.75rem;color:var(--dim);margin-top:8px"><span class="en">Innovation launchpad</span><span class="ar">منصة الابتكار</span></div>
-</div>
-<div style="background:var(--card2);border:1px solid var(--border);border-radius:16px;padding:24px;transition:all 0.3s" onmouseover="this.style.borderColor='var(--signal)'" onmouseout="this.style.borderColor='var(--border)'">
-<div style="font-size:0.65rem;color:var(--dim);margin-bottom:8px">🇸🇦 Saudi</div>
-<div style="font-size:1.1rem;font-weight:800">LEAP</div>
-<div style="font-size:0.75rem;color:var(--dim);margin-top:8px"><span class="en">Kingdom's tech vision</span><span class="ar">رؤية المملكة التقنية</span></div>
-</div>
-</div>
-
-<div style="background:var(--card2);border:1px solid var(--border);border-radius:16px;padding:24px;max-width:600px;margin:0 auto">
-<p style="font-size:1rem;color:var(--text);margin:0 0 8px 0"><span class="en">"We're not announcing wins. We're showing <strong style="color:var(--signal)">where the energy is flowing.</strong>"</span><span class="ar">"لا نعلن عن انتصارات. نُظهر <strong style="color:var(--signal)">أين تتدفق الطاقة.</strong>"</span></p>
-<p style="font-size:0.9rem;color:var(--dim);margin:0"><span class="en">When Hub71, Eureka, in5, and LEAP are all in your pipeline — the gut-brain axis is having its moment. 🇦🇪🇸🇦</span><span class="ar">عندما يكون Hub71 و Eureka و in5 و LEAP جميعهم في خط أنابيبك — محور الأمعاء-الدماغ يعيش لحظته. 🇦🇪🇸🇦</span></p>
-</div>
-</div>
-</section>
-
-<!-- WHY TWO PLATFORMS -->
-<section style="padding:80px 40px;background:var(--card)">
-<div style="max-width:1100px;margin:0 auto">
-<div style="text-align:center;margin-bottom:60px">
-<div style="display:inline-flex;align-items:center;gap:8px;padding:8px 16px;background:rgba(191,90,242,0.15);border:1px solid rgba(191,90,242,0.3);border-radius:50px;margin-bottom:20px;font-size:0.8rem;color:var(--accent);font-weight:600">🧬 Platform Philosophy</div>
-<h2 style="font-size:clamp(1.8rem,4vw,2.5rem);font-weight:900;margin-bottom:16px"><span class="en">Two Platforms. <span style="color:var(--primary)">One Mission.</span></span><span class="ar">منصتان. <span style="color:var(--primary)">مهمة واحدة.</span></span></h2>
-<p style="color:var(--dim);font-size:1.05rem;max-width:700px;margin:0 auto"><span class="en">We deliberately separate <strong style="color:var(--text)">Diseases</strong> from <strong style="color:var(--text)">Conditions</strong> — because they require fundamentally different approaches.</span><span class="ar">نفصل عمداً <strong style="color:var(--text)">الأمراض</strong> عن <strong style="color:var(--text)">الحالات</strong> — لأنها تتطلب مقاربات مختلفة جذرياً.</span></p>
-</div>
-
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-bottom:60px">
-<!-- BURAK Multiomics -->
-<div style="background:linear-gradient(135deg,var(--card2),rgba(191,90,242,0.05));border:2px solid var(--accent);border-radius:24px;padding:36px;position:relative;overflow:hidden">
-<div style="position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--accent),var(--pink))"></div>
-<div style="font-size:2.5rem;margin-bottom:16px">🔬</div>
-<div style="font-size:0.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px">BURAK Multiomics</div>
-<h3 style="font-size:1.4rem;font-weight:800;margin-bottom:16px"><span class="en">For Diseases</span><span class="ar">للأمراض</span></h3>
-<p style="color:var(--dim);font-size:0.95rem;line-height:1.8;margin-bottom:20px"><span class="en">Cancer, infections, metabolic disorders — each disease has <strong style="color:var(--text)">unique molecular signatures</strong>, requires <strong style="color:var(--text)">specialized diagnostic pathways</strong>, and demands <strong style="color:var(--text)">distinct treatment protocols</strong>.</span><span class="ar">السرطان، العدوى، الاضطرابات الأيضية — كل مرض له <strong style="color:var(--text)">توقيعات جزيئية فريدة</strong>، يتطلب <strong style="color:var(--text)">مسارات تشخيصية متخصصة</strong>.</span></p>
-<div style="display:flex;flex-wrap:wrap;gap:8px">
-<span style="padding:6px 12px;background:rgba(191,90,242,0.15);border-radius:8px;font-size:0.75rem">🦠 Unique pathways</span>
-<span style="padding:6px 12px;background:rgba(191,90,242,0.15);border-radius:8px;font-size:0.75rem">🧪 Different biomarkers</span>
-<span style="padding:6px 12px;background:rgba(191,90,242,0.15);border-radius:8px;font-size:0.75rem">💊 Separate treatments</span>
-</div>
-</div>
-
-<!-- BURAK Labs -->
-<div style="background:linear-gradient(135deg,var(--card2),rgba(0,255,178,0.05));border:2px solid var(--primary);border-radius:24px;padding:36px;position:relative;overflow:hidden">
-<div style="position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--primary),var(--signal))"></div>
-<div style="font-size:2.5rem;margin-bottom:16px">🧒</div>
-<div style="font-size:0.7rem;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px">BURAK Labs</div>
-<h3 style="font-size:1.4rem;font-weight:800;margin-bottom:16px"><span class="en">For Conditions</span><span class="ar">للحالات</span></h3>
-<p style="color:var(--dim);font-size:0.95rem;line-height:1.8;margin-bottom:20px"><span class="en">ADHD, Autism, Anxiety, Diabetes risk — these conditions <strong style="color:var(--text)">share the same origin window</strong>, use <strong style="color:var(--text)">overlapping biomarkers</strong>, and respond to <strong style="color:var(--text)">similar early interventions</strong>.</span><span class="ar">ADHD، التوحد، القلق، خطر السكري — هذه الحالات <strong style="color:var(--text)">تشترك في نفس نافذة الأصل</strong>، تستخدم <strong style="color:var(--text)">مؤشرات متداخلة</strong>.</span></p>
-<div style="display:flex;flex-wrap:wrap;gap:8px">
-<span style="padding:6px 12px;background:rgba(0,255,178,0.15);border-radius:8px;font-size:0.75rem">🔗 Shared data lake</span>
-<span style="padding:6px 12px;background:rgba(0,255,178,0.15);border-radius:8px;font-size:0.75rem">🧮 Same math layer</span>
-<span style="padding:6px 12px;background:rgba(0,255,178,0.15);border-radius:8px;font-size:0.75rem">🫃 Gut-brain axis</span>
-</div>
-</div>
-</div>
-
-<!-- The Magic -->
-<div style="background:var(--card2);border:1px solid var(--border);border-radius:20px;padding:40px;text-align:center">
-<div style="font-size:1.3rem;font-weight:800;margin-bottom:16px"><span class="en">💡 The Insight</span><span class="ar">💡 الرؤية</span></div>
-<p style="color:var(--text);font-size:1.1rem;line-height:1.9;max-width:800px;margin:0 auto"><span class="en">Conditions like ADHD, Autism, and Anxiety all trace back to the <strong style="color:var(--primary)">same 1,000-day developmental window</strong>. They share the <strong style="color:var(--primary)">gut-brain axis</strong> as their communication highway. One child's data can inform <strong style="color:var(--primary)">multiple condition risks simultaneously</strong> — that's why BURAK Labs uses a shared architecture.</span><span class="ar">حالات مثل ADHD والتوحد والقلق كلها تعود إلى <strong style="color:var(--primary)">نفس نافذة الألف يوم التنموية</strong>. تشترك في <strong style="color:var(--primary)">محور الأمعاء-الدماغ</strong> كطريق اتصالها السريع. بيانات طفل واحد يمكن أن تُعلم <strong style="color:var(--primary)">مخاطر حالات متعددة في وقت واحد</strong>.</span></p>
-</div>
-</div>
-</section>
-
-<!-- PRE-BIRTH VISION -->
-<section style="padding:80px 40px;background:linear-gradient(180deg,var(--bg),var(--card))">
-<div style="max-width:1100px;margin:0 auto">
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center">
-<div>
-<div style="display:inline-flex;align-items:center;gap:8px;padding:8px 16px;background:rgba(255,69,58,0.15);border:1px solid rgba(255,69,58,0.3);border-radius:50px;margin-bottom:20px;font-size:0.8rem;color:var(--danger);font-weight:600"><span style="display:inline-block;width:8px;height:8px;background:var(--danger);border-radius:50%;animation:pulse 1s infinite"></span> <span class="en">Revolutionary Approach</span><span class="ar">نهج ثوري</span></div>
-<h2 style="font-size:clamp(1.8rem,4vw,2.5rem);font-weight:900;margin-bottom:20px;line-height:1.2"><span class="en">We Look at Conditions <span style="color:var(--signal)">Before Birth</span></span><span class="ar">ننظر للحالات <span style="color:var(--signal)">قبل الولادة</span></span></h2>
-<p style="color:var(--dim);font-size:1.05rem;line-height:1.9;margin-bottom:24px"><span class="en">Traditional medicine waits for symptoms — we don't. BURAK Labs screens <strong style="color:var(--text)">during pregnancy</strong>, identifying risk patterns <strong style="color:var(--text)">months or years before</strong> conditions manifest. Prevention, not just treatment.</span><span class="ar">الطب التقليدي ينتظر الأعراض — نحن لا ننتظر. مختبرات بُراق تفحص <strong style="color:var(--text)">أثناء الحمل</strong>، تحدد أنماط الخطر <strong style="color:var(--text)">قبل أشهر أو سنوات</strong> من ظهور الحالات.</span></p>
-<div style="display:flex;flex-direction:column;gap:12px">
-<div style="display:flex;align-items:center;gap:12px"><span style="color:var(--primary);font-size:1.2rem">✓</span><span><span class="en">Screen maternal microbiome during pregnancy</span><span class="ar">فحص ميكروبيوم الأم أثناء الحمل</span></span></div>
-<div style="display:flex;align-items:center;gap:12px"><span style="color:var(--primary);font-size:1.2rem">✓</span><span><span class="en">Predict infant risk trajectories before Day 1</span><span class="ar">التنبؤ بمسارات خطر الرضيع قبل اليوم الأول</span></span></div>
-<div style="display:flex;align-items:center;gap:12px"><span style="color:var(--primary);font-size:1.2rem">✓</span><span><span class="en">Intervene during the critical 1,000-day window</span><span class="ar">التدخل خلال نافذة الألف يوم الحرجة</span></span></div>
-<div style="display:flex;align-items:center;gap:12px"><span style="color:var(--primary);font-size:1.2rem">✓</span><span><span class="en">Track outcomes across multiple conditions simultaneously</span><span class="ar">تتبع النتائج عبر حالات متعددة في وقت واحد</span></span></div>
-</div>
-</div>
-
-<!-- Timeline Visual -->
-<div style="background:var(--card);border:1px solid var(--border);border-radius:24px;padding:32px;position:relative">
-<div style="position:absolute;left:40px;top:80px;bottom:80px;width:4px;background:linear-gradient(180deg,var(--accent),var(--primary),var(--danger));border-radius:2px"></div>
-
-<div style="position:relative;padding-left:60px;margin-bottom:40px">
-<div style="position:absolute;left:30px;top:5px;width:24px;height:24px;background:var(--accent);border-radius:50%;border:4px solid var(--card)"></div>
-<div style="font-size:0.7rem;color:var(--accent);font-weight:700;margin-bottom:4px">DAY -270</div>
-<div style="font-weight:700;margin-bottom:4px"><span class="en">🤰 Pregnancy Screening</span><span class="ar">🤰 فحص الحمل</span></div>
-<div style="font-size:0.85rem;color:var(--dim)"><span class="en">Maternal stress, diet, microbiome baseline</span><span class="ar">توتر الأم، النظام الغذائي، خط الأساس للميكروبيوم</span></div>
-</div>
-
-<div style="position:relative;padding-left:60px;margin-bottom:40px">
-<div style="position:absolute;left:30px;top:5px;width:24px;height:24px;background:var(--signal);border-radius:50%;border:4px solid var(--card)"></div>
-<div style="font-size:0.7rem;color:var(--signal);font-weight:700;margin-bottom:4px">DAY 1</div>
-<div style="font-weight:700;margin-bottom:4px"><span class="en">👶 Birth Event Capture</span><span class="ar">👶 التقاط حدث الولادة</span></div>
-<div style="font-size:0.85rem;color:var(--dim)"><span class="en">Delivery mode, immediate seeding assessment</span><span class="ar">طريقة الولادة، تقييم البذر الفوري</span></div>
-</div>
-
-<div style="position:relative;padding-left:60px;margin-bottom:40px">
-<div style="position:absolute;left:30px;top:5px;width:24px;height:24px;background:var(--primary);border-radius:50%;border:4px solid var(--card)"></div>
-<div style="font-size:0.7rem;color:var(--primary);font-weight:700;margin-bottom:4px">DAY 1-1000</div>
-<div style="font-weight:700;margin-bottom:4px"><span class="en">📊 Continuous Monitoring</span><span class="ar">📊 مراقبة مستمرة</span></div>
-<div style="font-size:0.85rem;color:var(--dim)"><span class="en">Track gut development, intervene early</span><span class="ar">تتبع تطور الأمعاء، التدخل المبكر</span></div>
-</div>
-
-<div style="position:relative;padding-left:60px">
-<div style="position:absolute;left:30px;top:5px;width:24px;height:24px;background:var(--danger);border-radius:50%;border:4px solid var(--card)"></div>
-<div style="font-size:0.7rem;color:var(--danger);font-weight:700;margin-bottom:4px">DAY 2500+</div>
-<div style="font-weight:700;margin-bottom:4px"><span class="en">🎯 Outcome Prevention</span><span class="ar">🎯 منع النتائج</span></div>
-<div style="font-size:0.85rem;color:var(--dim)"><span class="en">ADHD, Autism, Anxiety — risks mitigated</span><span class="ar">ADHD، التوحد، القلق — تم تخفيف المخاطر</span></div>
-</div>
-</div>
-</div>
-</div>
-</section>
-
-<!-- UNIVERSITY PARTNERSHIPS -->
-<section style="padding:80px 40px;background:var(--card)">
-<div style="max-width:1100px;margin:0 auto">
-<div style="text-align:center;margin-bottom:60px">
-<div style="display:inline-flex;align-items:center;gap:8px;padding:8px 16px;background:rgba(255,214,10,0.15);border:1px solid rgba(255,214,10,0.3);border-radius:50px;margin-bottom:20px;font-size:0.8rem;color:var(--gold);font-weight:600">🎓 Open Research Ecosystem</div>
-<h2 style="font-size:clamp(1.8rem,4vw,2.5rem);font-weight:900;margin-bottom:16px"><span class="en">Built With <span style="color:var(--gold)">Universities & Researchers</span></span><span class="ar">مبني مع <span style="color:var(--gold)">الجامعات والباحثين</span></span></h2>
-<p style="color:var(--dim);font-size:1.05rem;max-width:700px;margin:0 auto"><span class="en">BURAK Labs isn't just a product — it's a <strong style="color:var(--text)">collaborative research platform</strong> where academia, clinicians, and technologists converge to advance child development science.</span><span class="ar">مختبرات بُراق ليست مجرد منتج — إنها <strong style="color:var(--text)">منصة بحث تعاونية</strong> حيث يلتقي الأكاديميون والأطباء والتقنيون لتقدم علم نمو الطفل.</span></p>
-</div>
-
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;margin-bottom:50px">
-<div style="background:var(--card2);border:1px solid var(--border);border-radius:20px;padding:32px;text-align:center">
-<div style="width:70px;height:70px;background:linear-gradient(135deg,rgba(0,255,178,0.2),rgba(92,225,230,0.1));border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:2rem">🏛️</div>
-<h3 style="font-size:1.1rem;font-weight:700;margin-bottom:12px"><span class="en">University Partnerships</span><span class="ar">شراكات الجامعات</span></h3>
-<p style="color:var(--dim);font-size:0.9rem;line-height:1.7"><span class="en">Joint research programs with medical schools and public health departments. Shared IRB protocols, co-authored publications, graduate student involvement.</span><span class="ar">برامج بحث مشتركة مع كليات الطب وأقسام الصحة العامة. بروتوكولات IRB مشتركة، منشورات مشتركة، مشاركة طلاب الدراسات العليا.</span></p>
-</div>
-
-<div style="background:var(--card2);border:1px solid var(--border);border-radius:20px;padding:32px;text-align:center">
-<div style="width:70px;height:70px;background:linear-gradient(135deg,rgba(191,90,242,0.2),rgba(244,114,182,0.1));border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:2rem">🔬</div>
-<h3 style="font-size:1.1rem;font-weight:700;margin-bottom:12px"><span class="en">Research Data Access</span><span class="ar">الوصول لبيانات البحث</span></h3>
-<p style="color:var(--dim);font-size:0.9rem;line-height:1.7"><span class="en">De-identified datasets available to qualified researchers. Standardized formats, comprehensive documentation, API access for computational studies.</span><span class="ar">مجموعات بيانات مجهولة الهوية متاحة للباحثين المؤهلين. تنسيقات موحدة، توثيق شامل، وصول API للدراسات الحسابية.</span></p>
-</div>
-
-<div style="background:var(--card2);border:1px solid var(--border);border-radius:20px;padding:32px;text-align:center">
-<div style="width:70px;height:70px;background:linear-gradient(135deg,rgba(255,214,10,0.2),rgba(255,159,67,0.1));border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:2rem">🧮</div>
-<h3 style="font-size:1.1rem;font-weight:700;margin-bottom:12px"><span class="en">Algorithm Contributions</span><span class="ar">مساهمات الخوارزميات</span></h3>
-<p style="color:var(--dim);font-size:0.9rem;line-height:1.7"><span class="en">Open math container where researchers can propose, validate, and publish new scoring algorithms. Peer-reviewed before deployment.</span><span class="ar">حاوية رياضيات مفتوحة حيث يمكن للباحثين اقتراح والتحقق من ونشر خوارزميات تسجيل جديدة. مراجعة الأقران قبل النشر.</span></p>
-</div>
-
-<div style="background:var(--card2);border:1px solid var(--border);border-radius:20px;padding:32px;text-align:center">
-<div style="width:70px;height:70px;background:linear-gradient(135deg,rgba(92,225,230,0.2),rgba(0,132,255,0.1));border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:2rem">🌍</div>
-<h3 style="font-size:1.1rem;font-weight:700;margin-bottom:12px"><span class="en">Global Cohort Network</span><span class="ar">شبكة المجموعات العالمية</span></h3>
-<p style="color:var(--dim);font-size:0.9rem;line-height:1.7"><span class="en">Multi-center studies across populations. Compare gut-brain patterns across genetics, geography, diet — build universal & population-specific models.</span><span class="ar">دراسات متعددة المراكز عبر السكان. مقارنة أنماط الأمعاء-الدماغ عبر الجينات والجغرافيا والنظام الغذائي.</span></p>
-</div>
-</div>
-
-<!-- What Researchers Get -->
-<div style="background:linear-gradient(135deg,rgba(255,214,10,0.1),rgba(0,255,178,0.05));border:2px solid var(--gold);border-radius:24px;padding:40px">
-<h3 style="font-size:1.3rem;font-weight:800;margin-bottom:24px;text-align:center"><span class="en">🎁 What Researchers Get</span><span class="ar">🎁 ما يحصل عليه الباحثون</span></h3>
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px">
-<div style="display:flex;align-items:flex-start;gap:12px">
-<span style="color:var(--gold);font-size:1.3rem">📊</span>
-<div>
-<div style="font-weight:700;margin-bottom:4px"><span class="en">Curated Datasets</span><span class="ar">مجموعات بيانات منسقة</span></div>
-<div style="font-size:0.85rem;color:var(--dim)"><span class="en">Clean, labeled, ready for analysis</span><span class="ar">نظيفة، مصنفة، جاهزة للتحليل</span></div>
-</div>
-</div>
-<div style="display:flex;align-items:flex-start;gap:12px">
-<span style="color:var(--gold);font-size:1.3rem">🔌</span>
-<div>
-<div style="font-weight:700;margin-bottom:4px"><span class="en">API Access</span><span class="ar">وصول API</span></div>
-<div style="font-size:0.85rem;color:var(--dim)"><span class="en">Programmatic data retrieval</span><span class="ar">استرجاع البيانات برمجياً</span></div>
-</div>
-</div>
-<div style="display:flex;align-items:flex-start;gap:12px">
-<span style="color:var(--gold);font-size:1.3rem">🧮</span>
-<div>
-<div style="font-weight:700;margin-bottom:4px"><span class="en">Math Sandbox</span><span class="ar">صندوق الرياضيات</span></div>
-<div style="font-size:0.85rem;color:var(--dim)"><span class="en">Test algorithms before deployment</span><span class="ar">اختبار الخوارزميات قبل النشر</span></div>
-</div>
-</div>
-<div style="display:flex;align-items:flex-start;gap:12px">
-<span style="color:var(--gold);font-size:1.3rem">📝</span>
-<div>
-<div style="font-weight:700;margin-bottom:4px"><span class="en">Publication Support</span><span class="ar">دعم النشر</span></div>
-<div style="font-size:0.85rem;color:var(--dim)"><span class="en">Co-authorship, data citations</span><span class="ar">تأليف مشترك، استشهادات البيانات</span></div>
-</div>
-</div>
-<div style="display:flex;align-items:flex-start;gap:12px">
-<span style="color:var(--gold);font-size:1.3rem">💰</span>
-<div>
-<div style="font-weight:700;margin-bottom:4px"><span class="en">Grant Collaboration</span><span class="ar">تعاون المنح</span></div>
-<div style="font-size:0.85rem;color:var(--dim)"><span class="en">Joint funding applications</span><span class="ar">طلبات تمويل مشتركة</span></div>
-</div>
-</div>
-<div style="display:flex;align-items:flex-start;gap:12px">
-<span style="color:var(--gold);font-size:1.3rem">🎓</span>
-<div>
-<div style="font-weight:700;margin-bottom:4px"><span class="en">Student Programs</span><span class="ar">برامج الطلاب</span></div>
-<div style="font-size:0.85rem;color:var(--dim)"><span class="en">Internships, thesis projects</span><span class="ar">تدريب، مشاريع أطروحات</span></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</section>
-
-<!-- SHARED ARCHITECTURE -->
-<section style="padding:80px 40px;background:var(--bg)">
-<div style="max-width:900px;margin:0 auto;text-align:center">
-<h2 style="font-size:clamp(1.6rem,3vw,2rem);font-weight:800;margin-bottom:40px"><span class="en">🏗️ The Shared Architecture</span><span class="ar">🏗️ الهندسة المشتركة</span></h2>
-
-<div style="background:var(--card);border:1px solid var(--border);border-radius:24px;padding:48px;text-align:center">
-<!-- Data Lake -->
-<div style="background:linear-gradient(135deg,rgba(0,255,178,0.2),rgba(92,225,230,0.1));border:3px solid var(--primary);border-radius:16px;padding:24px;margin-bottom:20px;box-shadow:0 0 40px var(--glow)">
-<div style="font-size:1.8rem;margin-bottom:8px">🗄️</div>
-<div style="font-size:1.1rem;font-weight:800;margin-bottom:4px"><span class="en">Unified Data Lake</span><span class="ar">بحيرة البيانات الموحدة</span></div>
-<div style="font-size:0.85rem;color:var(--dim)"><span class="en">Microbiome • Genomics • Maternal • Infant • Outcomes</span><span class="ar">ميكروبيوم • جينوم • أمومة • رضيع • نتائج</span></div>
-</div>
-
-<div style="font-size:2rem;color:var(--primary);margin-bottom:20px">⬇️</div>
-
-<!-- Math Container -->
-<div style="background:linear-gradient(135deg,rgba(191,90,242,0.2),rgba(244,114,182,0.1));border:3px solid var(--accent);border-radius:16px;padding:24px;margin-bottom:20px">
-<div style="font-size:1.8rem;margin-bottom:8px">🧮</div>
-<div style="font-size:1.1rem;font-weight:800;margin-bottom:4px"><span class="en">Math & Algorithm Container</span><span class="ar">حاوية الرياضيات والخوارزميات</span></div>
-<div style="font-size:0.85rem;color:var(--dim)"><span class="en">Diversity Index • Risk Scoring • Correlation Engine • Predictive ML</span><span class="ar">مؤشر التنوع • تسجيل الخطر • محرك الارتباط • التعلم الآلي التنبؤي</span></div>
-</div>
-
-<div style="font-size:2rem;color:var(--primary);margin-bottom:20px">⬇️</div>
-
-<!-- Condition Cohorts -->
-<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:16px">
-<div style="background:var(--card2);border:3px solid var(--signal);border-radius:14px;padding:16px 24px;box-shadow:0 0 30px rgba(92,225,230,0.3)">
-<div style="font-size:1.5rem;margin-bottom:4px">🧠</div>
-<div style="font-weight:700">ADHD</div>
-<div style="font-size:0.7rem;color:var(--signal)">● ACTIVE</div>
-</div>
-<div style="background:var(--card2);border:2px solid var(--border);border-radius:14px;padding:16px 24px;opacity:0.7">
-<div style="font-size:1.5rem;margin-bottom:4px">🌈</div>
-<div style="font-weight:700">Autism</div>
-<div style="font-size:0.7rem;color:var(--dim)">Q2 2025</div>
-</div>
-<div style="background:var(--card2);border:2px solid var(--border);border-radius:14px;padding:16px 24px;opacity:0.7">
-<div style="font-size:1.5rem;margin-bottom:4px">😰</div>
-<div style="font-weight:700">Anxiety</div>
-<div style="font-size:0.7rem;color:var(--dim)">Q3 2025</div>
-</div>
-<div style="background:var(--card2);border:2px solid var(--border);border-radius:14px;padding:16px 24px;opacity:0.7">
-<div style="font-size:1.5rem;margin-bottom:4px">🩸</div>
-<div style="font-weight:700">T2 Diabetes</div>
-<div style="font-size:0.7rem;color:var(--dim)">Q4 2025</div>
-</div>
-<div style="background:var(--card2);border:2px solid var(--border);border-radius:14px;padding:16px 24px;opacity:0.7">
-<div style="font-size:1.5rem;margin-bottom:4px">🫁</div>
-<div style="font-weight:700">Asthma</div>
-<div style="font-size:0.7rem;color:var(--dim)">2026</div>
-</div>
-</div>
-
-<div style="margin-top:32px;padding-top:32px;border-top:1px solid var(--border)">
-<p style="color:var(--dim);font-size:0.95rem"><span class="en">Each condition gets its own <strong style="color:var(--text)">screening logic</strong> and <strong style="color:var(--text)">intervention guides</strong> — but shares the <strong style="color:var(--primary)">same underlying data and mathematics</strong>. Efficient. Scalable. Powerful.</span><span class="ar">كل حالة تحصل على <strong style="color:var(--text)">منطق فحص</strong> و<strong style="color:var(--text)">أدلة تدخل</strong> خاصة بها — لكن تشترك في <strong style="color:var(--primary)">نفس البيانات والرياضيات الأساسية</strong>. فعال. قابل للتوسع. قوي.</span></p>
-</div>
-</div>
-</div>
-</section>
-
-<div class="page-footer">© 2025 BURAK Labs — A BURAK Multiomics Initiative</div>
-</div>
-
-<!-- DEEP SCIENCE PAGE -->
-<div class="page" id="page-science">
-<div class="science-header">
-<div class="cohort-badge"><div class="dot"></div><span>ADHD COHORT</span></div>
-<h1><span class="en">🧬 ADHD Deep Science</span><span class="ar">🧬 العلم العميق لـ ADHD</span></h1>
-<p><span class="en">Explore the knowledge graph, cross-connections, and early warning signals</span><span class="ar">استكشف خريطة المعرفة والروابط المتقاطعة وإشارات الإنذار المبكر</span></p>
-</div>
-
-<div class="science-tabs">
-<div class="science-tab active" onclick="showSection('overview')">📊 <span class="en">Overview</span><span class="ar">نظرة عامة</span></div>
-<div class="science-tab signal" onclick="showSection('connections')">🔗 <span class="en">Cross-Connections</span><span class="ar">الروابط المتقاطعة</span> <span class="tab-new">NEW</span></div>
-<div class="science-tab" onclick="showSection('signals')">⚡ <span class="en">Early Signals</span><span class="ar">الإشارات المبكرة</span></div>
-<div class="science-tab" onclick="showSection('calculator')">🧮 <span class="en">Risk Calculator</span><span class="ar">حاسبة الخطر</span></div>
-</div>
-
-<!-- OVERVIEW SECTION -->
-<div class="section-view active" id="section-overview">
-<div style="padding:60px 40px;text-align:center">
-<h2 style="font-size:1.5rem;margin-bottom:20px"><span class="en">📊 ADHD Cohort Overview</span><span class="ar">📊 نظرة عامة على مجموعة ADHD</span></h2>
-<p style="color:var(--dim);max-width:600px;margin:0 auto 40px"><span class="en">The foundation — individual factors organized by developmental phase. Click a tab above to explore connections.</span><span class="ar">الأساس — العوامل الفردية منظمة حسب المرحلة التنموية. انقر على علامة تبويب أعلاه لاستكشاف الروابط.</span></p>
-<button class="btn btn-signal" onclick="showSection('connections')"><span class="en">🔗 See How They Connect →</span><span class="ar">← 🔗 شاهد كيف ترتبط</span></button>
-</div>
-</div>
-
-<!-- CROSS-CONNECTIONS SECTION -->
-<div class="section-view" id="section-connections">
-<div class="network-hero">
-<h2><span class="en">🔗 The </span><span class="ar">🔗 شبكة </span><span class="gradient"><span class="en">Cross-Connection Network</span><span class="ar">الروابط المتقاطعة</span></span></h2>
-<p><span class="en">Every marker connects to others. See the cascading effects that compound ADHD risk — or protect against it.</span><span class="ar">كل مؤشر يتصل بالآخرين. شاهد التأثيرات المتسلسلة التي تضاعف خطر ADHD — أو تحمي منه.</span></p>
-</div>
-
-<section class="network-section">
-<div class="network-container">
-<div class="network-canvas">
-<!-- SVG Connections -->
-<svg class="network-svg" viewBox="0 0 1200 700">
-<!-- GUT to Brain -->
-<path class="connection-line cascade strong" d="M600,350 Q600,200 750,180"/>
-<!-- GUT to Cortisol -->
-<path class="connection-line risk" d="M600,350 Q400,250 280,200"/>
-<!-- GUT to Lactobacillus -->
-<path class="connection-line protect" d="M600,350 Q450,380 200,400"/>
-<!-- GUT to Bifidobacterium -->
-<path class="connection-line protect" d="M600,350 Q500,500 280,550"/>
-<!-- GUT to SCFAs -->
-<path class="connection-line protect" d="M600,350 Q750,450 900,500"/>
-<!-- GUT to Inflammation -->
-<path class="connection-line risk" d="M600,350 Q800,300 950,250"/>
-<!-- Cortisol to Lactobacillus -->
-<path class="connection-line risk" d="M280,200 Q200,300 200,400"/>
-<!-- Lactobacillus to Bifidobacterium -->
-<path class="connection-line protect" d="M200,400 Q220,480 280,550"/>
-<!-- SCFAs to Brain -->
-<path class="connection-line cascade" d="M900,500 Q850,350 750,180"/>
-<!-- Inflammation to Brain -->
-<path class="connection-line risk" d="M950,250 Q880,200 750,180"/>
-<!-- Dopamine connections -->
-<path class="connection-line cascade" d="M750,180 Q650,120 500,100"/>
-<!-- Serotonin connections -->
-<path class="connection-line cascade" d="M600,350 Q700,150 500,100"/>
-</svg>
-
-<!-- CENTRAL HUB: GUT -->
-<div class="network-node" style="top:50%;left:50%">
-<div class="node-hub gut">
-<div class="node-hub-icon">🫃</div>
-<div class="node-hub-label">GUT</div>
-</div>
-</div>
-
-<!-- BRAIN HUB -->
-<div class="network-node" style="top:26%;left:62%">
-<div class="node-hub brain" style="width:100px;height:100px">
-<div class="node-hub-icon" style="font-size:2rem">🧠</div>
-<div class="node-hub-label">BRAIN</div>
-</div>
-</div>
-
-<!-- BIOMARKERS -->
-<div class="network-node" style="top:28%;left:23%">
-<div class="node-marker risk">
-<div class="node-marker-icon">🧪</div>
-<div class="node-marker-name">Cortisol</div>
-<div class="node-marker-value">↑ 2-3× stress</div>
-</div>
-</div>
-
-<div class="network-node" style="top:57%;left:17%">
-<div class="node-marker protect">
-<div class="node-marker-icon">🦠</div>
-<div class="node-marker-name">Lactobacillus</div>
-<div class="node-marker-value">↓ depleted</div>
-</div>
-</div>
-
-<div class="network-node" style="top:78%;left:23%">
-<div class="node-marker protect">
-<div class="node-marker-icon">🧫</div>
-<div class="node-marker-name">Bifidobacterium</div>
-<div class="node-marker-value">Key species</div>
-</div>
-</div>
-
-<div class="network-node" style="top:71%;left:75%">
-<div class="node-marker protect">
-<div class="node-marker-icon">⚗️</div>
-<div class="node-marker-name">SCFAs</div>
-<div class="node-marker-value">↑ Brain fuel</div>
-</div>
-</div>
-
-<div class="network-node" style="top:36%;left:79%">
-<div class="node-marker risk">
-<div class="node-marker-icon">🔥</div>
-<div class="node-marker-name">IL-6 / TNF-α</div>
-<div class="node-marker-value">↑ Inflammation</div>
-</div>
-</div>
-
-<div class="network-node" style="top:14%;left:42%">
-<div class="node-marker signal">
-<div class="node-marker-icon">⚡</div>
-<div class="node-marker-name">Dopamine</div>
-<div class="node-marker-value">Attention</div>
-</div>
-</div>
-
-<div class="network-node" style="top:85%;left:50%">
-<div class="node-marker signal">
-<div class="node-marker-icon">😊</div>
-<div class="node-marker-name">Serotonin</div>
-<div class="node-marker-value">90% in gut!</div>
-</div>
-</div>
-
-<div class="network-node" style="top:50%;left:88%">
-<div class="node-marker risk">
-<div class="node-marker-icon">💧</div>
-<div class="node-marker-name">LPS</div>
-<div class="node-marker-value">↑ Leaky gut</div>
-</div>
-</div>
-
-<div class="network-node" style="top:14%;left:78%">
-<div class="node-marker risk">
-<div class="node-marker-icon">🧱</div>
-<div class="node-marker-name">Gut Barrier</div>
-<div class="node-marker-value">↓ Weakened</div>
-</div>
-</div>
-
-<!-- Legend -->
-<div class="network-legend">
-<div class="legend-title">Connections</div>
-<div class="legend-item"><div class="legend-line risk"></div><span>Risk pathway</span></div>
-<div class="legend-item"><div class="legend-line protect"></div><span>Protective pathway</span></div>
-<div class="legend-item"><div class="legend-line cascade"></div><span>Cascade signal</span></div>
-</div>
-</div>
-</div>
-</section>
-
-<!-- CASCADE PATHWAYS -->
-<section class="cascade-section">
-<div class="cascade-inner">
-<div class="cascade-header">
-<h2><span class="en">⛓️ Cascade Pathways</span><span class="ar">⛓️ مسارات التسلسل</span></h2>
-<p><span class="en">See how one disruption triggers a chain reaction through the gut-brain axis</span><span class="ar">شاهد كيف يؤدي اضطراب واحد إلى سلسلة تفاعلات عبر محور الأمعاء-الدماغ</span></p>
-</div>
-
-<div class="pathway-card">
-<div class="pathway-title">
-<div class="pathway-icon">😰</div>
-<div class="pathway-name"><span class="en">Stress Cascade</span><span class="ar">تسلسل التوتر</span></div>
-<div class="pathway-risk high">+40% ADHD Risk</div>
-</div>
-<div class="pathway-flow">
-<div class="pathway-step trigger"><div class="pathway-step-icon">😰</div><div class="pathway-step-label">Maternal Stress</div></div>
-<div class="pathway-arrow">→</div>
-<div class="pathway-step"><div class="pathway-step-icon">🧪</div><div class="pathway-step-label">Cortisol</div><div class="pathway-step-change up">↑ 2-3×</div></div>
-<div class="pathway-arrow">→</div>
-<div class="pathway-step"><div class="pathway-step-icon">🦠</div><div class="pathway-step-label">Lactobacillus</div><div class="pathway-step-change down">↓ -34%</div></div>
-<div class="pathway-arrow">→</div>
-<div class="pathway-step gut"><div class="pathway-step-icon">🫃</div><div class="pathway-step-label">GUT Diversity</div><div class="pathway-step-change down">↓ Reduced</div></div>
-<div class="pathway-arrow">→</div>
-<div class="pathway-step"><div class="pathway-step-icon">⚗️</div><div class="pathway-step-label">SCFAs</div><div class="pathway-step-change down">↓ Low</div></div>
-<div class="pathway-arrow">→</div>
-<div class="pathway-step brain"><div class="pathway-step-icon">⚡</div><div class="pathway-step-label">Dopamine</div><div class="pathway-step-change down">↓ Dysregulated</div></div>
-<div class="pathway-arrow">→</div>
-<div class="pathway-step outcome"><div class="pathway-step-icon">🧠</div><div class="pathway-step-label">ADHD Risk</div><div class="pathway-step-change up">↑ +40%</div></div>
-</div>
-<div class="pathway-explain"><span class="en"><strong>The Chain:</strong> Chronic stress elevates cortisol → depletes vaginal Lactobacillus → baby receives impoverished microbiome at birth → lower gut diversity → reduced SCFA production → less fuel for brain development → dopamine pathway disruption → attention deficits.</span><span class="ar"><strong>السلسلة:</strong> التوتر المزمن يرفع الكورتيزول → يستنزف اللاكتوباسيلس المهبلي → الطفل يتلقى ميكروبيوم فقير عند الولادة → تنوع أمعاء أقل → إنتاج SCFA منخفض → وقود أقل لنمو الدماغ → اضطراب مسار الدوبامين → عجز الانتباه.</span></div>
-</div>
-
-<div class="pathway-card">
-<div class="pathway-title">
-<div class="pathway-icon">💊</div>
-<div class="pathway-name"><span class="en">Antibiotic Cascade</span><span class="ar">تسلسل المضادات الحيوية</span></div>
-<div class="pathway-risk high">+50% Risk (3+ courses)</div>
-</div>
-<div class="pathway-flow">
-<div class="pathway-step trigger"><div class="pathway-step-icon">💊</div><div class="pathway-step-label">Antibiotics</div></div>
-<div class="pathway-arrow">→</div>
-<div class="pathway-step"><div class="pathway-step-icon">💀</div><div class="pathway-step-label">Mass Extinction</div><div class="pathway-step-change down">↓ -90%</div></div>
-<div class="pathway-arrow">→</div>
-<div class="pathway-step gut"><div class="pathway-step-icon">🫃</div><div class="pathway-step-label">GUT Collapse</div><div class="pathway-step-change down">↓ Diversity</div></div>
-<div class="pathway-arrow">→</div>
-<div class="pathway-step"><div class="pathway-step-icon">🧱</div><div class="pathway-step-label">Barrier</div><div class="pathway-step-change down">↓ Weak</div></div>
-<div class="pathway-arrow">→</div>
-<div class="pathway-step"><div class="pathway-step-icon">💧</div><div class="pathway-step-label">LPS Leakage</div><div class="pathway-step-change up">↑ Toxic</div></div>
-<div class="pathway-arrow">→</div>
-<div class="pathway-step"><div class="pathway-step-icon">🔥</div><div class="pathway-step-label">Neuroinflammation</div><div class="pathway-step-change up">↑ IL-6</div></div>
-<div class="pathway-arrow">→</div>
-<div class="pathway-step outcome"><div class="pathway-step-icon">🧠</div><div class="pathway-step-label">ADHD Risk</div><div class="pathway-step-change up">↑ +50%</div></div>
-</div>
-<div class="pathway-explain"><span class="en"><strong>The Chain:</strong> Early antibiotics cause mass bacterial extinction → gut ecosystem collapses → barrier integrity fails → LPS (bacterial toxins) leak into bloodstream → trigger neuroinflammation → IL-6 and TNF-α cross blood-brain barrier → disrupt prefrontal cortex development.</span><span class="ar"><strong>السلسلة:</strong> المضادات المبكرة تسبب انقراض بكتيري جماعي → انهيار النظام البيئي للأمعاء → فشل سلامة الحاجز → تسرب LPS (السموم البكتيرية) إلى مجرى الدم → تحفيز الالتهاب العصبي → IL-6 و TNF-α تعبر حاجز الدم-الدماغ → تعطيل نمو القشرة الجبهية.</span></div>
-</div>
-
-<div class="pathway-card">
-<div class="pathway-title">
-<div class="pathway-icon">🤱</div>
-<div class="pathway-name"><span class="en">Protection Cascade</span><span class="ar">تسلسل الحماية</span></div>
-<div class="pathway-risk medium" style="background:rgba(0,255,178,0.15);color:var(--primary)">-30% ADHD Risk</div>
-</div>
-<div class="pathway-flow">
-<div class="pathway-step trigger" style="border-color:var(--primary);background:rgba(0,255,178,0.1)"><div class="pathway-step-icon">🤱</div><div class="pathway-step-label">Breastfeeding</div></div>
-<div class="pathway-arrow">→</div>
-<div class="pathway-step"><div class="pathway-step-icon">🍯</div><div class="pathway-step-label">HMOs</div><div class="pathway-step-change down">↑ Delivered</div></div>
-<div class="pathway-arrow">→</div>
-<div class="pathway-step"><div class="pathway-step-icon">🧫</div><div class="pathway-step-label">Bifidobacterium</div><div class="pathway-step-change down">↑ 80%</div></div>
-<div class="pathway-arrow">→</div>
-<div class="pathway-step gut"><div class="pathway-step-icon">🫃</div><div class="pathway-step-label">GUT Thrives</div><div class="pathway-step-change down">↑ Diversity</div></div>
-<div class="pathway-arrow">→</div>
-<div class="pathway-step"><div class="pathway-step-icon">⚗️</div><div class="pathway-step-label">SCFAs</div><div class="pathway-step-change down">↑ High</div></div>
-<div class="pathway-arrow">→</div>
-<div class="pathway-step brain"><div class="pathway-step-icon">😊</div><div class="pathway-step-label">Serotonin</div><div class="pathway-step-change down">↑ Balanced</div></div>
-<div class="pathway-arrow">→</div>
-<div class="pathway-step" style="border-color:var(--primary);background:rgba(0,255,178,0.1)"><div class="pathway-step-icon">🛡️</div><div class="pathway-step-label">Protected</div><div class="pathway-step-change down">↓ -30%</div></div>
-</div>
-<div class="pathway-explain"><span class="en"><strong>The Chain:</strong> Breastmilk delivers HMOs (human milk oligosaccharides) → selectively feed Bifidobacterium infantis → gut ecosystem flourishes → strong SCFA production → fuel for brain development + 90% of serotonin made in gut → mood regulation + impulse control → ADHD protection.</span><span class="ar"><strong>السلسلة:</strong> حليب الأم يوصل HMOs (سكريات حليب الأم) → تغذي بشكل انتقائي Bifidobacterium infantis → نظام الأمعاء يزدهر → إنتاج SCFA قوي → وقود لنمو الدماغ + 90% من السيروتونين يُصنع في الأمعاء → تنظيم المزاج + التحكم في الاندفاع → حماية من ADHD.</span></div>
-</div>
-</div>
-</section>
-</div>
-
-<!-- EARLY SIGNALS SECTION -->
-<div class="section-view" id="section-signals">
-<section class="signals-section">
-<div class="signals-inner">
-<div class="signals-header">
-<h2><span class="en">⚡ Early Warning <span class="alert">Signals</span></span><span class="ar">⚡ إشارات <span class="alert">الإنذار المبكر</span></span></h2>
-<p><span class="en">Specific marker combinations that predict elevated ADHD risk — detectable months or years before diagnosis</span><span class="ar">مجموعات مؤشرات محددة تتنبأ بارتفاع خطر ADHD — يمكن اكتشافها قبل أشهر أو سنوات من التشخيص</span></p>
-</div>
-
-<div class="signal-cards">
-<div class="signal-card critical">
-<div class="signal-header">
-<div class="signal-level"><span class="signal-level-icon">🚨</span><span class="signal-level-text">Critical Signal</span></div>
-<div class="signal-risk">2.4×</div>
-</div>
-<div class="signal-title"><span class="en">The Triple Hit</span><span class="ar">الضربة الثلاثية</span></div>
-<div class="signal-combo">
-<span class="signal-marker"><span class="signal-marker-icon">🏥</span> C-Section</span>
-<span class="signal-plus">+</span>
-<span class="signal-marker"><span class="signal-marker-icon">🍼</span> Formula Fed</span>
-<span class="signal-plus">+</span>
-<span class="signal-marker"><span class="signal-marker-icon">💊</span> Early Antibiotics</span>
-</div>
-<div class="signal-desc"><span class="en">When all three factors combine, they create compounding microbiome disruption. Each factor alone increases risk, but together they multiply — the gut never receives proper seeding AND gets wiped out.</span><span class="ar">عندما تجتمع العوامل الثلاثة، تخلق اضطراباً مركباً للميكروبيوم. كل عامل وحده يزيد الخطر، لكن معاً يتضاعفون — الأمعاء لا تتلقى بذراً صحيحاً أبداً وتُمحى أيضاً.</span></div>
-<div class="signal-timing"><span class="signal-timing-icon">⏰</span> <span class="en">Detectable by Day 30</span><span class="ar">قابل للكشف بحلول اليوم 30</span></div>
-</div>
-
-<div class="signal-card critical">
-<div class="signal-header">
-<div class="signal-level"><span class="signal-level-icon">🚨</span><span class="signal-level-text">Critical Signal</span></div>
-<div class="signal-risk">2.1×</div>
-</div>
-<div class="signal-title"><span class="en">Low Diversity + High Inflammation</span><span class="ar">تنوع منخفض + التهاب عالي</span></div>
-<div class="signal-combo">
-<span class="signal-marker"><span class="signal-marker-icon">📊</span> Shannon Index < 2.0</span>
-<span class="signal-plus">+</span>
-<span class="signal-marker"><span class="signal-marker-icon">🔥</span> Fecal Calprotectin ↑</span>
-</div>
-<div class="signal-desc"><span class="en">Low microbial diversity (Shannon index below 2.0) combined with elevated fecal calprotectin indicates gut inflammation. This combo signals a compromised gut-brain axis before behavioral symptoms appear.</span><span class="ar">تنوع ميكروبي منخفض (مؤشر شانون أقل من 2.0) مع ارتفاع كالبروتكتين البراز يشير إلى التهاب الأمعاء. هذا المزيج يشير إلى محور أمعاء-دماغ مخترق قبل ظهور الأعراض السلوكية.</span></div>
-<div class="signal-timing"><span class="signal-timing-icon">⏰</span> <span class="en">Test at 6 months</span><span class="ar">اختبار في 6 أشهر</span></div>
-</div>
-
-<div class="signal-card warning">
-<div class="signal-header">
-<div class="signal-level"><span class="signal-level-icon">⚠️</span><span class="signal-level-text">Warning Signal</span></div>
-<div class="signal-risk">1.8×</div>
-</div>
-<div class="signal-title"><span class="en">Missing Keystone Species</span><span class="ar">فقدان الأنواع الأساسية</span></div>
-<div class="signal-combo">
-<span class="signal-marker"><span class="signal-marker-icon">🧫</span> No B. infantis</span>
-<span class="signal-plus">+</span>
-<span class="signal-marker"><span class="signal-marker-icon">🦠</span> Low Lactobacillus</span>
-</div>
-<div class="signal-desc"><span class="en">Bifidobacterium infantis and Lactobacillus are "keystone species" — their absence at 3 months predicts poor SCFA production and weakened gut barrier. Like missing foundation stones.</span><span class="ar">Bifidobacterium infantis و Lactobacillus هي "أنواع أساسية" — غيابها في 3 أشهر يتنبأ بإنتاج SCFA ضعيف وحاجز أمعاء ضعيف. مثل فقدان حجارة الأساس.</span></div>
-<div class="signal-timing"><span class="signal-timing-icon">⏰</span> <span class="en">Test at 3 months</span><span class="ar">اختبار في 3 أشهر</span></div>
-</div>
-
-<div class="signal-card warning">
-<div class="signal-header">
-<div class="signal-level"><span class="signal-level-icon">⚠️</span><span class="signal-level-text">Warning Signal</span></div>
-<div class="signal-risk">1.6×</div>
-</div>
-<div class="signal-title"><span class="en">Stressed Mom + Diet Gap</span><span class="ar">أم متوترة + فجوة غذائية</span></div>
-<div class="signal-combo">
-<span class="signal-marker"><span class="signal-marker-icon">😰</span> High Prenatal Stress</span>
-<span class="signal-plus">+</span>
-<span class="signal-marker"><span class="signal-marker-icon">🍭</span> Low Fiber Diet</span>
-</div>
-<div class="signal-desc"><span class="en">Prenatal stress depletes maternal microbiome. Without fiber to rebuild, the baby inherits an impoverished bacterial community. This combo is detectable during pregnancy.</span><span class="ar">التوتر قبل الولادة يستنزف ميكروبيوم الأم. بدون ألياف لإعادة البناء، يرث الطفل مجتمعاً بكتيرياً فقيراً. هذا المزيج يمكن اكتشافه أثناء الحمل.</span></div>
-<div class="signal-timing"><span class="signal-timing-icon">⏰</span> <span class="en">Screen during pregnancy</span><span class="ar">فحص أثناء الحمل</span></div>
-</div>
-
-<div class="signal-card watch">
-<div class="signal-header">
-<div class="signal-level"><span class="signal-level-icon">👁️</span><span class="signal-level-text">Watch Signal</span></div>
-<div class="signal-risk">1.4×</div>
-</div>
-<div class="signal-title"><span class="en">SCFA Deficit Pattern</span><span class="ar">نمط عجز SCFA</span></div>
-<div class="signal-combo">
-<span class="signal-marker"><span class="signal-marker-icon">⚗️</span> Low Butyrate</span>
-<span class="signal-plus">+</span>
-<span class="signal-marker"><span class="signal-marker-icon">⚗️</span> Low Propionate</span>
-</div>
-<div class="signal-desc"><span class="en">SCFAs are the gut's signal molecules to the brain. Low butyrate + low propionate = reduced fuel for brain development. Measurable in stool samples at 6-12 months.</span><span class="ar">SCFAs هي جزيئات إشارة الأمعاء للدماغ. بوتيرات منخفض + بروبيونات منخفض = وقود منخفض لنمو الدماغ. قابل للقياس في عينات البراز في 6-12 شهر.</span></div>
-<div class="signal-timing"><span class="signal-timing-icon">⏰</span> <span class="en">Test at 6-12 months</span><span class="ar">اختبار في 6-12 شهر</span></div>
-</div>
-
-<div class="signal-card watch">
-<div class="signal-header">
-<div class="signal-level"><span class="signal-level-icon">👁️</span><span class="signal-level-text">Watch Signal</span></div>
-<div class="signal-risk">1.3×</div>
-</div>
-<div class="signal-title"><span class="en">Proteobacteria Overgrowth</span><span class="ar">فرط نمو البروتيوبكتيريا</span></div>
-<div class="signal-combo">
-<span class="signal-marker"><span class="signal-marker-icon">⚠️</span> Proteobacteria > 15%</span>
-<span class="signal-plus">+</span>
-<span class="signal-marker"><span class="signal-marker-icon">📉</span> Firmicutes ↓</span>
-</div>
-<div class="signal-desc"><span class="en">Proteobacteria are gram-negative bacteria that produce LPS (endotoxin). When they exceed 15% of gut composition while Firmicutes decline, it signals dysbiosis and inflammation risk.</span><span class="ar">البروتيوبكتيريا هي بكتيريا سالبة الغرام تنتج LPS (السموم الداخلية). عندما تتجاوز 15% من تكوين الأمعاء بينما ينخفض Firmicutes، يشير ذلك إلى خلل التوازن وخطر الالتهاب.</span></div>
-<div class="signal-timing"><span class="signal-timing-icon">⏰</span> <span class="en">Test at 12 months</span><span class="ar">اختبار في 12 شهر</span></div>
-</div>
-</div>
-</div>
-</section>
-
-<!-- INTERVENTION TIMELINE -->
-<section class="timeline-section">
-<div class="timeline-inner">
-<div class="timeline-header">
-<h2><span class="en">🎯 Intervention Windows</span><span class="ar">🎯 نوافذ التدخل</span></h2>
-<p><span class="en">When to test, when to act — the critical decision points</span><span class="ar">متى تختبر، متى تتصرف — نقاط القرار الحرجة</span></p>
-</div>
-
-<div class="timeline">
-<div class="timeline-item">
-<div class="timeline-content">
-<div class="timeline-day">Day -270 to -180</div>
-<div class="timeline-title"><span class="en">Pregnancy: Early Intervention</span><span class="ar">الحمل: التدخل المبكر</span></div>
-<div class="timeline-markers">
-<span class="timeline-marker">😰 Stress screening</span>
-<span class="timeline-marker">🥗 Diet assessment</span>
-</div>
-<div class="timeline-action"><span class="en">Screen for maternal stress. Start <strong>fiber supplementation</strong> and stress reduction programs. Build maternal microbiome before transfer.</span><span class="ar">فحص توتر الأم. بدء <strong>مكملات الألياف</strong> وبرامج تقليل التوتر. بناء ميكروبيوم الأم قبل النقل.</span></div>
-</div>
-<div class="timeline-dot">🤰</div>
-</div>
-
-<div class="timeline-item">
-<div class="timeline-content">
-<div class="timeline-day">Day 1</div>
-<div class="timeline-title"><span class="en">Birth: Seeding Event</span><span class="ar">الولادة: حدث البذر</span></div>
-<div class="timeline-markers">
-<span class="timeline-marker">🚪 Delivery mode</span>
-<span class="timeline-marker">🤱 Skin-to-skin</span>
-</div>
-<div class="timeline-action"><span class="en">If C-section required, consider <strong>vaginal seeding protocol</strong>. Immediate skin-to-skin. Early breastfeeding initiation.</span><span class="ar">إذا كانت القيصرية مطلوبة، فكر في <strong>بروتوكول البذر المهبلي</strong>. تلامس جلد بجلد فوري. بدء الرضاعة الطبيعية مبكراً.</span></div>
-</div>
-<div class="timeline-dot">👶</div>
-</div>
-
-<div class="timeline-item">
-<div class="timeline-content">
-<div class="timeline-day">Day 30</div>
-<div class="timeline-title"><span class="en">First Month: Baseline Check</span><span class="ar">الشهر الأول: فحص خط الأساس</span></div>
-<div class="timeline-markers">
-<span class="timeline-marker">🧫 B. infantis check</span>
-<span class="timeline-marker">🦠 Diversity score</span>
-</div>
-<div class="timeline-action"><span class="en">First stool microbiome test. Check for <strong>B. infantis colonization</strong>. If missing + formula fed, consider B. infantis probiotic.</span><span class="ar">أول اختبار ميكروبيوم البراز. تحقق من <strong>استعمار B. infantis</strong>. إذا كان مفقوداً + تغذية صناعية، فكر في بروبيوتيك B. infantis.</span></div>
-</div>
-<div class="timeline-dot">🔬</div>
-</div>
-
-<div class="timeline-item">
-<div class="timeline-content">
-<div class="timeline-day">Day 90-180</div>
-<div class="timeline-title"><span class="en">3-6 Months: Critical Assessment</span><span class="ar">3-6 أشهر: التقييم الحرج</span></div>
-<div class="timeline-markers">
-<span class="timeline-marker">📊 Shannon index</span>
-<span class="timeline-marker">🔥 Calprotectin</span>
-<span class="timeline-marker">⚗️ SCFAs</span>
-</div>
-<div class="timeline-action"><span class="en">Full panel: diversity index, inflammation markers, SCFA levels. This is the <strong>prediction window</strong> — results here correlate with outcomes at age 7.</span><span class="ar">لوحة كاملة: مؤشر التنوع، علامات الالتهاب، مستويات SCFA. هذه <strong>نافذة التنبؤ</strong> — النتائج هنا ترتبط بالنتائج في عمر 7 سنوات.</span></div>
-</div>
-<div class="timeline-dot">⚡</div>
-</div>
-
-<div class="timeline-item">
-<div class="timeline-content">
-<div class="timeline-day">Day 180-365</div>
-<div class="timeline-title"><span class="en">6-12 Months: Diet Transition</span><span class="ar">6-12 شهر: انتقال الغذاء</span></div>
-<div class="timeline-markers">
-<span class="timeline-marker">🥦 Solids introduction</span>
-<span class="timeline-marker">🌈 Diversity building</span>
-</div>
-<div class="timeline-action"><span class="en">Introduce <strong>30+ plant foods</strong>. Avoid ultra-processed. This is the <strong>last major opportunity</strong> to shape the microbiome before it stabilizes.</span><span class="ar">قدم <strong>+30 طعام نباتي</strong>. تجنب المعالج الفائق. هذه <strong>الفرصة الكبرى الأخيرة</strong> لتشكيل الميكروبيوم قبل أن يستقر.</span></div>
-</div>
-<div class="timeline-dot">🥗</div>
-</div>
-
-<div class="timeline-item">
-<div class="timeline-content">
-<div class="timeline-day">Day 1000</div>
-<div class="timeline-title"><span class="en">Lock-In Point</span><span class="ar">نقطة الثبات</span></div>
-<div class="timeline-markers">
-<span class="timeline-marker">🔒 Microbiome stabilizes</span>
-<span class="timeline-marker">📈 Final diversity score</span>
-</div>
-<div class="timeline-action"><span class="en">The microbiome "sets" around age 3. After this point, it becomes much harder to change. <strong>Final assessment</strong> — confirm trajectory.</span><span class="ar">الميكروبيوم "يثبت" حوالي عمر 3 سنوات. بعد هذه النقطة، يصبح تغييره أصعب بكثير. <strong>التقييم النهائي</strong> — تأكيد المسار.</span></div>
-</div>
-<div class="timeline-dot">🔒</div>
-</div>
-</div>
-</div>
-</section>
-</div>
-
-<!-- CALCULATOR SECTION -->
-<div class="section-view" id="section-calculator">
-<section class="calculator-section">
-<div class="calculator-inner">
-<div class="calculator-header">
-<h2><span class="en">🧮 Risk Factor Calculator</span><span class="ar">🧮 حاسبة عوامل الخطر</span></h2>
-<p><span class="en">Select the factors present — see how they combine to affect ADHD risk</span><span class="ar">اختر العوامل الموجودة — شاهد كيف تتحد للتأثير على خطر ADHD</span></p>
-</div>
-
-<div class="calculator-box">
-<div class="calc-factors">
-<div class="calc-factor risk-factor" onclick="toggleFactor(this)" data-risk="0.40">
-<div class="calc-factor-check"></div>
-<div class="calc-factor-icon">😰</div>
-<div class="calc-factor-info">
-<div class="calc-factor-name"><span class="en">Maternal Stress</span><span class="ar">توتر الأم</span></div>
-<div class="calc-factor-impact">+40% risk</div>
-</div>
-</div>
-<div class="calc-factor risk-factor" onclick="toggleFactor(this)" data-risk="0.20">
-<div class="calc-factor-check"></div>
-<div class="calc-factor-icon">🏥</div>
-<div class="calc-factor-info">
-<div class="calc-factor-name"><span class="en">C-Section</span><span class="ar">قيصرية</span></div>
-<div class="calc-factor-impact">+20% risk</div>
-</div>
-</div>
-<div class="calc-factor risk-factor" onclick="toggleFactor(this)" data-risk="0.18">
-<div class="calc-factor-check"></div>
-<div class="calc-factor-icon">💊</div>
-<div class="calc-factor-info">
-<div class="calc-factor-name"><span class="en">Early Antibiotics</span><span class="ar">مضادات مبكرة</span></div>
-<div class="calc-factor-impact">+18% risk/course</div>
-</div>
-</div>
-<div class="calc-factor risk-factor" onclick="toggleFactor(this)" data-risk="0.25">
-<div class="calc-factor-check"></div>
-<div class="calc-factor-icon">🍭</div>
-<div class="calc-factor-info">
-<div class="calc-factor-name"><span class="en">Ultra-Processed Diet</span><span class="ar">غذاء معالج</span></div>
-<div class="calc-factor-impact">+25% risk</div>
-</div>
-</div>
-<div class="calc-factor protect-factor" onclick="toggleFactor(this)" data-risk="-0.30">
-<div class="calc-factor-check"></div>
-<div class="calc-factor-icon">🤱</div>
-<div class="calc-factor-info">
-<div class="calc-factor-name"><span class="en">Breastfeeding 6mo+</span><span class="ar">رضاعة 6 أشهر+</span></div>
-<div class="calc-factor-impact">-30% risk</div>
-</div>
-</div>
-<div class="calc-factor protect-factor" onclick="toggleFactor(this)" data-risk="-0.35">
-<div class="calc-factor-check"></div>
-<div class="calc-factor-icon">🥗</div>
-<div class="calc-factor-info">
-<div class="calc-factor-name"><span class="en">Diverse Diet 30+ foods</span><span class="ar">غذاء متنوع +30</span></div>
-<div class="calc-factor-impact">-35% risk</div>
-</div>
-</div>
-<div class="calc-factor protect-factor" onclick="toggleFactor(this)" data-risk="-0.13">
-<div class="calc-factor-check"></div>
-<div class="calc-factor-icon">🐕</div>
-<div class="calc-factor-info">
-<div class="calc-factor-name"><span class="en">Pets in Home</span><span class="ar">حيوانات أليفة</span></div>
-<div class="calc-factor-impact">-13% risk</div>
-</div>
-</div>
-<div class="calc-factor protect-factor" onclick="toggleFactor(this)" data-risk="-0.20">
-<div class="calc-factor-check"></div>
-<div class="calc-factor-icon">🚪</div>
-<div class="calc-factor-info">
-<div class="calc-factor-name"><span class="en">Vaginal Delivery</span><span class="ar">ولادة طبيعية</span></div>
-<div class="calc-factor-impact">-20% vs C-section</div>
-</div>
-</div>
-</div>
-
-<div class="calc-result">
-<div class="calc-result-label"><span class="en">Combined Risk Modifier</span><span class="ar">معدل الخطر المركب</span></div>
-<div class="calc-result-score low" id="calc-score">0%</div>
-<div class="calc-result-level" id="calc-level"><span class="en">Baseline Risk</span><span class="ar">خطر أساسي</span></div>
-<div class="calc-result-bar"><div class="calc-result-fill low" id="calc-fill"></div></div>
-<div class="calc-result-action" id="calc-action"><span class="en">Select factors above to see combined effect</span><span class="ar">اختر العوامل أعلاه لرؤية التأثير المركب</span></div>
-</div>
-</div>
-</div>
-</section>
-</div>
-
-<div class="page-footer">© 2025 BURAK Labs</div>
-</div>
-
-<!-- PIPELINE PAGE (Placeholder) -->
-<div class="page" id="page-pipeline">
-<section style="padding:60px 40px;background:linear-gradient(180deg,var(--bg),var(--card))">
-<div style="max-width:900px;margin:0 auto;text-align:center">
-<div style="display:inline-flex;align-items:center;gap:8px;padding:8px 16px;background:rgba(92,225,230,0.15);border:1px solid rgba(92,225,230,0.3);border-radius:50px;margin-bottom:20px;font-size:0.8rem;color:var(--signal);font-weight:600">🚀 Coming Soon</div>
-<h1 style="font-size:clamp(1.8rem,4vw,2.5rem);font-weight:900;margin-bottom:16px"><span class="en">🧠 ADHD Screening Pipeline</span><span class="ar">🧠 خط أنابيب فحص ADHD</span></h1>
-<p style="color:var(--dim);font-size:1.05rem;margin-bottom:50px;max-width:600px;margin-left:auto;margin-right:auto"><span class="en">The clinical implementation layer — APIs, interfaces, algorithms, and reports for real-world deployment</span><span class="ar">طبقة التنفيذ السريري — واجهات برمجة التطبيقات والواجهات والخوارزميات والتقارير للنشر الفعلي</span></p>
-
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;text-align:left;margin-bottom:60px">
-<div style="background:var(--card);border:2px solid var(--border);border-radius:20px;padding:28px;transition:all 0.3s" onmouseover="this.style.borderColor='var(--signal)'" onmouseout="this.style.borderColor='var(--border)'">
-<div style="font-size:2rem;margin-bottom:12px">🔌</div>
-<div style="font-weight:800;font-size:1rem;margin-bottom:8px"><span class="en">API Endpoints</span><span class="ar">نقاط API</span></div>
-<div style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--dim);line-height:1.8">
-<div style="padding:4px 0;border-bottom:1px solid var(--border)">/api/v1/adhd/screenings</div>
-<div style="padding:4px 0;border-bottom:1px solid var(--border)">/api/v1/adhd/screening/new</div>
-<div style="padding:4px 0">/api/v1/adhd/risk-report</div>
-</div>
-</div>
-<div style="background:var(--card);border:2px solid var(--border);border-radius:20px;padding:28px;transition:all 0.3s" onmouseover="this.style.borderColor='var(--signal)'" onmouseout="this.style.borderColor='var(--border)'">
-<div style="font-size:2rem;margin-bottom:12px">🖥️</div>
-<div style="font-weight:800;font-size:1rem;margin-bottom:8px"><span class="en">User Interface</span><span class="ar">واجهة المستخدم</span></div>
-<div style="font-size:0.85rem;color:var(--dim);line-height:1.8">
-<div style="padding:4px 0;border-bottom:1px solid var(--border)"><span class="en">3-Step Screening Flow</span><span class="ar">تدفق فحص 3 خطوات</span></div>
-<div style="padding:4px 0;border-bottom:1px solid var(--border)"><span class="en">Maternal Health Dashboard</span><span class="ar">لوحة صحة الأم</span></div>
-<div style="padding:4px 0"><span class="en">Simple Risk Card</span><span class="ar">بطاقة خطر بسيطة</span></div>
-</div>
-</div>
-<div style="background:var(--card);border:2px solid var(--border);border-radius:20px;padding:28px;transition:all 0.3s" onmouseover="this.style.borderColor='var(--signal)'" onmouseout="this.style.borderColor='var(--border)'">
-<div style="font-size:2rem;margin-bottom:12px">🧮</div>
-<div style="font-weight:800;font-size:1rem;margin-bottom:8px"><span class="en">Clinical Algorithms</span><span class="ar">الخوارزميات السريرية</span></div>
-<div style="font-size:0.85rem;color:var(--dim);line-height:1.8">
-<div style="padding:4px 0;border-bottom:1px solid var(--border)"><span class="en">3-marker composite scoring</span><span class="ar">تسجيل مركب 3 علامات</span></div>
-<div style="padding:4px 0;border-bottom:1px solid var(--border)"><span class="en">Maternal-child legacy risk</span><span class="ar">خطر إرث الأم-الطفل</span></div>
-<div style="padding:4px 0"><span class="en">Single handshake (Neuro)</span><span class="ar">المصافحة المفردة (عصبي)</span></div>
-</div>
-</div>
-<div style="background:var(--card);border:2px solid var(--border);border-radius:20px;padding:28px;transition:all 0.3s" onmouseover="this.style.borderColor='var(--signal)'" onmouseout="this.style.borderColor='var(--border)'">
-<div style="font-size:2rem;margin-bottom:12px">📋</div>
-<div style="font-weight:800;font-size:1rem;margin-bottom:8px"><span class="en">Reports</span><span class="ar">التقارير</span></div>
-<div style="font-size:0.85rem;color:var(--dim);line-height:1.8">
-<div style="padding:4px 0;border-bottom:1px solid var(--border)"><span class="en">Simple screening card</span><span class="ar">بطاقة فحص بسيطة</span></div>
-<div style="padding:4px 0;border-bottom:1px solid var(--border)"><span class="en">HIGH / MEDIUM / LOW risk</span><span class="ar">خطر عالي / متوسط / منخفض</span></div>
-<div style="padding:4px 0"><span class="en">Probiotic intervention guide</span><span class="ar">دليل تدخل البروبيوتيك</span></div>
-</div>
-</div>
-<div style="background:var(--card);border:2px solid var(--border);border-radius:20px;padding:28px;transition:all 0.3s" onmouseover="this.style.borderColor='var(--signal)'" onmouseout="this.style.borderColor='var(--border)'">
-<div style="font-size:2rem;margin-bottom:12px">🎯</div>
-<div style="font-weight:800;font-size:1rem;margin-bottom:8px"><span class="en">Target Market</span><span class="ar">السوق المستهدف</span></div>
-<div style="font-size:0.85rem;color:var(--dim);line-height:1.8">
-<div style="padding:4px 0;border-bottom:1px solid var(--border)"><span class="en">Pregnant women</span><span class="ar">النساء الحوامل</span></div>
-<div style="padding:4px 0;border-bottom:1px solid var(--border)"><span class="en">Infants (0-24 months)</span><span class="ar">الرضع (0-24 شهر)</span></div>
-<div style="padding:4px 0"><span class="en">OB/GYN & pediatric clinics</span><span class="ar">عيادات التوليد والأطفال</span></div>
-</div>
-</div>
-</div>
-
-<!-- Interested Box -->
-<div style="background:linear-gradient(135deg,rgba(92,225,230,0.1),rgba(191,90,242,0.05));border:2px solid var(--signal);border-radius:24px;padding:40px;max-width:600px;margin:0 auto">
-<div style="font-size:2rem;margin-bottom:16px">🤝</div>
-<h3 style="font-size:1.2rem;font-weight:800;margin-bottom:12px"><span class="en">Interested in Early Access?</span><span class="ar">مهتم بالوصول المبكر؟</span></h3>
-<p style="color:var(--dim);font-size:0.95rem;margin-bottom:24px"><span class="en">We're looking for pilot partners — clinics, researchers, and health systems ready to implement early ADHD screening.</span><span class="ar">نبحث عن شركاء تجريبيين — عيادات وباحثين وأنظمة صحية مستعدة لتنفيذ فحص ADHD المبكر.</span></p>
-<button class="btn btn-signal" onclick="showPage('collab')"><span class="en">Contact Us →</span><span class="ar">← اتصل بنا</span></button>
-</div>
-</div>
-</section>
-
-<div class="page-footer">© 2025 BURAK Labs — A BURAK Multiomics Initiative</div>
-</div>
-
-<!-- COLLABORATE PAGE -->
-<div class="page" id="page-collab">
-<section class="collab-hero">
-<h1><span class="en">Research Flourishes When Experts Unite</span><span class="ar">البحث يزدهر عندما يتحد الخبراء</span></h1>
-<p><span class="en">BURAK Labs is a platform for universities and research institutes to share best practices.</span><span class="ar">مختبرات بُراق هي منصة للجامعات ومعاهد البحث لمشاركة أفضل الممارسات.</span></p>
-</section>
-<section class="contact-section">
-<div class="contact-box">
-<h2><span class="en">Let's Build Together</span><span class="ar">لنبني معاً</span></h2>
-<p><span class="en">Whether you're a university, research institute, or clinical expert — we want to hear from you.</span><span class="ar">سواء كنت جامعة أو معهد بحث أو خبير سريري — نريد أن نسمع منك.</span></p>
-<a href="mailto:contactus@burakomics.com" class="contact-email">contactus@burakomics.com</a>
-</div>
-</section>
-<div class="page-footer">© 2025 BURAK Labs</div>
-</div>
-
-<script>
-function showPage(id) {
-document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-const page = document.getElementById('page-' + id);
-if (page) page.classList.add('active');
-document.querySelectorAll('.nav-link[data-page="' + id + '"]').forEach(l => l.classList.add('active'));
-window.scrollTo(0, 0);
-}
-
-function showSection(id) {
-document.querySelectorAll('.section-view').forEach(s => s.classList.remove('active'));
-document.querySelectorAll('.science-tab').forEach(t => t.classList.remove('active'));
-const section = document.getElementById('section-' + id);
-if (section) section.classList.add('active');
-// Highlight the clicked tab
-event.target.closest('.science-tab')?.classList.add('active');
-}
-
-function setLang(lang) {
-document.body.classList.toggle('rtl', lang === 'ar');
-document.getElementById('btn-en').classList.toggle('active', lang === 'en');
-document.getElementById('btn-ar').classList.toggle('active', lang === 'ar');
-}
-
-// Calculator logic
-function toggleFactor(el) {
-el.classList.toggle('selected');
-calculateRisk();
-}
-
-function calculateRisk() {
-let totalRisk = 0;
-document.querySelectorAll('.calc-factor.selected').forEach(f => {
-totalRisk += parseFloat(f.dataset.risk);
-});
-
-const scoreEl = document.getElementById('calc-score');
-const levelEl = document.getElementById('calc-level');
-const fillEl = document.getElementById('calc-fill');
-const actionEl = document.getElementById('calc-action');
-
-const pct = Math.round(totalRisk * 100);
-const sign = pct >= 0 ? '+' : '';
-scoreEl.textContent = sign + pct + '%';
-
-// Update level
-let level, action;
-if (pct <= -30) {
-level = 'low'; 
-scoreEl.className = 'calc-result-score low';
-fillEl.className = 'calc-result-fill low';
-levelEl.innerHTML = '<span class="en">🛡️ Well Protected</span><span class="ar">🛡️ محمي جيداً</span>';
-action = '<span class="en">Multiple protective factors in place. Continue these practices!</span><span class="ar">عوامل وقائية متعددة في مكانها. استمر في هذه الممارسات!</span>';
-} else if (pct <= 0) {
-level = 'low';
-scoreEl.className = 'calc-result-score low';
-fillEl.className = 'calc-result-fill low';
-levelEl.innerHTML = '<span class="en">✓ Below Baseline</span><span class="ar">✓ تحت خط الأساس</span>';
-action = '<span class="en">Good protective factors present. Consider adding more.</span><span class="ar">عوامل وقائية جيدة موجودة. فكر في إضافة المزيد.</span>';
-} else if (pct <= 30) {
-level = 'medium';
-scoreEl.className = 'calc-result-score medium';
-fillEl.className = 'calc-result-fill medium';
-levelEl.innerHTML = '<span class="en">⚠️ Moderate Elevation</span><span class="ar">⚠️ ارتفاع معتدل</span>';
-action = '<span class="en">Some risk factors present. Focus on adding protective factors.</span><span class="ar">بعض عوامل الخطر موجودة. ركز على إضافة عوامل وقائية.</span>';
-} else if (pct <= 60) {
-level = 'high';
-scoreEl.className = 'calc-result-score high';
-fillEl.className = 'calc-result-fill high';
-levelEl.innerHTML = '<span class="en">⚠️ Elevated Risk</span><span class="ar">⚠️ خطر مرتفع</span>';
-action = '<span class="en">Multiple risk factors compounding. Consider microbiome testing and interventions.</span><span class="ar">تضاعف عوامل خطر متعددة. فكر في اختبار الميكروبيوم والتدخلات.</span>';
-} else {
-level = 'critical';
-scoreEl.className = 'calc-result-score critical';
-fillEl.className = 'calc-result-fill critical';
-levelEl.innerHTML = '<span class="en">🚨 High Risk Pattern</span><span class="ar">🚨 نمط خطر عالي</span>';
-action = '<span class="en">Critical combination detected. Recommend comprehensive assessment and intervention plan.</span><span class="ar">تم اكتشاف مزيج حرج. يوصى بتقييم شامل وخطة تدخل.</span>';
-}
-actionEl.innerHTML = action;
-}
-
-// Day counter animation
-document.addEventListener('DOMContentLoaded', function() {
-const el = document.getElementById('dayCount');
-if (!el) return;
-let start = performance.now();
-function step(now) {
-let p = Math.min((now - start) / 2000, 1);
-el.textContent = Math.floor(p * p * 1000);
-if (p < 1) requestAnimationFrame(step);
-}
-setTimeout(() => requestAnimationFrame(step), 500);
-});
-</script>
+<body class="pb-24">
+
+    <nav class="glass-nav sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-slate-900 rounded-xl flex items-center justify-center text-white shadow-xl rotate-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                </div>
+                <div>
+                    <h1 class="text-xl font-black text-slate-900 uppercase tracking-tighter">HANDSHAKE PATHWAYS</h1>
+                    <p class="text-[10px] font-bold text-blue-600 uppercase tracking-widest">Biological Mechanism Gospel</p>
+                </div>
+            </div>
+            <div class="text-right">
+                <span class="text-[10px] block font-extrabold text-slate-400 uppercase tracking-widest">AMS STATUS</span>
+                <span class="text-lg font-black text-purple-600 tracking-tighter">ACTIVE</span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-3xl mx-auto px-6 mt-8">
+        
+        <!-- Transparency Guide -->
+        <div class="bg-white border border-slate-200 p-6 rounded-3xl mb-8 shadow-sm">
+            <h2 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">The Journey Within Your Body</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="space-y-2">
+                    <span class="logic-label" style="background:#fef3c7; color:#92400e;">1. Source</span>
+                    <p class="text-xs text-slate-600">The <strong>Gut</strong> is the origin. We track the specific bacterial shifts (Seed) that start the internal cascade.</p>
+                </div>
+                <div class="space-y-2">
+                    <span class="logic-label" style="background:#fee2e2; color:#b91c1c;">2. Trigger</span>
+                    <p class="text-xs text-slate-600">These shifts create <strong>Metabolic Bridges</strong>. Inflammation or toxins move from the gut into circulation.</p>
+                </div>
+                <div class="space-y-2">
+                    <span class="logic-label" style="background:#e0f2fe; color:#0369a1;">3. Outcome</span>
+                    <p class="text-xs text-slate-600">Finally, we measure <strong>Blood Markers</strong>. These are the clinical evidence confirming the disease state.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-6 flex items-center justify-between">
+            <h2 class="text-xs font-black text-slate-400 uppercase tracking-[0.2em]">Mechanistic Handshakes</h2>
+            <button onclick="toggleAll()" class="text-[10px] font-black text-indigo-600 uppercase tracking-widest border-b border-indigo-200 hover:border-indigo-600 transition-all">Expand Full Analysis</button>
+        </div>
+
+        <!-- LEVEL 1: FOUNDATION -->
+        <div class="category-group active" id="cat-1">
+            <div class="category-header" onclick="toggleCategory('cat-1')">
+                <div class="flex items-center gap-3">
+                    <span class="logic-label">Level 1</span>
+                    <h3 class="text-sm font-black text-slate-800 uppercase tracking-tight">Gut Foundation & Nutrient Logic</h3>
+                </div>
+                <svg class="w-4 h-4 text-slate-400 chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="category-content">
+                <!-- Nutrient Handshake -->
+                <div class="chain-node layer-foundation">
+                    <div class="flex gap-5">
+                        <div class="handshake-icon">🌈</div>
+                        <div class="flex-1">
+                            <h4 class="text-[11px] font-black uppercase text-amber-600 mb-4 tracking-widest">Nutrient Handshake</h4>
+                            <div class="flex items-center justify-between gap-2 mb-4">
+                                <div class="pathway-step active">
+                                    <div class="text-[8px] uppercase font-bold text-slate-400">Diversity</div>
+                                    <div class="font-extrabold">Total Phyla 76.2%</div>
+                                </div>
+                                <div class="text-slate-300">→</div>
+                                <div class="pathway-step">
+                                    <div class="text-[8px] uppercase font-bold text-slate-400">Absorption</div>
+                                    <div class="font-extrabold text-red-500">Magnesium 1.5</div>
+                                </div>
+                                <div class="text-slate-300">→</div>
+                                <div class="pathway-step active">
+                                    <div class="text-[8px] uppercase font-bold text-slate-400">Synthesis</div>
+                                    <div class="font-extrabold text-amber-600">Vit-D 18</div>
+                                </div>
+                            </div>
+                            <div class="analysis-card">
+                                <p class="text-[10px] font-black text-slate-400 uppercase mb-2 tracking-tighter">🔬 3-WAY PATHWAY ANALYSIS</p>
+                                <p class="text-[12px] font-bold text-slate-800 leading-relaxed mb-3">
+                                    <span class="text-red-500 uppercase">PATHOLOGICAL:</span> Low bacterial diversity (76.2%) → Impairs Mineral Absorption (Magnesium 1.5) → Leads to failed Vitamin Synthesis (Vit-D 18).
+                                </p>
+                                <p class="text-[12px] font-bold text-slate-700 pt-3 border-t border-slate-100 mt-3">
+                                    🔴 OUTCOME: <span class="font-normal text-slate-600">Your gut diversity is too low to process and activate essential immune vitamins your body needs.</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LEVEL 2: ACUTE & AMS -->
+        <div class="category-group" id="cat-2">
+            <div class="category-header" onclick="toggleCategory('cat-2')">
+                <div class="flex items-center gap-3">
+                    <span class="logic-label" style="background:#f5f3ff; color:#6d28d9;">Infection</span>
+                    <h3 class="text-sm font-black text-slate-800 uppercase tracking-tight">Acute Infectious Stewardship</h3>
+                </div>
+                <svg class="w-4 h-4 text-slate-400 chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="category-content">
+                <!-- Viral -->
+                <div class="chain-node layer-ams" style="--accent-color: #0ea5e9;">
+                    <div class="flex gap-5">
+                        <div class="handshake-icon">🧬</div>
+                        <div class="flex-1">
+                            <h4 class="text-[11px] font-black uppercase text-sky-600 mb-4 tracking-widest">Viral Handshake (Marker 1)</h4>
+                            <div class="flex items-center justify-between gap-2 mb-4">
+                                <div class="pathway-step active">
+                                    <div class="text-[8px] uppercase font-bold text-slate-400">Defense</div>
+                                    <div class="font-extrabold">Bifido Collapse</div>
+                                </div>
+                                <div class="text-slate-300">→</div>
+                                <div class="pathway-step">
+                                    <div class="text-[8px] uppercase font-bold text-slate-400">Bridge</div>
+                                    <div class="font-extrabold text-sky-500">MxA Protein +</div>
+                                </div>
+                                <div class="text-slate-300">→</div>
+                                <div class="pathway-step active">
+                                    <div class="text-[8px] uppercase font-bold text-slate-400">Blood</div>
+                                    <div class="font-extrabold text-sky-600">V-Score 1</div>
+                                </div>
+                            </div>
+                            <div class="analysis-card">
+                                <p class="text-[10px] font-black text-slate-400 uppercase mb-2 tracking-tighter">🔬 3-WAY PATHWAY ANALYSIS</p>
+                                <p class="text-[12px] font-bold text-slate-800 leading-relaxed">
+                                    <span class="text-red-500 uppercase">PATHOLOGICAL:</span> Collapse of good defense bacteria → Triggers Interferon-induced MxA signaling → Results in <strong>Marker 1</strong> (High Viral) signature.
+                                </p>
+                                <p class="text-[12px] font-bold text-slate-700 pt-3 border-t border-slate-100 mt-3">
+                                    🔵 OUTCOME: <span class="font-normal text-slate-600">Biological evidence confirms a <strong>Viral</strong> origin. Supportive care is indicated; avoid unnecessary antibiotics.</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bacterial -->
+                <div class="chain-node layer-ams">
+                    <div class="flex gap-5">
+                        <div class="handshake-icon">🦠</div>
+                        <div class="flex-1">
+                            <h4 class="text-[11px] font-black uppercase text-purple-600 mb-4 tracking-widest">Bacterial Handshake (Marker 2)</h4>
+                            <div class="flex items-center justify-between gap-2 mb-4">
+                                <div class="pathway-step active">
+                                    <div class="text-[8px] uppercase font-bold text-slate-400">Pathogen</div>
+                                    <div class="font-extrabold">Entero 4.8%</div>
+                                </div>
+                                <div class="text-slate-300">→</div>
+                                <div class="pathway-step">
+                                    <div class="text-[8px] uppercase font-bold text-slate-400">Bridge</div>
+                                    <div class="font-extrabold text-red-500">PCT > 0.5</div>
+                                </div>
+                                <div class="text-slate-300">→</div>
+                                <div class="pathway-step active">
+                                    <div class="text-[8px] uppercase font-bold text-slate-400">Marker</div>
+                                    <div class="font-extrabold text-purple-600">B-Score 2</div>
+                                </div>
+                            </div>
+                            <div class="analysis-card">
+                                <p class="text-[10px] font-black text-slate-400 uppercase mb-2 tracking-tighter">🔬 3-WAY PATHWAY ANALYSIS</p>
+                                <p class="text-[12px] font-bold text-slate-800 leading-relaxed">
+                                    <span class="text-red-500 uppercase">PATHOLOGICAL:</span> Opportunistic Bacterial growth → Triggers Procalcitonin elevation → Results in a <strong>Marker 2</strong> (Bacterial) signature.
+                                </p>
+                                <p class="text-[12px] font-bold text-slate-700 pt-3 border-t border-slate-100 mt-3">
+                                    🔴 OUTCOME: <span class="font-normal text-slate-600">Biological evidence confirms a <strong>Bacterial</strong> origin. Antimicrobial stewardship suggests targeted antibiotic therapy.</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LEVEL 3: INFLAMMATORY -->
+        <div class="category-group" id="cat-3">
+            <div class="category-header" onclick="toggleCategory('cat-3')">
+                <div class="flex items-center gap-3">
+                    <span class="logic-label" style="background:#fee2e2; color:#b91c1c;">Trigger</span>
+                    <h3 class="text-sm font-black text-slate-800 uppercase tracking-tight">Inflammatory Mechanism</h3>
+                </div>
+                <svg class="w-4 h-4 text-slate-400 chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="category-content">
+                <div class="chain-node layer-trigger">
+                    <div class="flex gap-5">
+                        <div class="handshake-icon">☠️</div>
+                        <div class="flex-1">
+                            <h4 class="text-[11px] font-black uppercase text-red-600 mb-4 tracking-widest">Systemic Inflammation Handshake</h4>
+                            <div class="flex items-center justify-between gap-2 mb-4">
+                                <div class="pathway-step active">
+                                    <div class="text-[8px] uppercase font-bold text-slate-400">Hazard</div>
+                                    <div class="font-extrabold">Proteo 3.2%</div>
+                                </div>
+                                <div class="text-slate-300">→</div>
+                                <div class="pathway-step">
+                                    <div class="text-[8px] uppercase font-bold text-slate-400">Damage</div>
+                                    <div class="font-extrabold text-red-500">LDH 320</div>
+                                </div>
+                                <div class="text-slate-300">→</div>
+                                <div class="pathway-step active">
+                                    <div class="text-[8px] uppercase font-bold text-slate-400">Systemic</div>
+                                    <div class="font-extrabold text-red-600">CRP 8.5</div>
+                                </div>
+                            </div>
+                            <div class="analysis-card">
+                                <p class="text-[10px] font-black text-slate-400 uppercase mb-2 tracking-tighter">🔬 3-WAY PATHWAY ANALYSIS</p>
+                                <p class="text-[12px] font-bold text-slate-800 leading-relaxed mb-3">
+                                    <span class="text-red-500 uppercase">PATHOLOGICAL:</span> Hazard bacteria overgrowth (Proteobacteria 3.2%) → Releases endotoxins causing tissue damage (LDH 320) → Triggers systemic inflammation (CRP 8.5).
+                                </p>
+                                <p class="text-[12px] font-bold text-slate-700 pt-3 border-t border-slate-100 mt-3">
+                                    🔴 OUTCOME: <span class="font-normal text-slate-600">Bad gut bacteria are releasing toxins that damage your tissues and cause body-wide inflammation.</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LEVEL 4: CHRONIC OUTCOMES -->
+        <div class="category-group" id="cat-4">
+            <div class="category-header" onclick="toggleCategory('cat-4')">
+                <div class="flex items-center gap-3">
+                    <span class="logic-label">Outcome</span>
+                    <h3 class="text-sm font-black text-slate-800 uppercase tracking-tight">Disease Handshakes</h3>
+                </div>
+                <svg class="w-4 h-4 text-slate-400 chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="category-content">
+                
+                <!-- Diabetes Handshake -->
+                <div class="chain-node layer-disease">
+                    <div class="flex gap-5">
+                        <div class="handshake-icon">🍬</div>
+                        <div class="flex-1">
+                            <h4 class="text-[11px] font-black uppercase text-blue-600 mb-4 tracking-widest">Diabetes (Metabolic) Handshake</h4>
+                            <div class="flex items-center justify-between gap-2 mb-4">
+                                <div class="pathway-step active">
+                                    <div class="text-[8px] uppercase font-bold text-slate-400">Harvesting</div>
+                                    <div class="font-extrabold">Firmicutes 42.3%</div>
+                                </div>
+                                <div class="text-slate-300">→</div>
+                                <div class="pathway-step">
+                                    <div class="text-[8px] uppercase font-bold text-slate-400">Burning</div>
+                                    <div class="font-extrabold text-red-500">Bacteroides 18.1%</div>
+                                </div>
+                                <div class="text-slate-300">→</div>
+                                <div class="pathway-step active">
+                                    <div class="text-[8px] uppercase font-bold text-slate-400">Sensitivity</div>
+                                    <div class="font-extrabold text-blue-600">HOMA-IR 12.8</div>
+                                </div>
+                            </div>
+                            <div class="analysis-card">
+                                <p class="text-[10px] font-black text-slate-400 uppercase mb-2 tracking-tighter">🔬 3-WAY PATHWAY ANALYSIS</p>
+                                <p class="text-[12px] font-bold text-slate-800 leading-relaxed mb-3">
+                                    <span class="text-red-500 uppercase">PATHOLOGICAL:</span> High Firmicutes (42.3%) harvest excess calories → Low Bacteroides fail to burn fat → Results in insulin resistance (HOMA-IR 12.8).
+                                </p>
+                                <p class="text-[12px] font-bold text-slate-700 pt-3 border-t border-slate-100 mt-3">
+                                    🔴 OUTCOME: <span class="font-normal text-slate-600">Your gut bacteria harvest too many calories while failing to burn fat, leading directly to blood sugar failure.</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cardiovascular Handshake -->
+                <div class="chain-node layer-organ" style="--accent-color: #10b981;">
+                    <div class="flex gap-5">
+                        <div class="handshake-icon">❤️</div>
+                        <div class="flex-1">
+                            <h4 class="text-[11px] font-black uppercase text-emerald-600 mb-4 tracking-widest">Cardiovascular Handshake</h4>
+                            <div class="flex items-center justify-between gap-2 mb-4">
+                                <div class="pathway-step active">
+                                    <div class="text-[8px] uppercase font-bold text-slate-400">Shield</div>
+                                    <div class="font-extrabold">Akker 2.8%</div>
+                                </div>
+                                <div class="text-slate-300">→</div>
+                                <div class="pathway-step">
+                                    <div class="text-[8px] uppercase font-bold text-slate-400">Barrier</div>
+                                    <div class="font-extrabold text-red-500">Albumin 3.2</div>
+                                </div>
+                                <div class="text-slate-300">→</div>
+                                <div class="pathway-step active">
+                                    <div class="text-[8px] uppercase font-bold text-slate-400">Particles</div>
+                                    <div class="font-extrabold text-emerald-600">ApoB 145</div>
+                                </div>
+                            </div>
+                            <div class="analysis-card">
+                                <p class="text-[10px] font-black text-slate-400 uppercase mb-2 tracking-tighter">🔬 3-WAY PATHWAY ANALYSIS</p>
+                                <p class="text-[12px] font-bold text-slate-800 leading-relaxed">
+                                    <span class="text-red-500 uppercase">PATHOLOGICAL:</span> Depleted mucosal shield → Impaired barrier allows protein leakage → Triggers atherogenic particle formation (ApoB 145).
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kidney/Renal Handshake -->
+                <div class="chain-node layer-organ" style="--accent-color: #06b6d4;">
+                    <div class="flex gap-5">
+                        <div class="handshake-icon">⚔️</div>
+                        <div class="flex-1">
+                            <h4 class="text-[11px] font-black uppercase text-cyan-600 mb-4 tracking-widest">Kidney Disease Handshake</h4>
+                            <div class="flex items-center justify-between gap-2 mb-4">
+                                <div class="pathway-step active">
+                                    <div class="text-[8px] uppercase font-bold text-slate-400">Defense</div>
+                                    <div class="font-extrabold">Actino 9.8%</div>
+                                </div>
+                                <div class="text-slate-300">→</div>
+                                <div class="pathway-step">
+                                    <div class="text-[8px] uppercase font-bold text-slate-400">Waste</div>
+                                    <div class="font-extrabold text-red-500">BUN 28</div>
+                                </div>
+                                <div class="text-slate-300">→</div>
+                                <div class="pathway-step active">
+                                    <div class="text-[8px] uppercase font-bold text-slate-400">Filtration</div>
+                                    <div class="font-extrabold text-cyan-600">Uric 8.9</div>
+                                </div>
+                            </div>
+                            <div class="analysis-card">
+                                <p class="text-[10px] font-black text-slate-400 uppercase mb-2 tracking-tighter">🔬 3-WAY PATHWAY ANALYSIS</p>
+                                <p class="text-[12px] font-bold text-slate-800 leading-relaxed">
+                                    <span class="text-red-500 uppercase">PATHOLOGICAL:</span> Defense bacteria overactivation (9.8%) → Increases nitrogen waste loading → Accumulates as urate crystals (Uric Acid 8.9).
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fatty Liver Handshake -->
+                <div class="chain-node layer-organ" style="--accent-color: #ec4899;">
+                    <div class="flex gap-5">
+                        <div class="handshake-icon">🏥</div>
+                        <div class="flex-1">
+                            <h4 class="text-[11px] font-black uppercase text-pink-600 mb-4 tracking-widest">Fatty Liver Handshake</h4>
+                            <div class="flex items-center justify-between gap-2 mb-4">
+                                <div class="pathway-step active">
+                                    <div class="text-[8px] uppercase font-bold text-slate-400">Burning</div>
+                                    <div class="font-extrabold">Bactero 18.1%</div>
+                                </div>
+                                <div class="text-slate-300">→</div>
+                                <div class="pathway-step">
+                                    <div class="text-[8px] uppercase font-bold text-slate-400">Lipid</div>
+                                    <div class="font-extrabold text-red-500">TG 245</div>
+                                </div>
+                                <div class="text-slate-300">→</div>
+                                <div class="pathway-step active">
+                                    <div class="text-[8px] uppercase font-bold text-slate-400">Hepatic</div>
+                                    <div class="font-extrabold text-pink-600">ALT 58</div>
+                                </div>
+                            </div>
+                            <div class="analysis-card">
+                                <p class="text-[10px] font-black text-slate-400 uppercase mb-2 tracking-tighter">🔬 3-WAY PATHWAY ANALYSIS</p>
+                                <p class="text-[12px] font-bold text-slate-800 leading-relaxed">
+                                    <span class="text-red-500 uppercase">PATHOLOGICAL:</span> Impaired fat burning Phyla → Causes lipid accumulation (Triglycerides 245) → Results in liver cell leakage (ALT 58).
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Oncogenic Handshake -->
+                <div class="chain-node layer-organ" style="--accent-color: #7f1d1d;">
+                    <div class="flex gap-5">
+                        <div class="handshake-icon">🔬</div>
+                        <div class="flex-1">
+                            <h4 class="text-[11px] font-black uppercase text-red-900 mb-4 tracking-widest">Oncogenic Handshake</h4>
+                            <div class="flex items-center justify-between gap-2 mb-4">
+                                <div class="pathway-step active">
+                                    <div class="text-[8px] uppercase font-bold text-slate-400">Oncomicrobe</div>
+                                    <div class="font-extrabold">Pathobiont</div>
+                                </div>
+                                <div class="text-slate-300">→</div>
+                                <div class="pathway-step">
+                                    <div class="text-[8px] uppercase font-bold text-slate-400">Signaling</div>
+                                    <div class="font-extrabold text-red-500">TGF-β 450</div>
+                                </div>
+                                <div class="text-slate-300">→</div>
+                                <div class="pathway-step active">
+                                    <div class="text-[8px] uppercase font-bold text-slate-400">Marker</div>
+                                    <div class="font-extrabold text-red-900">CEA 5.2</div>
+                                </div>
+                            </div>
+                            <div class="analysis-card">
+                                <p class="text-[10px] font-black text-slate-400 uppercase mb-2 tracking-tighter">🔬 3-WAY PATHWAY ANALYSIS</p>
+                                <p class="text-[12px] font-bold text-slate-800 leading-relaxed">
+                                    <span class="text-red-500 uppercase">PATHOLOGICAL:</span> Pathobiont overgrowth → Triggers growth-factor immunosuppression (TGF-β) → Results in tumor markers (CEA 5.2).
+                                </p>
+                                <p class="text-[12px] font-bold text-slate-700 pt-3 border-t border-slate-100 mt-3">
+                                    🔴 OUTCOME: <span class="font-normal text-slate-600">Specific pathobionts are promoting a pro-mutagenic environment, signaling cellular damage risk.</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Neuro Handshake -->
+                <div class="chain-node layer-organ" style="--accent-color: #6366f1;">
+                    <div class="flex gap-5">
+                        <div class="handshake-icon">🧠</div>
+                        <div class="flex-1">
+                            <h4 class="text-[11px] font-black uppercase text-indigo-600 mb-4 tracking-widest">Neuro/Cognitive Handshake</h4>
+                            <div class="flex items-center justify-between gap-2 mb-4">
+                                <div class="pathway-step active">
+                                    <div class="text-[8px] uppercase font-bold text-slate-400">Precursor</div>
+                                    <div class="font-extrabold">Bifido ↓</div>
+                                </div>
+                                <div class="text-slate-300">→</div>
+                                <div class="pathway-step">
+                                    <div class="text-[8px] uppercase font-bold text-slate-400">Trigger</div>
+                                    <div class="font-extrabold text-red-500">IL-1β</div>
+                                </div>
+                                <div class="text-slate-300">→</div>
+                                <div class="pathway-step active">
+                                    <div class="text-[8px] uppercase font-bold text-slate-400">Repair</div>
+                                    <div class="font-extrabold text-indigo-600">BDNF 15.2</div>
+                                </div>
+                            </div>
+                            <div class="analysis-card">
+                                <p class="text-[10px] font-black text-slate-400 uppercase mb-2 tracking-tighter">🔬 3-WAY PATHWAY ANALYSIS</p>
+                                <p class="text-[12px] font-bold text-slate-800 leading-relaxed">
+                                    <span class="text-red-500 uppercase">PATHOLOGICAL:</span> Probiotic depletion → Triggers neuro-cytokine load (IL-1β) → Suppresses brain recovery markers (BDNF 15.2).
+                                </p>
+                                <p class="text-[12px] font-bold text-slate-700 pt-3 border-t border-slate-100 mt-3">
+                                    🔴 OUTCOME: <span class="font-normal text-slate-600">Gut-brain axis inflammation is hindering your cognitive repair biology and mental focus.</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Thyroid Handshake -->
+                <div class="chain-node layer-organ" style="--accent-color: #f43f5e;">
+                    <div class="flex gap-5">
+                        <div class="handshake-icon">🦋</div>
+                        <div class="flex-1">
+                            <h4 class="text-[11px] font-black uppercase text-rose-600 mb-4 tracking-widest">Thyroid Handshake</h4>
+                            <div class="flex items-center justify-between gap-2 mb-4">
+                                <div class="pathway-step active">
+                                    <div class="text-[8px] uppercase font-bold text-slate-400">Conversion</div>
+                                    <div class="font-extrabold">Seleno ↓</div>
+                                </div>
+                                <div class="text-slate-300">→</div>
+                                <div class="pathway-step">
+                                    <div class="text-[8px] uppercase font-bold text-slate-400">Immune</div>
+                                    <div class="font-extrabold text-red-500">Anti-TPO</div>
+                                </div>
+                                <div class="text-slate-300">→</div>
+                                <div class="pathway-step active">
+                                    <div class="text-[8px] uppercase font-bold text-slate-400">Metabolic</div>
+                                    <div class="font-extrabold text-rose-600">Free T3 2.1</div>
+                                </div>
+                            </div>
+                            <div class="analysis-card">
+                                <p class="text-[10px] font-black text-slate-400 uppercase mb-2 tracking-tighter">🔬 3-WAY PATHWAY ANALYSIS</p>
+                                <p class="text-[12px] font-bold text-slate-800 leading-relaxed">
+                                    <span class="text-red-500 uppercase">PATHOLOGICAL:</span> Microbial conversion failure (Selenium) → Triggers autoimmune activity → Results in basal metabolic crash (Low Free T3 2.1).
+                                </p>
+                                <p class="text-[12px] font-bold text-slate-700 pt-3 border-t border-slate-100 mt-3">
+                                    🔴 OUTCOME: <span class="font-normal text-slate-600">Gut-driven immune reactivity is crashing your metabolism, leading to systemic energy loss.</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- LEVEL 5: TRAJECTORY -->
+        <div class="category-group" id="cat-5">
+            <div class="category-header" onclick="toggleCategory('cat-5')">
+                <div class="flex items-center gap-3">
+                    <span class="logic-label">Level 5</span>
+                    <h3 class="text-sm font-black text-slate-800 uppercase tracking-tight">Disease Chronicity</h3>
+                </div>
+                <svg class="w-4 h-4 text-slate-400 chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="category-content">
+                <div class="chain-node layer-future">
+                    <div class="flex gap-5">
+                        <div class="handshake-icon">⏱️</div>
+                        <div class="flex-1">
+                            <h4 class="text-[11px] font-black uppercase text-violet-600 mb-4 tracking-widest">Chronicity Handshake</h4>
+                            <div class="flex items-center justify-between gap-2 mb-4">
+                                <div class="pathway-step active">
+                                    <div class="text-[8px] uppercase font-bold text-slate-400">Gut Shift</div>
+                                    <div class="font-extrabold">Aggressive</div>
+                                </div>
+                                <div class="text-slate-300">→</div>
+                                <div class="pathway-step">
+                                    <div class="text-[8px] uppercase font-bold text-slate-400">Inflamm</div>
+                                    <div class="font-extrabold text-red-500">Persistent</div>
+                                </div>
+                                <div class="text-slate-300">→</div>
+                                <div class="pathway-step active">
+                                    <div class="text-[8px] uppercase font-bold text-slate-400 inline-flex items-center gap-1">
+                                        Velocity
+                                        <span class="tooltip">
+                                            <svg class="w-2.5 h-2.5 text-slate-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"></path></svg>
+                                            <span class="tooltiptext">
+                                                <strong>Cloud Function Logic (Present-Moment):</strong><br>
+                                                1. <strong>Marker Intensity (I):</strong> Current Result / Clinical Limit<br>
+                                                2. <strong>Bridge Multiplier (M):</strong> 1.5x (if Bridge markers are out-of-range)<br><br>
+                                                <strong>Momentum Equation:</strong> V = I * M<br>
+                                                (Estimates speed of current biological decline).
+                                            </span>
+                                        </span>
+                                    </div>
+                                    <div class="font-extrabold text-violet-600">High Momentum</div>
+                                </div>
+                            </div>
+                            <div class="analysis-card">
+                                <p class="text-[10px] font-black text-slate-400 uppercase mb-2 tracking-tighter">🔬 3-WAY PATHWAY ANALYSIS</p>
+                                <p class="text-[12px] font-bold text-slate-800 leading-relaxed mb-3">
+                                    <span class="text-red-500 uppercase">PATHOLOGICAL:</span> Persistent gut imbalance + chronic inflammatory load (Intensity 1.4x) → Results in high disease momentum.
+                                </p>
+                                <p class="text-[12px] font-bold text-slate-700 pt-3 border-t border-slate-100 mt-3">
+                                    🔴 OUTCOME: <span class="font-normal text-slate-600">Your health markers are moving quickly toward clinical risk; immediate intervention is needed to stop the progression.</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        function toggleCategory(id) {
+            document.getElementById(id).classList.toggle('active');
+        }
+
+        function toggleAll() {
+            const groups = document.querySelectorAll('.category-group');
+            const anyActive = Array.from(groups).some(g => g.classList.contains('active'));
+            groups.forEach(g => {
+                if(anyActive) g.classList.remove('active');
+                else g.classList.add('active');
+            });
+        }
+    </script>
 </body>
 </html>
